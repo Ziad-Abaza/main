@@ -130,6 +130,37 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaCollection('avatar')->singleFile();
     }
 
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(Course::class, 'user_course_progress', 'user_id', 'course_id')
+            ->withPivot(['completion_percentage', 'last_accessed', 'user_course_id'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if the user is the instructor of the given course.
+     *
+     * @param string $courseId
+     * @return bool
+     */
+    public function isEnrolledIn(string $courseId): bool
+    {
+        return $this->enrolledCourses()
+            ->where('courses.course_id', $courseId)
+            ->exists();
+    }
+    /**
+     * Check if the user is the instructor of the given course.
+     *
+     * @param string $courseId
+     * @return bool
+     */
+    public function isInstructorOfCourse(string $courseId): bool
+    {
+        return $this->courses()
+            ->where('courses.course_id', $courseId)
+            ->exists();
+    }
     public function getAvatar()
     {
         $media = $this->getFirstMedia('avatar');

@@ -7,6 +7,7 @@ use App\Models\Video;
 use App\Http\Resources\User\VideoResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class VideoController extends Controller
@@ -17,6 +18,13 @@ class VideoController extends Controller
     public function index(Request $request, $courseId)
     {
         try {
+            $user = Auth::user();
+
+            /**
+             * @var \App\Models\User $user
+             */
+
+            if($user->isEnrolledIn($courseId)){
             // Fetch videos with course, questions, and user progress
             $videos = Video::with([
                 'course' => function ($query) {
@@ -39,6 +47,14 @@ class VideoController extends Controller
                 'data' => VideoResource::collection($videos),
                 'course_title' => $videos->first() ? $videos->first()->course->title : null,
             ], Response::HTTP_OK);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'code' => Response::HTTP_UNAUTHORIZED,
+                    'message' => 'You are not enrolled in this course.',
+                ]
+                , Response::HTTP_UNAUTHORIZED);
+            }
         } catch (Throwable $th) {
             return response()->json([
                 'success' => false,
@@ -55,6 +71,12 @@ class VideoController extends Controller
     public function show(Request $request, $videoId)
     {
         try {
+            $user = Auth::user();
+            $courseId = Video::find($videoId)->course_id;
+            /**
+             * @var \App\Models\User $user
+             */
+            if($user->isEnrolledIn($courseId)){
             $video = Video::with([
                 'course' => function ($query) {
                     $query->select('course_id', 'title');
@@ -94,6 +116,13 @@ class VideoController extends Controller
                     'order_in_course' => $nextVideo->order_in_course,
                 ] : null,
             ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'code' => 403,
+                    'message' => 'You are not enrolled in this course',
+                    ], Response::HTTP_FORBIDDEN);
+            }
         } catch (Throwable $th) {
             return response()->json([
                 'success' => false,
