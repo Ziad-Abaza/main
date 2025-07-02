@@ -137,13 +137,30 @@ class User extends Authenticatable implements HasMedia
             ->withTimestamps();
     }
 
+    /**
+     * Check if the user is the instructor of the given course.
+     *
+     * @param string $courseId
+     * @return bool
+     */
     public function isEnrolledIn(string $courseId): bool
     {
         return $this->enrolledCourses()
             ->where('courses.course_id', $courseId)
             ->exists();
     }
-
+    /**
+     * Check if the user is the instructor of the given course.
+     *
+     * @param string $courseId
+     * @return bool
+     */
+    public function isInstructorOfCourse(string $courseId): bool
+    {
+        return $this->courses()
+            ->where('courses.course_id', $courseId)
+            ->exists();
+    }
     public function getAvatar()
     {
         $media = $this->getFirstMedia('avatar');
