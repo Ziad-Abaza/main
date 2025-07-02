@@ -7,6 +7,10 @@ use App\Models\ChildrenUniversity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use App\Models\UserCourseProgress;
+use App\Models\Level;
+use App\Models\Role;
 
 class ChildrenStudentImportService
 {
@@ -15,139 +19,197 @@ class ChildrenStudentImportService
         Log::info("✅ Starting import of children students from: $filePath");
 
         try {
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($filePath);
+            $spreadsheet = $this->loadSpreadsheet($filePath);
             $worksheet = $spreadsheet->getActiveSheet();
             $highestRow = $worksheet->getHighestRow();
-            $highestColumn = $worksheet->getHighestColumn();
-            $headerRow = [];
-
-            foreach (range(1, \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn)) as $col) {
-                $cellValue = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
-                $headerRow[$col] = trim((string) $cellValue);
-            }
+            $headerRow = $this->getHeaderRow($worksheet);
 
             for ($rowIndex = 2; $rowIndex <= $highestRow; $rowIndex++) {
                 try {
                     $rowData = [];
                     foreach ($headerRow as $col => $fieldName) {
                         $cellValue = $worksheet->getCellByColumnAndRow($col, $rowIndex)->getValue();
-                        $rowData[$fieldName] = trim((string) $cellValue);
+                        $rowData[$fieldName] = $cellValue;
                     }
 
-                    if (empty($rowData['name'])) {
+                    $processed = $this->processRow($rowData);
+                    if (!$processed) {
                         Log::warning("⚠️ Empty name at row $rowIndex, skipping.");
                         continue;
                     }
 
-                    // Ensure name is a string
-                    $name = is_array($rowData['name']) ? implode(' ', $rowData['name']) : (string) $rowData['name'];
-                    // Determine code
-                    if (!empty($rowData['code'])) {
-                        $code = is_array($rowData['code']) ? implode('', $rowData['code']) : (string) $rowData['code'];
-                    } elseif (!empty($rowData['academic_id'])) {
-                        $code = is_array($rowData['academic_id']) ? implode('', $rowData['academic_id']) : (string) $rowData['academic_id'];
-                    } else {
-                        $code = $this->generateUniqueCode(1001); // start from 22501001
-                    }
-
-                    // Always use code as email
-                    $email = $code . '@children.org';
-
-                    // Check for duplicate email
+                    $email = $this->generateEmail($processed['code']);
                     if (User::where('email', $email)->exists()) {
                         Log::warning("⚠️ Duplicate email $email at row $rowIndex, skipping.");
                         continue;
                     }
 
-                    $initials = $this->extractArabicInitials($name);
-                    $password = $initials . rand(111, 999) .'0'. date('d');
+                    $password = $this->generatePassword($processed['name']);
                     $hashedPassword = Hash::make($password);
                     $encryptPassword = encrypt($password);
 
-                    // Resolve level_id from level name in Excel
-                    $levelName = $rowData['level'] ?? null;
-                    $levelId = null;
-                    if ($levelName) {
-                        // Ensure levelName is a string
-                        $levelName = is_array($levelName) ? implode(' ', $levelName) : (string) $levelName;
-                        $level = \App\Models\Level::where('name', $levelName)->first();
-                        if ($level) {
-                            $levelId = $level->level_id;
-                        } else {
-                            Log::warning("⚠️ Level '$levelName' not found at row $rowIndex, skipping.");
-                            continue;
-                        }
+                    $levelId = $this->resolveLevelId($processed['level']);
+                    if (!$levelId) {
+                        Log::warning("⚠️ Level not found at row $rowIndex, skipping.");
+                        continue;
                     }
 
-                    // Extract class_name from meta if present, like image
-                    $className = null;
-                    if (isset($rowData['class_name'])) {
-                        $classNameValue = $rowData['class_name'];
-                        // Handle case where class_name might be an array
-                        if (is_array($classNameValue)) {
-                            $className = trim(implode(' ', $classNameValue));
-                        } else {
-                            $className = trim((string) $classNameValue);
-                        }
-                        unset($rowData['class_name']);
-                    }
+                    $className = $this->ensureString($processed['class_name'] ?? null);
+                    $image = $this->extractImageFromMeta($processed['meta']);
 
-                    $metaData = $rowData;
-                    unset($metaData['name']);
-                    unset($metaData['code']);
-                    unset($metaData['level']);
+                    $this->createUserAndStudent(
+                        $processed,
+                        $email,
+                        $password,
+                        $hashedPassword,
+                        $encryptPassword,
+                        $levelId,
+                        $className,
+                        $image
+                    );
 
-                    // Ensure all meta data values are strings, not arrays
-                    foreach ($metaData as $key => $value) {
-                        if (is_array($value)) {
-                            $metaData[$key] = implode(' ', $value);
-                        } else {
-                            $metaData[$key] = (string) $value;
-                        }
-                    }
-
-                    // Remove image from meta if present
-                    $image = null;
-                    if (isset($metaData['image'])) {
-                        $image = is_array($metaData['image']) ? implode(' ', $metaData['image']) : (string) $metaData['image'];
-                        unset($metaData['image']);
-                    }
-
-                    DB::transaction(function () use ($name, $email, $hashedPassword, $code, $metaData, $encryptPassword, $image, $levelId, $className) {
-                        $user = User::create([
-                            'name'     => $name,
-                            'email'    => $email,
-                            'password' => $hashedPassword,
-                        ]);
-
-                        $role = \App\Models\Role::where('name', 'student')->first();
-
-                        if ($role) {
-                            $user->roles()->attach($role->role_id);
-                        }
-
-                        ChildrenUniversity::create([
-                            'code'      => $code,
-                            'user_id'   => $user->user_id,
-                            'password'  => $encryptPassword,
-                            'level_id'  => $levelId,
-                            'class_name'=> $className,
-                            'meta'      => $metaData,
-                            'image'     => $image,
-                        ]);
-                    });
-                } catch (\Throwable $rowException) {
-                    Log::error("❌ Error importing row $rowIndex: " . $rowException->getMessage());
+                } catch (\Throwable $e) {
+                    Log::error("❌ Error importing row $rowIndex: " . $e->getMessage());
                 }
             }
 
             Log::info("✅ Import completed successfully.");
+
         } catch (\Throwable $e) {
             Log::error("❌ Failed to import file: " . $e->getMessage());
             throw $e;
         }
+    }
+
+    private function loadSpreadsheet($filePath)
+    {
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $reader->setReadDataOnly(true);
+        return $reader->load($filePath);
+    }
+
+    private function getHeaderRow($worksheet)
+    {
+        $highestColumn = $worksheet->getHighestColumn();
+        $headerRow = [];
+
+        foreach (range(1, \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn)) as $col) {
+            $cellValue = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
+            $headerRow[$col] = trim((string) $cellValue);
+        }
+
+        return $headerRow;
+    }
+
+    private function processRow($rowData)
+    {
+        if (empty($rowData['name'])) {
+            return null;
+        }
+
+        $processed = [
+            'name' => $this->ensureString($rowData['name']),
+            'code' => $this->getCodeFromRow($rowData),
+            'level' => $rowData['level'] ?? null,
+            'class_name' => $rowData['class_name'] ?? null,
+            'meta' => [],
+        ];
+
+        unset($rowData['name'], $rowData['code'], $rowData['level'], $rowData['class_name']);
+        foreach ($rowData as $key => $value) {
+            $processed['meta'][$key] = $this->ensureString($value);
+        }
+
+        return $processed;
+    }
+
+    private function ensureString($value)
+    {
+        return is_array($value) ? implode(' ', $value) : (string)$value;
+    }
+
+    private function getCodeFromRow($rowData)
+    {
+        if (!empty($rowData['code'])) {
+            return $this->ensureString($rowData['code']);
+        } elseif (!empty($rowData['academic_id'])) {
+            return $this->ensureString($rowData['academic_id']);
+        } else {
+            return $this->generateUniqueCode(1001);
+        }
+    }
+
+    private function generateEmail($code)
+    {
+        return $code . '@children.org';
+    }
+
+    private function generatePassword($name)
+    {
+        $initials = $this->extractArabicInitials($name);
+        return $initials . rand(111, 999) . '0' . date('d');
+    }
+
+
+    private function getCoursesByLevelId($levelId)
+    {
+        return DB::table('course_level')
+            ->where('level_id', $levelId)
+            ->pluck('course_id');
+    }
+
+    private function resolveLevelId($levelName)
+    {
+        $levelName = $this->ensureString($levelName);
+        $level = Level::where('name', $levelName)->first();
+        return $level?->level_id;
+    }
+
+    private function extractImageFromMeta(&$metaData)
+    {
+        $image = null;
+        if (isset($metaData['image'])) {
+            $image = $metaData['image'];
+            unset($metaData['image']);
+        }
+        return $image;
+    }
+
+    private function createUserAndStudent($data, $email, $password, $hashedPassword, $encryptPassword, $levelId, $className, $image)
+    {
+        DB::transaction(function () use ($data, $email, $hashedPassword, $encryptPassword, $levelId, $className, $image) {
+            $user = User::create([
+                'name'     => $data['name'],
+                'email'    => $email,
+                'password' => $hashedPassword,
+            ]);
+
+            $role = Role::where('name', 'student')->first();
+            if ($role) {
+                $user->roles()->attach($role->role_id);
+            }
+
+            ChildrenUniversity::create([
+                'code'      => $data['code'],
+                'user_id'   => $user->user_id,
+                'password'  => $encryptPassword,
+                'level_id'  => $levelId,
+                'class_name'=> $className,
+                'meta'      => $data['meta'],
+                'image'     => $image,
+            ]);
+
+            $courseIds = $this->getCoursesByLevelId($levelId);
+
+            foreach ($courseIds as $courseId) {
+                UserCourseProgress::create([
+                    'user_course_id' => (string) Str::uuid(),
+                    'user_id'        => $user->user_id,
+                    'course_id'      => $courseId,
+                    'completion_percentage' => 0,
+                ]);
+            }
+        });
     }
 
     public function generateUniqueCode($start = 1)
@@ -161,7 +223,6 @@ class ChildrenStudentImportService
         $newNumber = $maxCode ? max(((int) substr($maxCode, -4)) + 1, $minNumber) : $minNumber;
         $newNumberPadded = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
-        // Ensure code is unique
         while (ChildrenUniversity::where('code', $prefix . $newNumberPadded)->exists()) {
             $newNumber++;
             $newNumberPadded = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
@@ -172,9 +233,8 @@ class ChildrenStudentImportService
 
     public function extractArabicInitials($name)
     {
-        // Ensure name is a string
         if (!is_string($name)) {
-            $name = (string) $name;
+            $name = (string)$name;
         }
 
         $map = [
