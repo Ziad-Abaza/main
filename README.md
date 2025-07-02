@@ -68,6 +68,7 @@ The main goal of this project is to test and explore different methods for uploa
 
    ```bash
    php artisan serve
+   php artisan queue:work
    ```
 
 ## 📸 Image Upload Example
