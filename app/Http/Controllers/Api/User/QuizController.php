@@ -18,33 +18,31 @@ use Illuminate\Support\Facades\Log;
 class QuizController extends Controller
 {
     /**
-     * عرض الأسئلة الخاصة بالفيديو
+     *  Display a listing of the resource.
      */
     public function showQuizForVideo(Request $request, $videoId)
     {
         try {
             $user = Auth::user();
 
-            // التحقق من وجود الفيديو
+            // Validate the request
             $video = Video::findOrFail($videoId);
 
-            // التحقق من أن المستخدم مسجل في الدورة
+            //  Check if the user has already attempted the quiz
             /**
              * @var \App\Models\User $user
              */
-            $isEnrolled = $user->userCourseProgress()
-                ->where('course_id', $video->course_id)
-                ->exists();
+            $isEnrolled = $user->isEnrolledIn($video->course_id);
 
             if (!$isEnrolled) {
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'يجب عليك التسجيل في الدورة لرؤية هذا الاختبار.',
+                    'message' => 'You are not enrolled in this course',
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            // جلب الأسئلة مع الخيارات
+            // Get the questions for the video
             $questions = Question::where('video_id', $videoId)
                 ->with([
                     'questionOptions' => function ($query) {
@@ -57,7 +55,7 @@ class QuizController extends Controller
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'لا توجد أسئلة لهذا الفيديو.',
+                    'message' => 'No questions found for this video',
                 ], Response::HTTP_NOT_FOUND);
             }
 
@@ -74,14 +72,14 @@ class QuizController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'فشل في استرجاع الأسئلة',
+                'message' => 'An error occurred while processing your request',
                 'error' => $th->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * إرسال إجابات المستخدم وحساب النتيجة
+     *  Get the questions for a video
      */
     public function submitQuizAnswers(Request $request, $videoId)
     {
@@ -111,19 +109,17 @@ class QuizController extends Controller
 
             $video = Video::findOrFail($videoId);
 
-            // التحقق من تسجيل المستخدم في الدورة
+            // Check if the user has already submitted answers for this video
             /**
              * @var \App\Models\User $user
              */
-            $isEnrolled = $user->userCourseProgress()
-                ->where('course_id', $video->course_id)
-                ->exists();
+            $isEnrolled = $user->isEnrolledIn($video->course_id);
 
             if (!$isEnrolled) {
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'يجب عليك التسجيل في الدورة لتقديم هذا الاختبار.',
+                    'message' => 'You are not enrolled in this course.',
                 ], Response::HTTP_FORBIDDEN);
             }
 
@@ -143,7 +139,7 @@ class QuizController extends Controller
                     $score++;
                 }
 
-                // حفظ كل إجابة في QuizAttempt
+                // Update the user's score in the database
 
                 $attemptId = Str::uuid();
                 QuizAttempt::create([
@@ -158,7 +154,7 @@ class QuizController extends Controller
 
             $percentage = $totalQuestions > 0 ? ($score / $totalQuestions) * 100 : 0;
 
-            // جلب الفيديو التالي
+            // Update the user's score in the database
             $nextVideo = Video::where('course_id', $video->course_id)
                 ->where('order_in_course', '>', $video->order_in_course)
                 ->orderBy('order_in_course')
@@ -167,7 +163,7 @@ class QuizController extends Controller
             return response()->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'message' => 'تم تقديم الإجابات بنجاح!',
+                'message' => 'Quiz submitted successfully.',
                 'data' => [
                     'score' => $score,
                     'total_questions' => $totalQuestions,
@@ -183,7 +179,7 @@ class QuizController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'فشل في التحقق من البيانات',
+                'message' => 'field validation failed',
                 'errors' => $e->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Throwable $th) {
@@ -191,7 +187,7 @@ class QuizController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'فشل في تقديم الإجابات',
+                'message' => 'Internal Server Error',
                 'error' => $th->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -199,42 +195,40 @@ class QuizController extends Controller
 
 
     /**
-     * استرجاع نتائج الاختبار للمستخدم بناءً على معرف الفيديو ومستخدم
+     *  Get the quiz questions for a given video.
      */
     public function getQuizResults(Request $request, $videoId)
     {
         try {
-            // الحصول على المستخدم الحالي
+            // Validate the request
             $user = Auth::user();
 
             if (!$user) {
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_UNAUTHORIZED,
-                    'message' => 'المستخدم غير مصادق عليه.',
+                    'message' => 'Unauthorized',
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            // التحقق من وجود الفيديو
+            // Get the quiz questions for the given video
             $video = Video::findOrFail($videoId);
 
-            // التحقق من تسجيل المستخدم في الدورة
+            // Get the quiz questions for the given video
             /**
              * @var \App\Models\User $user
              */
-            $isEnrolled = $user->userCourseProgress()
-                ->where('course_id', $video->course_id)
-                ->exists();
+            $isEnrolled = $user->isEnrolledIn($video->course_id);
 
             if (!$isEnrolled) {
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'يجب عليك التسجيل في الدورة لرؤية نتائج هذا الاختبار.',
+                    'message' => 'You are not enrolled in this course',
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            // جلب جميع المحاولات الخاصة بالفيديو
+            // Get the quiz questions for the given video
             $quizAttempts = QuizAttempt::whereHas('question', function ($query) use ($videoId) {
                 $query->where('video_id', $videoId);
             })
@@ -246,17 +240,17 @@ class QuizController extends Controller
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'لا توجد نتائج لهذا الاختبار للمستخدم.',
+                    'message' => 'No quiz attempts found',
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            // حساب النتيجة
+            // Get the quiz results for the given video
             $totalQuestions = $quizAttempts->unique('question_id')->count();
             $correctAnswers = $quizAttempts->where('is_correct', true)->unique('question_id')->count();
             $percentage = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100, 2) : 0;
 
 
-            // جلب الفيديو التالي
+            // Return the quiz results
             $nextVideo = Video::where('course_id', $video->course_id)
                 ->where('order_in_course', '>', $video->order_in_course)
                 ->orderBy('order_in_course')
@@ -284,7 +278,7 @@ class QuizController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'فشل في استرجاع نتائج الاختبار',
+                'message' => 'An error occurred while processing the request',
                 'error' => $th->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
