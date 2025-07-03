@@ -20,19 +20,19 @@
             </button>
         </div>
 
-        <NavBar />
-        <div class="h-16"></div>
+        <NavBar v-if="!is404" />
+        <div v-if="!is404" class=" h-20"></div>
         <router-view></router-view>
-        <Footer />
+        <Footer v-if="!is404" />
     </div>
 </template>
 
 <script setup>
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useAuthStore } from "./stores/auth";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useTheme } from "./composables/useTheme";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -42,8 +42,11 @@ library.add(faMoon, faSun);
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 const mobileOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
+
+const is404 = computed(() => route.name === 'not-found');
 
 const handleLogout = async () => {
     mobileOpen.value = false;

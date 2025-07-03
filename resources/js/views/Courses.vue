@@ -90,8 +90,8 @@
                 type="text"
                 placeholder="Search for courses, instructors, or topics..."
                 :class="[
-                    'w-full p-6 bg-transparent placeholder:text-white/50 focus:outline-none pl-14 pr-6 text-lg',
-                    isDark ? 'text-white placeholder:text-white/50' : 'text-slate-900 placeholder:text-slate-500'
+                    'w-full p-6 bg-transparent placeholder:text-black focus:outline-none pl-14 pr-6 text-lg',
+                    isDark ? 'text-white placeholder:text-black' : 'text-slate-900 placeholder:text-slate-500'
                 ]"
               />
               <font-awesome-icon

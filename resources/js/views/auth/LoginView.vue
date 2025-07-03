@@ -1,10 +1,10 @@
 <template>
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white">
+<div :class="isDark ? 'min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white' : 'min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-white text-slate-900'">
         <!-- Static Background Elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl opacity-60"></div>
-            <div class="absolute top-40 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl opacity-50"></div>
-            <div class="absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-600/10 rounded-full blur-3xl opacity-40"></div>
+            <div :class="isDark ? 'absolute top-20 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl opacity-60' : 'absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl opacity-60' "></div>
+            <div :class="isDark ? 'absolute top-40 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl opacity-50' : 'absolute top-40 right-20 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl opacity-50' "></div>
+            <div :class="isDark ? 'absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-600/10 rounded-full blur-3xl opacity-40' : 'absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-200/30 rounded-full blur-3xl opacity-40' "></div>
         </div>
 
         <!-- Static Particles -->
@@ -25,10 +25,10 @@
         <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
             <div class="w-full max-w-md lg:max-w-lg xl:max-w-xl">
                 <!-- Login Card -->
-                <div class="glass-card-premium rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-xl relative group animate-slide-up">
+                <div :class="isDark ? 'glass-card-premium rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-xl relative group animate-slide-up' : 'bg-white rounded-2xl overflow-hidden shadow-xl border border-blue-100 relative group animate-slide-up'">
                     <!-- Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-60 pointer-events-none"></div>
-                    
+                    <div :class="isDark ? 'absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-60 pointer-events-none' : 'absolute inset-0 bg-gradient-to-br from-purple-200/10 via-transparent to-blue-200/10 opacity-60 pointer-events-none' "></div>
+
                     <!-- Shimmer Effect -->
                     <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer"></div>
@@ -37,7 +37,7 @@
                     <div class="relative z-10 p-8 lg:p-10 xl:p-12">
                         <!-- Header with Icon -->
                         <div class="text-center mb-8 lg:mb-10">
-                            <div class="inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500">
+                            <div :class="isDark ? 'inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500' : 'inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-200 to-blue-200 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500'">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     class="text-white lg:w-8 lg:h-8">
@@ -46,18 +46,18 @@
                                     <line x1="15" y1="12" x2="3" y2="12" />
                                 </svg>
                             </div>
-                            <h2 class="text-xl lg:text-2xl font-bold text-white mb-1">Welcome Back!</h2>
-                            <p class="text-slate-400 text-sm lg:text-base">Please sign in to your account</p>
+                            <h2 :class="isDark ? 'text-xl lg:text-2xl font-bold text-white mb-1' : 'text-xl lg:text-2xl font-bold text-blue-900 mb-1'">Welcome Back!</h2>
+                            <p :class="isDark ? 'text-slate-400 text-sm lg:text-base' : 'text-slate-500 text-sm lg:text-base'">Please sign in to your account</p>
                         </div>
 
-                        <form @submit.prevent="handleLogin" class="space-y-6 lg:space-y-8">
+                        <form @submit.prevent="handleLogin" :class="isDark ? 'space-y-6 lg:space-y-8' : 'space-y-6 lg:space-y-8'">
                             <!-- Email Input -->
                             <div class="space-y-2">
-                                <label for="email" class="block text-sm lg:text-base font-semibold text-slate-200">Email Address</label>
+                                <label for="email" :class="isDark ? 'block text-sm lg:text-base font-semibold text-slate-200' : 'block text-sm lg:text-base font-semibold text-blue-900'">Email Address</label>
                                 <div class="relative group">
                                     <!-- Email Icon -->
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                                        <div class="p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg backdrop-blur-sm border border-purple-500/30 group-focus-within:border-purple-400/60 transition-all duration-300">
+                                    <div :class="isDark ? 'absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10' : 'absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10'">
+                                        <div :class="isDark ? 'p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg backdrop-blur-sm border border-purple-500/30 group-focus-within:border-purple-400/60 transition-all duration-300' : 'p-2 bg-gradient-to-r from-purple-200/20 to-blue-200/20 rounded-lg backdrop-blur-sm border border-blue-200/40 group-focus-within:border-blue-400/60 transition-all duration-300'">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                 class="text-purple-400 group-focus-within:text-purple-300 transition-colors duration-300">
@@ -66,13 +66,13 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    
-                                    <input 
-                                        type="email" 
-                                        id="email" 
-                                        v-model="email" 
-                                        required 
-                                        class="w-full pl-16 pr-4 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white placeholder-slate-400 focus:border-purple-500/60 focus:bg-white/15 focus:shadow-lg focus:shadow-purple-500/20 transition-all duration-300 group-hover:bg-white/12 group-hover:border-white/30"
+
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        v-model="email"
+                                        required
+                                        :class="isDark ? 'w-full pl-16 pr-4 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white placeholder-slate-400 focus:border-purple-500/60 focus:bg-white/15 focus:shadow-lg focus:shadow-purple-500/20 transition-all duration-300 group-hover:bg-white/12 group-hover:border-white/30' : 'w-full pl-16 pr-4 py-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 placeholder-slate-400 focus:border-blue-400 focus:bg-white focus:shadow-lg focus:shadow-blue-200/20 transition-all duration-300 group-hover:bg-blue-100 group-hover:border-blue-300'"
                                         placeholder="Enter your email address"
                                     />
                                 </div>
@@ -80,11 +80,11 @@
 
                             <!-- Password Input -->
                             <div class="space-y-2">
-                                <label for="password" class="block text-sm lg:text-base font-semibold text-slate-200">Password</label>
+                                <label for="password" :class="isDark ? 'block text-sm lg:text-base font-semibold text-slate-200' : 'block text-sm lg:text-base font-semibold text-blue-900'">Password</label>
                                 <div class="relative group">
                                     <!-- Lock Icon -->
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                                        <div class="p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg backdrop-blur-sm border border-purple-500/30 group-focus-within:border-purple-400/60 transition-all duration-300">
+                                    <div :class="isDark ? 'absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10' : 'absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10'">
+                                        <div :class="isDark ? 'p-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg backdrop-blur-sm border border-purple-500/30 group-focus-within:border-purple-400/60 transition-all duration-300' : 'p-2 bg-gradient-to-r from-purple-200/20 to-blue-200/20 rounded-lg backdrop-blur-sm border border-blue-200/40 group-focus-within:border-blue-400/60 transition-all duration-300'">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                 class="text-purple-400 group-focus-within:text-purple-300 transition-colors duration-300">
@@ -94,19 +94,19 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    
-                                    <input 
-                                        :type="showPassword ? 'text' : 'password'" 
-                                        id="password" 
-                                        v-model="password" 
+
+                                    <input
+                                        :type="showPassword ? 'text' : 'password'"
+                                        id="password"
+                                        v-model="password"
                                         required
-                                        class="w-full pl-16 pr-16 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white placeholder-slate-400 focus:border-purple-500/60 focus:bg-white/15 focus:shadow-lg focus:shadow-purple-500/20 transition-all duration-300 group-hover:bg-white/12 group-hover:border-white/30"
+                                        :class="isDark ? 'w-full pl-16 pr-16 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white placeholder-slate-400 focus:border-purple-500/60 focus:bg-white/15 focus:shadow-lg focus:shadow-purple-500/20 transition-all duration-300 group-hover:bg-white/12 group-hover:border-white/30' : 'w-full pl-16 pr-16 py-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 placeholder-slate-400 focus:border-blue-400 focus:bg-white focus:shadow-lg focus:shadow-blue-200/20 transition-all duration-300 group-hover:bg-blue-100 group-hover:border-blue-300'"
                                         placeholder="Enter your password"
                                     />
-                                    
+
                                     <!-- Password Toggle -->
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         class="absolute inset-y-0 right-0 pr-4 flex items-center z-10"
                                         @click="showPassword = !showPassword"
                                         tabindex="-1"
@@ -134,23 +134,22 @@
                             <div class="flex items-center justify-between">
                                 <label class="flex items-center cursor-pointer group">
                                     <input type="checkbox" v-model="rememberMe" class="sr-only">
-                                    <div class="relative flex items-center justify-center w-5 h-5 border-2 rounded transition-all duration-300"
-                                         :class="rememberMe ? 'border-purple-500 bg-gradient-to-r from-purple-500 to-blue-500' : 'border-slate-400 bg-transparent group-hover:border-purple-400'">
+                                    <div :class="['relative flex items-center justify-center w-5 h-5 border-2 rounded transition-all duration-300', rememberMe ? (isDark ? 'border-purple-500 bg-gradient-to-r from-purple-500 to-blue-500' : 'border-blue-500 bg-gradient-to-r from-blue-400 to-purple-400') : (isDark ? 'border-slate-400 bg-transparent group-hover:border-purple-400' : 'border-blue-200 bg-transparent group-hover:border-blue-400')]">
                                         <svg v-if="rememberMe" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <span class="ml-3 text-sm text-slate-300 group-hover:text-white transition-colors duration-300">Remember me</span>
+                                    <span :class="isDark ? 'ml-3 text-sm text-slate-300 group-hover:text-white transition-colors duration-300' : 'ml-3 text-sm text-blue-900 group-hover:text-blue-700 transition-colors duration-300'">Remember me</span>
                                 </label>
-                                <a href="#" class="text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300 font-medium hover:underline">
+                                <a href="#" :class="isDark ? 'text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300 font-medium hover:underline' : 'text-sm text-blue-500 hover:text-blue-400 transition-colors duration-300 font-medium hover:underline'">
                                     Forgot password?
                                 </a>
                             </div>
 
                             <!-- Error Message -->
-                            <div v-if="error" class="bg-red-500/15 border border-red-500/30 rounded-xl p-4 backdrop-blur-sm animate-shake">
+                            <div v-if="error" :class="isDark ? 'bg-red-500/15 border border-red-500/30 rounded-xl p-4 backdrop-blur-sm animate-shake' : 'bg-red-100 border border-red-300 rounded-xl p-4 animate-shake'">
                                 <div class="flex items-center space-x-3">
-                                    <div class="p-1 bg-red-500/20 rounded-lg">
+                                    <div :class="isDark ? 'p-1 bg-red-500/20 rounded-lg' : 'p-1 bg-red-200 rounded-lg'">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400">
                                             <circle cx="12" cy="12" r="10" />
@@ -158,19 +157,19 @@
                                             <line x1="9" y1="9" x2="15" y2="15" />
                                         </svg>
                                     </div>
-                                    <span class="text-red-300 text-sm font-medium">{{ error }}</span>
+                                    <span :class="isDark ? 'text-red-300 text-sm font-medium' : 'text-red-700 text-sm font-medium'">{{ error }}</span>
                                 </div>
                             </div>
 
                             <!-- Sign In Button -->
-                            <button 
-                                type="submit" 
-                                class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-0.5 shadow-lg hover:shadow-purple-500/30 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
+                            <button
+                                type="submit"
+                                :class="isDark ? 'w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-0.5 shadow-lg hover:shadow-purple-500/30 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group' : 'w-full py-4 bg-gradient-to-r from-blue-500 to-purple-400 hover:from-blue-400 hover:to-purple-300 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-0.5 shadow-lg hover:shadow-blue-200/30 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group'"
                                 :disabled="loading"
                             >
                                 <!-- Button Shimmer Effect -->
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 group-hover:animate-shimmer"></div>
-                                
+
                                 <span v-if="!loading" class="flex items-center justify-center space-x-2 relative z-10">
                                     <span>Sign In</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -180,21 +179,20 @@
                                         <path d="m12 5 7 7-7 7" />
                                     </svg>
                                 </span>
-                                
+
                                 <div v-else class="flex items-center justify-center space-x-3 relative z-10">
-                                    <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    <div :class="isDark ? 'w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' : 'w-5 h-5 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin' "></div>
                                     <span>Signing in...</span>
                                 </div>
                             </button>
                         </form>
 
                         <!-- Register Link -->
-                        <div class="text-center pt-6 mt-6 border-t border-slate-600">
-                            <p class="text-slate-400 text-sm mb-3">Don't have an account?</p>
-                            <router-link 
-                                to="/register" 
-                                class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 hover:from-indigo-500 hover:to-purple-500 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-indigo-500/30 backdrop-blur-sm border border-white/10 text-sm group"
-                            >
+                        <div class="text-center pt-6 mt-6 border-t" :class="isDark ? 'border-slate-600' : 'border-blue-100'">
+                            <p :class="isDark ? 'text-slate-400 text-sm mb-3' : 'text-slate-500 text-sm mb-3'">Don't have an account?</p>
+                            <router-link
+                                to="/register"
+                                :class="isDark ? 'inline-flex items-center px-6 py-2 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 hover:from-indigo-500 hover:to-purple-500 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-indigo-500/30 backdrop-blur-sm border border-white/10 text-sm group' : 'inline-flex items-center px-6 py-2 bg-gradient-to-r from-blue-400/80 to-purple-400/80 hover:from-blue-300 hover:to-purple-300 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-blue-200/30 border border-blue-100 text-sm group'">
                                 <span>Create Account</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -210,13 +208,13 @@
         </div>
 
         <!-- Footer -->
-        <footer class="relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-sm">
+        <footer :class="isDark ? 'relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-sm' : 'relative z-10 border-t border-blue-100 bg-blue-50'">
             <div class="container mx-auto px-6 py-6">
-                <div class="text-center text-slate-400">
+                <div class="text-center" :class="isDark ? 'text-slate-400' : 'text-slate-500'">
                     <p class="text-sm">
-                        Made with <span class="text-red-500">❤️</span> by EduStream Team
+                        Made with <span :class="isDark ? 'text-red-500' : 'text-red-600'">❤️</span> by EduStream Team
                     </p>
-                    <p class="text-xs mt-1 text-slate-500">
+                    <p class="text-xs mt-1" :class="isDark ? 'text-slate-500' : 'text-blue-400'">
                         © 2024 EduStream. Empowering learners worldwide.
                     </p>
                 </div>
@@ -229,9 +227,11 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import { useTheme } from '../../composables/useTheme';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { isDark } = useTheme();
 
 const email = ref('');
 const password = ref('');
@@ -357,7 +357,7 @@ input:focus::placeholder {
         animation: none !important;
         transition: none !important;
     }
-    
+
     .animate-slide-up {
         opacity: 1;
         transform: none;

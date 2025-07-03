@@ -1,19 +1,11 @@
 <template>
-    <div
-        class="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-gray-900"
-    >
+    <div :class="isDark ? 'min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-gray-900 text-white' : 'min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-white text-slate-900'">
         <section class="relative overflow-hidden">
             <!-- Animated Background  -->
             <div class="absolute inset-0">
-                <div
-                    class="absolute top-20 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl animate-pulse"
-                ></div>
-                <div
-                    class="absolute top-40 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"
-                ></div>
-                <div
-                    class="absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-600/10 rounded-full blur-3xl animate-pulse delay-2000"
-                ></div>
+                <div :class="isDark ? 'absolute top-20 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl animate-pulse' : 'absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-pulse' "></div>
+                <div :class="isDark ? 'absolute top-40 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000' : 'absolute top-40 right-20 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl animate-pulse delay-1000' "></div>
+                <div :class="isDark ? 'absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-600/10 rounded-full blur-3xl animate-pulse delay-2000' : 'absolute bottom-20 left-1/3 w-60 h-60 bg-indigo-200/30 rounded-full blur-3xl animate-pulse delay-2000' "></div>
             </div>
 
             <!-- Floating Particles -->
@@ -39,39 +31,31 @@
                         class="lg:w-1/2 text-center lg:text-left space-y-8 animate-fade-in-up"
                     >
                         <!-- Badge -->
-                        <div
-                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full backdrop-blur-sm"
-                        >
-                            <span class="text-sm font-medium text-blue-300"
-                                >🚀 New Platform Launch</span
-                            >
+                        <div :class="isDark ? 'inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full backdrop-blur-sm' : 'inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-200/30 to-purple-200/30 border border-blue-200/40 rounded-full backdrop-blur-sm'">
+                            <span :class="isDark ? 'text-sm font-medium text-blue-300' : 'text-sm font-medium text-blue-700'">
+                                🚀 New Platform Launch
+                            </span>
                         </div>
 
                         <!-- Main Heading -->
                         <h1
                             class="text-5xl md:text-7xl font-black leading-tight"
                         >
-                            <span
-                                class="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent"
-                            >
+                            <span :class="isDark ? 'block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent' : 'block bg-gradient-to-r from-blue-700 via-blue-400 to-purple-400 bg-clip-text text-transparent'">
                             EduStream
                             </span>
-                            <span
-                                class="block bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent"
-                            >
+                            <span :class="isDark ? 'block bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent' : 'block bg-gradient-to-r from-blue-700 via-purple-700 to-indigo-700 bg-clip-text text-transparent'">
                                 Shape Future
                             </span>
                         </h1>
 
                         <!-- Description -->
-                        <p
-                            class="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
-                        >
+                        <p :class="isDark ? 'text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed' : 'text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed'">
                             Transform your career with cutting-edge courses from
                             industry experts.
-                            <span class="text-blue-300 font-semibold"
-                                >Learn, Build, Succeed</span
-                            >
+                            <span :class="isDark ? 'text-blue-300 font-semibold' : 'text-blue-700 font-semibold'">
+                                Learn, Build, Succeed
+                            </span>
                             — all at your own pace.
                         </p>
 
@@ -80,26 +64,17 @@
                             class="flex flex-wrap justify-center lg:justify-start gap-8 py-6"
                         >
                             <!-- Quality Education Card -->
-                            <div
-                                class="group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-blue-500/30 transition-all duration-300 transform hover:scale-105"
-                            >
+                            <div :class="isDark ? 'group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-blue-500/30 transition-all duration-300 transform hover:scale-105' : 'group p-4 bg-white rounded-2xl border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 transform hover:scale-105 shadow'">
                                 <div class="relative">
                                     <div class="flex items-center gap-3">
-                                        <div
-                                            class="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10"
-                                        >
-                                            <font-awesome-icon
-                                                :icon="['fas', 'award']"
-                                                class="text-2xl text-blue-400"
-                                            />
+                                        <div :class="isDark ? 'p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10' : 'p-3 rounded-xl bg-gradient-to-br from-blue-200/30 to-purple-200/30 border border-blue-100'">
+                                            <font-awesome-icon :icon="['fas', 'award']" :class="isDark ? 'text-2xl text-blue-400' : 'text-2xl text-blue-700'" />
                                         </div>
                                         <div class="text-left">
-                                            <div
-                                                class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors"
-                                            >
+                                            <div :class="isDark ? 'text-lg font-bold text-white group-hover:text-blue-400 transition-colors' : 'text-lg font-bold text-blue-700 group-hover:text-blue-500 transition-colors'">
                                                 Premium Quality
                                             </div>
-                                            <div class="text-sm text-slate-400">
+                                            <div :class="isDark ? 'text-sm text-slate-400' : 'text-sm text-slate-500'">
                                                 Expert-Led Courses
                                             </div>
                                         </div>
@@ -108,26 +83,17 @@
                             </div>
 
                             <!-- Interactive Learning Card -->
-                            <div
-                                class="group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/30 transition-all duration-300 transform hover:scale-105"
-                            >
+                            <div :class="isDark ? 'group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/30 transition-all duration-300 transform hover:scale-105' : 'group p-4 bg-white rounded-2xl border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 transform hover:scale-105 shadow'">
                                 <div class="relative">
                                     <div class="flex items-center gap-3">
-                                        <div
-                                            class="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10"
-                                        >
-                                            <font-awesome-icon
-                                                :icon="['fas', 'lightbulb']"
-                                                class="text-2xl text-purple-400"
-                                            />
+                                        <div :class="isDark ? 'p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10' : 'p-3 rounded-xl bg-gradient-to-br from-purple-200/30 to-pink-200/30 border border-blue-100'">
+                                            <font-awesome-icon :icon="['fas', 'lightbulb']" :class="isDark ? 'text-2xl text-purple-400' : 'text-2xl text-purple-700'" />
                                         </div>
                                         <div class="text-left">
-                                            <div
-                                                class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors"
-                                            >
+                                            <div :class="isDark ? 'text-lg font-bold text-white group-hover:text-purple-400 transition-colors' : 'text-lg font-bold text-purple-700 group-hover:text-purple-500 transition-colors'">
                                                 Interactive
                                             </div>
-                                            <div class="text-sm text-slate-400">
+                                            <div :class="isDark ? 'text-sm text-slate-400' : 'text-sm text-slate-500'">
                                                 Hands-on Learning
                                             </div>
                                         </div>
@@ -136,26 +102,17 @@
                             </div>
 
                             <!-- Modern Platform Card -->
-                            <div
-                                class="group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-emerald-500/30 transition-all duration-300 transform hover:scale-105"
-                            >
+                            <div :class="isDark ? 'group p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-emerald-500/30 transition-all duration-300 transform hover:scale-105' : 'group p-4 bg-white rounded-2xl border border-blue-100 hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 transform hover:scale-105 shadow'">
                                 <div class="relative">
                                     <div class="flex items-center gap-3">
-                                        <div
-                                            class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-white/10"
-                                        >
-                                            <font-awesome-icon
-                                                :icon="['fas', 'rocket']"
-                                                class="text-2xl text-emerald-400"
-                                            />
+                                        <div :class="isDark ? 'p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-white/10' : 'p-3 rounded-xl bg-gradient-to-br from-emerald-200/30 to-teal-200/30 border border-blue-100'">
+                                            <font-awesome-icon :icon="['fas', 'rocket']" :class="isDark ? 'text-2xl text-emerald-400' : 'text-2xl text-emerald-700'" />
                                         </div>
                                         <div class="text-left">
-                                            <div
-                                                class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors"
-                                            >
+                                            <div :class="isDark ? 'text-lg font-bold text-white group-hover:text-emerald-400 transition-colors' : 'text-lg font-bold text-emerald-700 group-hover:text-emerald-500 transition-colors'">
                                                 Modern Platform
                                             </div>
-                                            <div class="text-sm text-slate-400">
+                                            <div :class="isDark ? 'text-sm text-slate-400' : 'text-sm text-slate-500'">
                                                 Latest Technologies
                                             </div>
                                         </div>
@@ -982,6 +939,7 @@ import {
     faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { useHomeStore } from "@/stores/homeStore";
+import { useTheme } from '../composables/useTheme';
 
 library.add(
     faLightbulb,
@@ -1036,6 +994,8 @@ onMounted(async () => {
         randomCourse.value = getRandomCourse();
     }, 10000);
 });
+
+const { isDark } = useTheme();
 </script>
 
 <style scoped>

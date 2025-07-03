@@ -48,7 +48,7 @@ class CourseQuizController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'start_at' => 'required|date',
+            'start_at' => 'required|date_format:Y-m-d\TH:i',
             'duration_minutes' => 'required|integer|min:1',
         ]);
 
@@ -89,7 +89,7 @@ class CourseQuizController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'start_at' => 'required|date',
+            'start_at' => 'required|date_format:Y-m-d\TH:i',
             'duration_minutes' => 'required|integer|min:1',
         ]);
 

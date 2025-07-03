@@ -84,10 +84,23 @@ const routes = [{
         props: true,
     },
     {
-        path: '/profile',
-        name: 'profile',
-        component: Profile,
+        path: '/profile/:page/:id',
+        name: 'profile-page-id',
+        component: () =>
+            import ('../views/ProfileDynamicPage.vue'),
+        props: true,
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/profile/:page',
+        name: 'profile-page',
+        component: Profile,
+        props: true,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/profile',
+        redirect: '/profile/overview'
     },
     {
         path: '/assignments/:id',
@@ -101,6 +114,12 @@ const routes = [{
         name: 'clear',
         component: Logout,
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: () =>
+            import ('../views/NotFound.vue')
     },
     // Instructor Routes
 ];

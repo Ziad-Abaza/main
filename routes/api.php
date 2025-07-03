@@ -10,9 +10,10 @@ use App\Http\Controllers\Api\User\QuizController;
 use App\Http\Controllers\Api\User\VideoController;
 use App\Http\Controllers\Api\User\ProgressController;
 use App\Http\Controllers\Api\User\CourseController as UserCourseController;
-use App\Http\Controllers\Api\User\AssignmentController;
+use App\Http\Controllers\Api\Lms\AssignmentController;
 use App\Http\Controllers\Api\General\CategoryController;
 use App\Http\Controllers\Api\Instructor\SubmissionController;
+use App\Http\Controllers\Api\Lms\CourseQuizController;
 /*
 |===========================================
 |> Authentication Routes
@@ -80,6 +81,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/video/{videoId}', [QuizController::class, 'showQuizForVideo']);
         Route::post('/video/{videoId}', [QuizController::class, 'submitQuizAnswers']);
         Route::get('/video/{videoId}/quiz-results', [QuizController::class, 'getQuizResults']);
+        // LMS Course-level Quiz Endpoints
+        Route::get('/', [CourseQuizController::class, 'index']);
+        Route::get('/all', [CourseQuizController::class, 'index']);
+        Route::get('/course/{courseId}', [CourseQuizController::class, 'showQuizForCourse']);
+        Route::post('/course/{courseId}', [CourseQuizController::class, 'submitQuizAnswers']);
+        Route::get('/course/{courseId}/quiz-results', [CourseQuizController::class, 'getQuizResults']);
+        Route::post('/{quizId}/submit', [CourseQuizController::class, 'submitQuizById']);
+        Route::get('/{quizId}', [CourseQuizController::class, 'show']);
     });
 
     // User Progress Routes

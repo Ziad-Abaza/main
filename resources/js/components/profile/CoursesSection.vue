@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div :class="isDark ? 'text-white' : 'text-slate-800'">
     <h2 class="text-2xl font-semibold mb-4">My Courses</h2>
 
-    <div v-if="loading" class="text-gray-400">Loading...</div>
+    <div v-if="loading" :class="isDark ? 'text-gray-400' : 'text-gray-500'">Loading...</div>
     <div v-if="error" class="text-red-500">{{ error }}</div>
 
     <ul v-if="!loading && !error" class="space-y-4">
-      <li v-for="c in courses" :key="c.course_id" class="p-4 bg-white/5 rounded-xl flex justify-between items-center">
+      <li v-for="c in courses" :key="c.course_id" :class="['p-4 rounded-xl flex justify-between items-center', isDark ? 'bg-white/5' : 'bg-blue-50']">
         <div>
           <h3 class="text-xl font-semibold">{{ c.title }}</h3>
-          <p class="text-gray-400 text-sm">{{ c.category_name }}</p>
+          <p :class="isDark ? 'text-gray-400' : 'text-gray-500 text-sm'">{{ c.category_name }}</p>
         </div>
-        <router-link :to="`/courses/${c.course_id}`" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm">Open</router-link>
+        <router-link :to="`/courses/${c.course_id}`" :class="isDark ? 'px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm text-white' : 'px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm text-white'">Open</router-link>
       </li>
     </ul>
   </div>
@@ -20,6 +20,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useTheme } from '../../composables/useTheme';
+const { isDark } = useTheme();
 
 const loading = ref(false);
 const error = ref(null);

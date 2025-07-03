@@ -2,14 +2,15 @@
   <nav :class="[
     'modern-navbar',
     { scrolled: isScrolled },
-    'fixed top-0 left-0 w-full z-50 px-4 py-3 transition-all duration-500'
+    isDark ? 'fixed top-0 left-0 w-full z-50 px-4 py-3 transition-all duration-500' : 'fixed top-0 left-0 w-full z-50 px-4 py-3 transition-all duration-500 bg-white/95 border-b border-blue-50 shadow',
+    !isDark && isScrolled ? 'bg-white border-b border-blue-100 shadow-md' : ''
   ]">
     <div class="container mx-auto flex items-center justify-between">
       <!-- Logo with enhanced animation -->
       <router-link to="/" class="flex items-center space-x-2 group">
-          <font-awesome-icon :icon="['fas', 'stream']" class="text-indigo-500 text-xl group-hover:text-blue-400 transition" />
-          <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">EduStream</span>
-        </router-link>
+        <img :src="logo" alt="CTU Logo" class="h-16 w-16 object-contain transition-transform duration-300 group-hover:scale-110" />
+        <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">CTU</span>
+      </router-link>
 
       <!-- Desktop Menu with enhanced styling -->
       <div class="hidden md:flex items-center space-x-1">
@@ -107,6 +108,7 @@ import { faStream, faSearch, faBars, faTimes, faMoon, faSun } from '@fortawesome
 import { useAuthStore } from '../stores/auth';
 import { useRoute } from 'vue-router';
 import { useTheme } from '../composables/useTheme';
+import logo from '../assets/icons/logo.png';
 
 library.add(faStream, faSearch, faBars, faTimes, faMoon, faSun);
 
@@ -151,6 +153,98 @@ onUnmounted(() => {
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.modern-navbar) {
+  /* Light mode overrides */
+  background: var(--navbar-bg, rgba(15, 23, 42, 0.8));
+}
+
+:deep(.modern-navbar):not(.dark) {
+  --navbar-bg: #fff;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.04);
+}
+
+:deep(.modern-navbar):not(.dark).scrolled {
+  --navbar-bg: #fff;
+  border-bottom: 1px solid #e0e7ef;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.07);
+}
+
+:deep(.modern-navbar):not(.dark) .nav-link {
+  color: #64748b;
+  background: transparent;
+}
+:deep(.modern-navbar):not(.dark) .nav-link.router-link-active,
+:deep(.modern-navbar):not(.dark) .nav-link.router-link-exact-active {
+  color: #2563eb;
+  background: #f1f5f9;
+}
+:deep(.modern-navbar):not(.dark) .nav-link:hover {
+  color: #1e40af;
+  background: #f3f4f6;
+}
+:deep(.modern-navbar):not(.dark) .group-hover\:opacity-100.transition-opacity.duration-300 {
+  background: linear-gradient(to right, #e0e7ff55, #f3e8ff55);
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r {
+  background: linear-gradient(to right, #60a5fa, #a78bfa);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+:deep(.modern-navbar):not(.dark) .text-gray-300 {
+  color: #64748b !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-white\/10 {
+  background: #f1f5f9 !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-white\/5 {
+  background: #f3f4f6 !important;
+}
+:deep(.modern-navbar):not(.dark) .text-blue-400 {
+  color: #2563eb !important;
+}
+:deep(.modern-navbar):not(.dark) .text-white {
+  color: #1e293b !important;
+}
+:deep(.modern-navbar):not(.dark) .hover\:bg-white\/5:hover {
+  background: #f3f4f6 !important;
+}
+:deep(.modern-navbar):not(.dark) .hover\:bg-white\/10:hover {
+  background: #f1f5f9 !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-blue-600.to-purple-600 {
+  background: linear-gradient(to right, #2563eb, #a78bfa) !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-red-500.to-red-600 {
+  background: linear-gradient(to right, #ef4444, #f87171) !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-blue-500.to-purple-500 {
+  background: linear-gradient(to right, #60a5fa, #a78bfa) !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-blue-500\/20.to-purple-500\/20 {
+  background: linear-gradient(to right, #e0e7ff55, #f3e8ff55) !important;
+}
+:deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-red-400.to-red-500 {
+  background: linear-gradient(to right, #fca5a5, #f87171) !important;
+}
+:deep(.modern-navbar):not(.dark) .text-yellow-400 {
+  color: #f59e42 !important;
+}
+:deep(.modern-navbar):not(.dark) .dark\:text-blue-400 {
+  color: #2563eb !important;
+}
+:deep(.modern-navbar):not(.dark) .rounded-lg {
+  border-radius: 0.75rem;
+}
+:deep(.modern-navbar):not(.dark) .shadow-lg {
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.04);
+}
+:deep(.modern-navbar):not(.dark) .shadow-xl {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.07);
 }
 
 .scrolled {
