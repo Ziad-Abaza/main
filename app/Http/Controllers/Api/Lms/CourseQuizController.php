@@ -31,6 +31,9 @@ class CourseQuizController extends Controller
                 ], 404);
             }
 
+            /**
+             * @var \App\Models\User $user
+             */
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -104,6 +107,9 @@ class CourseQuizController extends Controller
                 ], 404);
             }
 
+            /**
+             * @var \App\Models\User $user
+             */
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -190,6 +196,9 @@ class CourseQuizController extends Controller
                 ], 404);
             }
 
+            /**
+             * @var \App\Models\User $user
+             */
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -239,6 +248,9 @@ class CourseQuizController extends Controller
             $user = Auth::user();
             $now = now();
             // Get all courses the user is enrolled in
+            /**
+             * @var \App\Models\User $user
+             */
             $courses = $user->enrolledCourses()->get();
             $allQuizzes = [];
             foreach ($courses as $course) {
@@ -246,15 +258,15 @@ class CourseQuizController extends Controller
                     ->orderBy('start_at', 'asc')
                     ->get();
                 foreach ($quizzes as $quiz) {
-                    $status = 'open';
                     $startAt = \Carbon\Carbon::parse($quiz->start_at);
-                    $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
+                    $durationMinutes = $quiz->duration_minutes ?? 0;
+                    $quizEnd = $startAt->copy()->addMinutes($durationMinutes);
 
                     $status = 'open';
-                    if ($endAt && $endAt->isPast()) {
-                        $status = 'closed';
-                    } elseif ($startAt && $now->lt($startAt)) {
+                    if ($now->lt($startAt)) {
                         $status = 'scheduled';
+                    } elseif ($now->gt($quizEnd)) {
+                        $status = 'closed';
                     }
 
                     $allQuizzes[] = [
@@ -264,8 +276,7 @@ class CourseQuizController extends Controller
                         'duration_minutes' => $quiz->duration_minutes,
                         'end_at' => $quiz->end_at,
                         'status' => $status,
-                        'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
-
+                        'message' => $status === 'scheduled' ? 'Quiz opens at ' . $startAt->format('M d, Y H:i') : null,
                         'course_id' => $course->course_id,
                         'course_title' => $course->title,
                     ];
@@ -295,14 +306,16 @@ class CourseQuizController extends Controller
             $status = 'open';
             $now = now();
             $startAt = \Carbon\Carbon::parse($quiz->start_at);
-            $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
+            $durationMinutes = $quiz->duration_minutes ?? 0;
+            $quizEnd = $startAt->copy()->addMinutes($durationMinutes);
 
             $status = 'open';
-            if ($endAt && $endAt->isPast()) {
-                $status = 'closed';
-            } elseif ($startAt && $now->lt($startAt)) {
+            if ($now->lt($startAt)) {
                 $status = 'scheduled';
+            } elseif ($now->gt($quizEnd)) {
+                $status = 'closed';
             }
+
             $questions = $quiz->questions->map(function($q) {
                 return [
                     'question_id' => $q->question_id,
@@ -354,7 +367,7 @@ class CourseQuizController extends Controller
             $submittedAnswers = $request->input('answers');
             $score = 0;
             $totalQuestions = count($submittedAnswers);
-            $userId = auth()->id();
+            $userId = Auth::id();
             foreach ($submittedAnswers as $answer) {
                 $question = $quiz->questions->where('question_id', $answer['question_id'])->first();
                 $correctOption = $question->questionOptions->firstWhere('is_correct', true);
