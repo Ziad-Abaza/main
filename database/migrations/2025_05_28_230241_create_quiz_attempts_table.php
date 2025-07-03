@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('attempt_id')->primary();
             $table->foreignUuid('user_id')->constrained('users', 'user_id')->cascadeOnDelete();
             $table->foreignUuid('question_id')->constrained('questions', 'question_id')->cascadeOnDelete();
-            $table->foreignUuid('selected_option_id')->constrained('question_options', 'option_id')->cascadeOnDelete();
+            $table->foreignUuid('selected_option_id')->nullable()->constrained('question_options', 'option_id')->cascadeOnDelete();
+            $table->text('essay_answer')->nullable();
             $table->timestamp('attempt_time')->useCurrent();
             $table->boolean('is_correct')->nullable();
             $table->timestamps();

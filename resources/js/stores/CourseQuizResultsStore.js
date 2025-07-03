@@ -28,13 +28,16 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
             this.error = null;
             const authStore = useAuthStore();
             try {
-                const response = await axios.get(`/api/quizzes/course/${courseId}/quiz-results`, {
-                    headers: {
-                        Authorization: `Bearer ${authStore.token}`,
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                });
+                const response = await axios.get(
+                    `/api/quizzes/course/${courseId}/quiz-results`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authStore.token}`,
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
                 const data = response.data.data;
                 this.courseId = courseId;
                 this.totalQuestions = data.total_questions;
@@ -42,7 +45,7 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
                 this.percentage = data.percentage;
                 this.attempts = [...(data.attempts || [])];
                 const grouped = {};
-                (data.attempts || []).forEach(attempt => {
+                (data.attempts || []).forEach((attempt) => {
                     if (!grouped[attempt.question_id]) {
                         grouped[attempt.question_id] = [];
                     }
@@ -50,8 +53,10 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
                 });
                 this.groupedAttempts = grouped;
             } catch (error) {
-                console.error('Error fetching course quiz results:', error);
-                this.error = error.response ? .data ? .message || 'Failed to load course quiz results.';
+                console.error("Error fetching course quiz results:", error);
+                this.error =
+                    error.response?.data?.message ||
+                    "Failed to load course quiz results.";
                 throw error;
             } finally {
                 this.loading = false;

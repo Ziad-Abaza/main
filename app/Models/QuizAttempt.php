@@ -20,6 +20,7 @@ class QuizAttempt extends Model
         'selected_option_id',
         'attempt_time',
         'is_correct',
+        'essay_answer'
     ];
 
     public function user()
