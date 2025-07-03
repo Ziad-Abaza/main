@@ -1,17 +1,17 @@
 <template>
     <div
-        class="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white"
+        :class="isDark ? 'min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white' : 'min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-white text-slate-900'"
     >
         <!-- Static Background Elements - تحديث مواقع العناصر -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-                class="absolute top-10 right-[20%] w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl opacity-50 rotate-12"
+                :class="isDark ? 'absolute top-10 right-[20%] w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl opacity-50 rotate-12' : 'absolute top-10 right-[20%] w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl opacity-50 rotate-12'"
             ></div>
             <div
-                class="absolute bottom-40 left-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl opacity-40 -rotate-12"
+                :class="isDark ? 'absolute bottom-40 left-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl opacity-40 -rotate-12' : 'absolute bottom-40 left-20 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl opacity-40 -rotate-12'"
             ></div>
             <div
-                class="absolute top-1/3 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl opacity-30"
+                :class="isDark ? 'absolute top-1/3 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl opacity-30' : 'absolute top-1/3 left-1/4 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl opacity-30'"
             ></div>
         </div>
 
@@ -34,13 +34,13 @@
         <!-- Floating geometric shapes - تحديث مواقع وأحجام الأشكال الهندسية -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-                class="absolute top-1/4 right-1/3 w-10 h-10 border border-indigo-400/30 rotate-45 animate-float"
+                :class="isDark ? 'absolute top-1/4 right-1/3 w-10 h-10 border border-indigo-400/30 rotate-45 animate-float' : 'absolute top-1/4 right-1/3 w-10 h-10 border border-indigo-200/40 rotate-45 animate-float'"
             ></div>
             <div
-                class="absolute bottom-1/4 left-1/3 w-8 h-8 border border-purple-400/30 -rotate-12 animate-float-delayed"
+                :class="isDark ? 'absolute bottom-1/4 left-1/3 w-8 h-8 border border-purple-400/30 -rotate-12 animate-float-delayed' : 'absolute bottom-1/4 left-1/3 w-8 h-8 border border-purple-200/40 -rotate-12 animate-float-delayed'"
             ></div>
             <div
-                class="absolute top-2/3 right-1/4 w-6 h-6 border border-blue-400/30 rotate-90 animate-float"
+                :class="isDark ? 'absolute top-2/3 right-1/4 w-6 h-6 border border-blue-400/30 rotate-90 animate-float' : 'absolute top-2/3 right-1/4 w-6 h-6 border border-blue-200/40 rotate-90 animate-float'"
             ></div>
         </div>
 
@@ -51,11 +51,11 @@
             <div class="w-full max-w-4xl">
                 <!-- Register Card -->
                 <div
-                    class="glass-card-premium rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-xl relative group animate-slide-up"
+                    :class="isDark ? 'glass-card-premium rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-xl relative group animate-slide-up' : 'bg-white rounded-2xl overflow-hidden shadow-xl border border-blue-100 relative group animate-slide-up'"
                 >
                     <!-- Gradient Overlay -->
                     <div
-                        class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-60 pointer-events-none"
+                        :class="isDark ? 'absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-60 pointer-events-none' : 'absolute inset-0 bg-gradient-to-br from-purple-200/10 via-transparent to-blue-200/10 opacity-60 pointer-events-none'"
                     ></div>
 
                     <!-- Shimmer Effect -->
@@ -71,7 +71,7 @@
                         <!-- Header with Icon -->
                         <div class="text-center mb-8">
                             <div
-                                class="inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500"
+                                :class="isDark ? 'inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500' : 'inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-purple-200 to-blue-200 rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-all duration-500'"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -94,11 +94,11 @@
                                 </svg>
                             </div>
                             <h2
-                                class="text-xl lg:text-2xl font-bold text-white mb-1"
+                                :class="isDark ? 'text-xl lg:text-2xl font-bold text-white mb-1' : 'text-xl lg:text-2xl font-bold text-blue-900 mb-1'"
                             >
                                 Create Your Account
                             </h2>
-                            <p class="text-slate-400 text-sm lg:text-base">
+                            <p :class="isDark ? 'text-slate-400 text-sm lg:text-base' : 'text-slate-500 text-sm lg:text-base'">
                                 Join our learning community today
                             </p>
                         </div>
@@ -654,23 +654,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Footer -->
-        <footer
-            class="relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-sm"
-        >
-            <div class="container mx-auto px-6 py-6">
-                <div class="text-center text-slate-400">
-                    <p class="text-sm">
-                        Made with <span class="text-red-500">❤️</span> by
-                        EduStream Team
-                    </p>
-                    <p class="text-xs mt-1 text-slate-500">
-                        © 2024 EduStream. Empowering learners worldwide.
-                    </p>
-                </div>
-            </div>
-        </footer>
     </div>
 </template>
 
@@ -678,9 +661,11 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useTheme } from '../../composables/useTheme';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { isDark } = useTheme();
 
 const name = ref("");
 const email = ref("");

@@ -14,6 +14,9 @@ use App\Http\Controllers\Api\Lms\AssignmentController;
 use App\Http\Controllers\Api\General\CategoryController;
 use App\Http\Controllers\Api\Instructor\SubmissionController;
 use App\Http\Controllers\Api\Lms\CourseQuizController;
+use App\Http\Controllers\Api\General\FaqController as ApiFaqController;
+use App\Http\Controllers\Api\General\BlogController as ApiBlogController;
+use App\Http\Controllers\Api\General\ContactController as ApiContactController;
 /*
 |===========================================
 |> Authentication Routes
@@ -136,3 +139,14 @@ Route::prefix('instructors')->group(function () {
     Route::get('/', [InstructorController::class, 'index']);
     Route::get('/{instructor_profile_id}', [InstructorController::class, 'show']);
 });
+
+// FAQ API
+Route::get('/faqs', [ApiFaqController::class, 'index']);
+Route::get('/faqs/{faq}', [ApiFaqController::class, 'show']);
+
+// Blog API
+Route::get('/blogs', [ApiBlogController::class, 'index']);
+Route::get('/blogs/{blog}', [ApiBlogController::class, 'show']);
+
+// Contact API
+Route::post('/contact', [ApiContactController::class, 'store']);

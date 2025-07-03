@@ -13,6 +13,9 @@ use App\Http\Controllers\Web\Dashboard\DashboardController;
 use App\Http\Controllers\Web\Instructor\AbsenceController;
 use Illuminate\Support\Facades\Log;
 use App\Livewire\Dashboard\ChildrenStudentsTable;
+use App\Http\Controllers\Web\Dashboard\FaqController;
+use App\Http\Controllers\Web\Dashboard\BlogController;
+use App\Http\Controllers\Web\Dashboard\ContactController;
 
 
 
@@ -148,6 +151,32 @@ Route::middleware(['auth', 'role:admin'])->prefix('console')->group(function () 
         Route::get('/edit/{level}', [LevelCourseController::class, 'edit'])->name('console.level-courses.edit');
         Route::post('/update/{level}', [LevelCourseController::class, 'update'])->name('console.level-courses.update');
         Route::delete('/{level}/remove/{course}', [LevelCourseController::class, 'destroy'])->name('console.level-courses.delete');
+    });
+
+    // FAQ Management
+    Route::prefix('faqs')->group(function () {
+        Route::get('/', [FaqController::class, 'index'])->name('dashboard.faq.index');
+        Route::get('/create', [FaqController::class, 'create'])->name('dashboard.faq.create');
+        Route::post('/store', [FaqController::class, 'store'])->name('dashboard.faq.store');
+        Route::get('/edit/{faq}', [FaqController::class, 'edit'])->name('dashboard.faq.edit');
+        Route::put('/update/{faq}', [FaqController::class, 'update'])->name('dashboard.faq.update');
+        Route::delete('/delete/{faq}', [FaqController::class, 'destroy'])->name('dashboard.faq.destroy');
+    });
+
+    // Blog Management
+    Route::prefix('blogs')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('dashboard.blog.index');
+        Route::get('/create', [BlogController::class, 'create'])->name('dashboard.blog.create');
+        Route::post('/store', [BlogController::class, 'store'])->name('dashboard.blog.store');
+        Route::get('/edit/{blog}', [BlogController::class, 'edit'])->name('dashboard.blog.edit');
+        Route::put('/update/{blog}', [BlogController::class, 'update'])->name('dashboard.blog.update');
+        Route::delete('/delete/{blog}', [BlogController::class, 'destroy'])->name('dashboard.blog.destroy');
+    });
+
+    // Contact Management
+    Route::prefix('contacts')->group(function () {
+        Route::get('/', [ContactController::class, 'index'])->name('dashboard.contact.index');
+        Route::delete('/delete/{contact}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
     });
 
     // Students Management

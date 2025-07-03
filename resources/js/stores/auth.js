@@ -96,21 +96,21 @@ export const useAuthStore = defineStore("auth", {
 
         async fetchUser() {
             try {
-              if (!this.token) {
-                throw new Error("No token found");
-              }
-              const response = await axios.get("/api/auth/user");
-              // response.data = { success, code, user }
-              this.user = response.data.user;
-              localStorage.setItem("user", JSON.stringify(this.user));
-              return response;
+                if (!this.token) {
+                    throw new Error("No token found");
+                }
+                const response = await axios.get("/api/auth/user");
+                // response.data = { success, code, user }
+                this.user = response.data.user;
+                localStorage.setItem("user", JSON.stringify(this.user));
+                return response;
             } catch (error) {
-              this.token = null;
-              this.user = null;
-              localStorage.removeItem("token");
-              localStorage.removeItem("user");
-              throw error;
+                this.token = null;
+                this.user = null;
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                throw error;
             }
-          },
+        },
     },
 });

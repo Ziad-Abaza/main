@@ -45,7 +45,7 @@
         </button>
 
         <!-- Auth Actions -->
-        <div v-if="authStore.user" class="flex items-center space-x-3">
+        <router-link to="/profile" v-if="authStore.user" class="flex items-center space-x-3">
           <div class="hidden md:flex items-center space-x-2 px-3 py-2 bg-white/5 rounded-lg">
             <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             <span class="text-sm text-gray-300">
@@ -57,7 +57,7 @@
             <span class="relative z-10">Logout</span>
             <div class="absolute inset-0 bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
-        </div>
+        </router-link>
         <router-link v-else to="/login"
           class="relative overflow-hidden text-sm px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group">
           <span class="relative z-10">Login</span>

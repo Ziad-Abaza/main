@@ -83,6 +83,33 @@
                 </a>
             </li>
 
+            <!-- FAQ -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/faqs*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('dashboard.faq.index') }}">
+                    <i class="material-symbols-rounded opacity-5">help</i>
+                    <span class="nav-link-text ms-1">FAQs</span>
+                </a>
+            </li>
+
+            <!-- Blog -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/blogs*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('dashboard.blog.index') }}">
+                    <i class="material-symbols-rounded opacity-5">article</i>
+                    <span class="nav-link-text ms-1">Blog</span>
+                </a>
+            </li>
+
+            <!-- Contact -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/contacts*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('dashboard.contact.index') }}">
+                    <i class="material-symbols-rounded opacity-5">mail</i>
+                    <span class="nav-link-text ms-1">Contact Messages</span>
+                </a>
+            </li>
+
             <!-- Separator -->
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">

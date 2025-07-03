@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder
             CourseEnrollmentsSeeder::class,
             ChildrenUniversitySeeder::class,
             AbsenceSeeder::class,
+            FaqSeeder::class,
+            BlogSeeder::class,
+            ContactSeeder::class,
         ]);
     }
 }

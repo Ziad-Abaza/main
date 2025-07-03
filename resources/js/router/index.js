@@ -15,6 +15,12 @@ import Quiz from '../views/Quiz.vue';
 import QuizResult from '../views/QuizResults.vue';
 import InstructorProfile from '../views/InstructorProfile.vue';
 import Profile from '../views/Profile.vue';
+import About from '../views/About.vue';
+import Privacy from '../views/Privacy.vue';
+import Terms from '../views/Terms.vue';
+import FAQ from '../views/FAQ.vue';
+import Blog from '../views/Blog.vue';
+import Contact from '../views/Contact.vue';
 
 const routes = [{
         path: '/',
@@ -114,6 +120,36 @@ const routes = [{
         name: 'clear',
         component: Logout,
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: About,
+    },
+    {
+        path: '/privacy',
+        name: 'privacy',
+        component: Privacy,
+    },
+    {
+        path: '/terms',
+        name: 'terms',
+        component: Terms,
+    },
+    {
+        path: '/faq',
+        name: 'faq',
+        component: FAQ,
+    },
+    {
+        path: '/blog',
+        name: 'blog',
+        component: Blog,
+    },
+    {
+        path: '/contact',
+        name: 'contact',
+        component: Contact,
     },
     {
         path: '/:pathMatch(.*)*',
