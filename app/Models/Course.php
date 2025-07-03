@@ -68,6 +68,11 @@ class Course extends Model implements HasMedia
         return $this->hasOne(CourseEnrollment::class, 'course_id', 'course_id');
     }
 
+    public function enrolledUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_course_progress', 'course_id', 'user_id');
+    }
+
     public function videos()
     {
         return $this->hasMany(Video::class, 'course_id');

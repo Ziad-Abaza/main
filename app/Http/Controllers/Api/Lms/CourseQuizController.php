@@ -4,412 +4,299 @@ namespace App\Http\Controllers\Api\Lms;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Response;
-use App\Models\Course;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use App\Models\QuizAssignment;
-use App\Models\Question;
-use App\Models\QuestionOption;
 use App\Models\QuizAttempt;
-use Throwable;
-use Illuminate\Support\Str;
+use App\Models\QuestionOption;
+use GuzzleHttp\Psr7\Message;
+use Illuminate\Http\Response;
 
 class CourseQuizController extends Controller
 {
-    // GET /api/quizzes/course/{courseId}
-    public function showQuizForCourse(Request $request, $courseId)
+    public function __construct()
     {
-        try {
-            $user = Auth::user();
-            $course = Course::where('course_id', $courseId)->first();
-            if (!$course) {
-                return response()->json([
-                    'success' => false,
-                    'code' => 404,
-                    'message' => 'Course not found.',
-                ], 404);
-            }
-
-            /**
-             * @var \App\Models\User $user
-             */
-            if (!$user->isEnrolledIn($courseId)) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'You are not enrolled in this course',
-                ], Response::HTTP_FORBIDDEN);
-            }
-            $now = now();
-            $quizzes = QuizAssignment::where('course_id', $courseId)
-                ->orderBy('start_at', 'asc')
-                ->get();
-            if ($quizzes->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'No quizzes found for this course',
-                ], Response::HTTP_NOT_FOUND);
-            }
-            $quizData = $quizzes->map(function($quiz) use ($now) {
-                $status = 'open';
-                $startAt = \Carbon\Carbon::parse($quiz->start_at);
-                $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
-
-                $status = 'open';
-                if ($endAt && $endAt->isPast()) {
-                    $status = 'closed';
-                } elseif ($startAt && $now->lt($startAt)) {
-                    $status = 'scheduled';
-                }
-
-                return [
-                    'quiz_id' => $quiz->quiz_id,
-                    'title' => $quiz->title,
-                    'start_at' => $quiz->start_at,
-                    'duration_minutes' => $quiz->duration_minutes,
-                    'end_at' => $quiz->end_at,
-                    'status' => $status,
-                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
-                ];
-            });
-            return response()->json([
-                'success' => true,
-                'code' => Response::HTTP_OK,
-                'data' => [
-                    'course_id' => $course->course_id,
-                    'course_title' => $course->title,
-                    'quizzes' => $quizData,
-                ]
-            ]);
-        } catch (Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'An error occurred while processing your request',
-                'error' => $th->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $this->middleware('auth:sanctum');
     }
 
-    // POST /api/quizzes/course/{courseId}
-    public function submitQuizAnswers(Request $request, $courseId)
-    {
-        try {
-            $user = Auth::user();
-            $course = Course::where('course_id', $courseId)->first();
-            if (!$course) {
-                return response()->json([
-                    'success' => false,
-                    'code' => 404,
-                    'message' => 'Course not found.',
-                ], 404);
-            }
-
-            /**
-             * @var \App\Models\User $user
-             */
-            if (!$user->isEnrolledIn($courseId)) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'You are not enrolled in this course.',
-                ], Response::HTTP_FORBIDDEN);
-            }
-            $quiz = QuizAssignment::where('course_id', $courseId)
-                ->orderBy('start_at', 'desc')
-                ->first();
-            if (!$quiz) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'No quiz found for this course',
-                ], Response::HTTP_NOT_FOUND);
-            }
-            $validated = $request->validate([
-                'answers' => 'required|array',
-                'answers.*.question_id' => 'required|uuid|exists:questions,question_id',
-                'answers.*.selected_option_id' => 'required|uuid|exists:question_options,option_id',
-            ]);
-            $submittedAnswers = $request->input('answers');
-            $score = 0;
-            $totalQuestions = count($submittedAnswers);
-            $userId = Auth::id();
-            foreach ($submittedAnswers as $answer) {
-                $question = Question::with('questionOptions')->find($answer['question_id']);
-                $correctOption = $question->questionOptions->firstWhere('is_correct', true);
-                $selectedOption = $answer['selected_option_id'];
-                $isCorrect = $correctOption && $correctOption->option_id === $selectedOption;
-                if ($isCorrect) {
-                    $score++;
-                }
-                QuizAttempt::create([
-                    'attempt_id' => Str::uuid(),
-                    'user_id' => $userId,
-                    'question_id' => $question->question_id,
-                    'selected_option_id' => $selectedOption,
-                    'is_correct' => $isCorrect,
-                    'attempt_time' => now(),
-                ]);
-            }
-            $percentage = $totalQuestions > 0 ? ($score / $totalQuestions) * 100 : 0;
-            return response()->json([
-                'success' => true,
-                'code' => Response::HTTP_OK,
-                'message' => 'Quiz submitted successfully.',
-                'data' => [
-                    'score' => $score,
-                    'total_questions' => $totalQuestions,
-                    'percentage' => round($percentage, 2),
-                ],
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'field validation failed',
-                'errors' => $e->errors(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (Throwable $th) {
-            Log::error('Course quiz submission failed: ' . $th->getMessage() . '\n' . $th->getTraceAsString());
-            return response()->json([
-                'success' => false,
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Internal Server Error',
-                'error' => $th->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    // GET /api/quizzes/course/{courseId}/quiz-results
-    public function getQuizResults(Request $request, $courseId)
-    {
-        try {
-            $user = Auth::user();
-            $course = Course::where('course_id', $courseId)->first();
-            if (!$course) {
-                return response()->json([
-                    'success' => false,
-                    'code' => 404,
-                    'message' => 'Course not found.',
-                ], 404);
-            }
-
-            /**
-             * @var \App\Models\User $user
-             */
-            if (!$user->isEnrolledIn($courseId)) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_FORBIDDEN,
-                    'message' => 'You are not enrolled in this course',
-                ], Response::HTTP_FORBIDDEN);
-            }
-            $quiz = QuizAssignment::where('course_id', $courseId)
-                ->orderBy('start_at', 'desc')
-                ->first();
-            if (!$quiz) {
-                return response()->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'No quiz found for this course',
-                ], Response::HTTP_NOT_FOUND);
-            }
-            $attempts = QuizAttempt::where('user_id', $user->id)
-                ->whereIn('question_id', Question::where('quiz_id', $quiz->quiz_id)->pluck('question_id'))
-                ->get();
-            $score = $attempts->where('is_correct', true)->count();
-            $totalQuestions = $attempts->count();
-            $percentage = $totalQuestions > 0 ? ($score / $totalQuestions) * 100 : 0;
-            return response()->json([
-                'success' => true,
-                'code' => Response::HTTP_OK,
-                'data' => [
-                    'score' => $score,
-                    'total_questions' => $totalQuestions,
-                    'percentage' => round($percentage, 2),
-                    'attempts' => $attempts,
-                ],
-            ]);
-        } catch (Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'An error occurred while processing your request',
-                'error' => $th->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
+    // Get all quizzes for enrolled courses
     public function index(Request $request)
     {
         try {
-            $user = Auth::user();
-            $now = now();
-            // Get all courses the user is enrolled in
-            /**
-             * @var \App\Models\User $user
-             */
-            $courses = $user->enrolledCourses()->get();
-            $allQuizzes = [];
-            foreach ($courses as $course) {
-                $quizzes = QuizAssignment::where('course_id', $course->course_id)
-                    ->orderBy('start_at', 'asc')
-                    ->get();
-                foreach ($quizzes as $quiz) {
-                    $startAt = \Carbon\Carbon::parse($quiz->start_at);
-                    $durationMinutes = $quiz->duration_minutes ?? 0;
-                    $quizEnd = $startAt->copy()->addMinutes($durationMinutes);
+            $user = $request->user();
 
-                    $status = 'open';
-                    if ($now->lt($startAt)) {
-                        $status = 'scheduled';
-                    } elseif ($now->gt($quizEnd)) {
-                        $status = 'closed';
-                    }
+            $quizzes = QuizAssignment::whereHas('course.userCourseProgress', function ($query) use ($user) {
+                $query->where('user_id', $user->user_id);
+            })
+                ->with(['course' => function ($query) {
+                    $query->select('course_id', 'title');
+                }])
+                ->get();
 
-                    $allQuizzes[] = [
-                        'quiz_id' => $quiz->quiz_id,
-                        'title' => $quiz->title,
-                        'start_at' => $quiz->start_at,
-                        'duration_minutes' => $quiz->duration_minutes,
-                        'end_at' => $quiz->end_at,
-                        'status' => $status,
-                        'message' => $status === 'scheduled' ? 'Quiz opens at ' . $startAt->format('M d, Y H:i') : null,
-                        'course_id' => $course->course_id,
-                        'course_title' => $course->title,
-                    ];
-                }
-            }
             return response()->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'data' => [
-                    'quizzes' => $allQuizzes,
-                ]
+                'message' => 'Quizzes fetched successfully.',
+                'data' => $quizzes->map(function ($quiz) {
+                    return [
+                        'quiz_id' => $quiz->quiz_id,
+                        'title' => $quiz->title,
+                        'course_title' => $quiz->course->title,
+                        'start_at' => $quiz->start_at,
+                        'end_at' => $quiz->end_at,
+                        'duration_minutes' => $quiz->duration_minutes,
+                        'status' => $quiz->status, // scheduled / available / ended
+                        'is_attempted' => $quiz->is_attempted, // true / false
+                    ];
+                }),
             ]);
-        } catch (Throwable $th) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'An error occurred while processing your request',
-                'error' => $th->getMessage()
+                'message' => 'Failed to fetch quizzes.' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    public function show($quizId)
+    // Get quiz details including questions and user attempts
+    public function show(QuizAssignment $quiz, Request $request)
     {
-        try {
-            $quiz = QuizAssignment::with('questions.questionOptions')->findOrFail($quizId);
-            $status = 'open';
-            $now = now();
-            $startAt = \Carbon\Carbon::parse($quiz->start_at);
-            $durationMinutes = $quiz->duration_minutes ?? 0;
-            $quizEnd = $startAt->copy()->addMinutes($durationMinutes);
+        $user = $request->user();
 
-            $status = 'open';
-            if ($now->lt($startAt)) {
-                $status = 'scheduled';
-            } elseif ($now->gt($quizEnd)) {
-                $status = 'closed';
-            }
-
-            $questions = $quiz->questions->map(function($q) {
-                return [
-                    'question_id' => $q->question_id,
-                    'text' => $q->question_text,
-                    'type' => $q->question_type,
-                    'points' => $q->points,
-                    'options' => $q->questionOptions->map(function($opt) {
-                        return [
-                            'option_id' => $opt->option_id,
-                            'option_text' => $opt->option_text,
-                        ];
-                    }),
-                ];
-            });
-            return response()->json([
-                'success' => true,
-                'code' => 200,
-                'data' => [
-                    'quiz_id' => $quiz->quiz_id,
-                    'title' => $quiz->title,
-                    'start_at' => $quiz->start_at,
-                    'duration_minutes' => $quiz->duration_minutes,
-                    'end_at' => $quiz->end_at,
-                    'status' => $status,
-                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
-                    'questions' => $questions,
-                    'course_id' => $quiz->course_id,
-                ]
-            ]);
-        } catch (\Throwable $th) {
+        if (!$user->isEnrolledIn($quiz->course_id)) {
             return response()->json([
                 'success' => false,
-                'code' => 500,
-                'message' => 'Quiz not found',
-                'error' => $th->getMessage()
-            ], 500);
+                'code' => Response::HTTP_FORBIDDEN,
+                'message' => 'You are not enrolled in this course.'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $quizDetails = QuizAssignment::with([
+            'questions.questionOptions',
+            'questions.quizAttempts' => function ($query) use ($user) {
+                $query->where('user_id', $user->user_id);
+            }
+        ])->find($quiz->quiz_id);
+
+        return response()->json([
+            'success' => true,
+            'code' => Response::HTTP_OK,
+            'message' => 'Quiz details retrieved successfully.',
+            'data' => [
+                'quiz_id' => $quizDetails->quiz_id,
+                'title' => $quizDetails->title,
+                'start_at' => $quizDetails->start_at,
+                'end_at' => $quizDetails->end_at,
+                'duration_minutes' => $quizDetails->duration_minutes,
+                'status' => $quizDetails->status,
+                'is_attempted' => $quizDetails->is_attempted,
+                'questions' => $quizDetails->questions->map(function ($question) use ($user) {
+                    $attempt = $question->quizAttempts->first();
+                    return [
+                        'question_id' => $question->question_id,
+                        'question_text' => $question->question_text,
+                        'type' => $question->type,
+                        'points' => $question->points,
+                        'attempted' => !!$attempt,
+                        'given_answer' => $attempt && $attempt->essay_answer ? $attempt->essay_answer : null,
+                        'selected_option_id' => $attempt && $attempt->selected_option_id ? $attempt->selected_option_id : null,
+                        'is_correct' => $attempt && $attempt->is_correct ? $attempt->is_correct : null,
+                    ];
+                }),
+            ]
+        ]);
+    }
+
+    // Submit quiz answers
+    public function submit(Request $request)
+    {
+        $user = $request->user();
+
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+                'quiz_id' => 'required|exists:quiz_assignments,quiz_id',
+                'answers' => 'required|array',
+                'answers.*.question_id' => 'required|exists:questions,question_id',
+                'answers.*.type' => 'required|in:mcq,essay',
+                'answers.*.answer' => 'required',
+            ]);
+
+            $quiz = QuizAssignment::findOrFail($validated['quiz_id']);
+
+            if (!$user->isEnrolledIn($quiz->course_id)) {
+                return response()->json([
+                    'success' => false,
+                    'code' => Response::HTTP_FORBIDDEN,
+                    'message' => 'You are not enrolled in this course.'
+                ], Response::HTTP_FORBIDDEN);
+            }
+
+            $results = [];
+
+            foreach ($validated['answers'] as $answer) {
+                $question = $quiz->questions()
+                    ->where('question_id', $answer['question_id'])
+                    ->firstOrFail();
+
+                if ($answer['type'] === 'mcq') {
+                    $option = QuestionOption::findOrFail($answer['answer']);
+                    $isCorrect = $option->is_correct;
+
+                    $attempt = QuizAttempt::create([
+                        'user_id' => $user->user_id,
+                        'question_id' => $question->question_id,
+                        'selected_option_id' => $option->option_id,
+                        'is_correct' => $isCorrect,
+                        'attempt_time' => now(),
+                    ]);
+
+                    $results[] = [
+                        'question_id' => $question->question_id,
+                        'question_text' => $question->question_text,
+                        'selected_option_id' => $option->option_id,
+                        'selected_option_text' => $option->option_text,
+                        'correct_option' => $question->questionOptions
+                            ->filter(fn($opt) => $opt->is_correct)
+                            ->first()?->option_text,
+                        'is_correct' => $isCorrect,
+                        'score' => $isCorrect ? $question->points : 0,
+                        'max_score' => $question->points,
+                        'type' => 'mcq'
+                    ];
+                } elseif ($answer['type'] === 'essay') {
+                    $attempt = QuizAttempt::create([
+                        'user_id' => $user->user_id,
+                        'question_id' => $question->question_id,
+                        'attempt_time' => now(),
+                        'essay_answer' => $answer['answer'],
+                    ]);
+
+                    $results[] = [
+                        'question_id' => $question->question_id,
+                        'question_text' => $question->question_text,
+                        'given_answer' => $answer['answer'],
+                        'status' => 'pending_instructor_review',
+                        'type' => 'essay'
+                    ];
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'code' => Response::HTTP_OK,
+                'message' => 'Answers submitted successfully.',
+                'data' => [
+                    'results' => $results
+                ]
+            ]);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors()
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Failed to submit answers.' . $e->getMessage()
+            ]);
         }
     }
 
-    public function submitQuizById(Request $request, $quizId)
+    // Get quiz results for the authenticated user
+    public function results(QuizAssignment $quiz, Request $request)
     {
-        try {
-            $quiz = QuizAssignment::with('questions.questionOptions')->findOrFail($quizId);
-            $validated = $request->validate([
-                'answers' => 'required|array',
-                'answers.*.question_id' => 'required|uuid|exists:questions,question_id',
-                'answers.*.selected_option_id' => 'required|uuid|exists:question_options,option_id',
-            ]);
-            $submittedAnswers = $request->input('answers');
-            $score = 0;
-            $totalQuestions = count($submittedAnswers);
-            $userId = Auth::id();
-            foreach ($submittedAnswers as $answer) {
-                $question = $quiz->questions->where('question_id', $answer['question_id'])->first();
-                $correctOption = $question->questionOptions->firstWhere('is_correct', true);
-                $selectedOption = $answer['selected_option_id'];
-                $isCorrect = $correctOption && $correctOption->option_id === $selectedOption;
-                if ($isCorrect) {
-                    $score++;
-                }
-                \App\Models\QuizAttempt::create([
-                    'attempt_id' => \Illuminate\Support\Str::uuid(),
-                    'user_id' => $userId,
-                    'question_id' => $question->question_id,
-                    'selected_option_id' => $selectedOption,
-                    'is_correct' => $isCorrect,
-                    'attempt_time' => now(),
-                ]);
-            }
-            $percentage = $totalQuestions > 0 ? ($score / $totalQuestions) * 100 : 0;
-            return response()->json([
-                'success' => true,
-                'code' => 200,
-                'message' => 'Quiz submitted successfully.',
-                'data' => [
-                    'score' => $score,
-                    'total_questions' => $totalQuestions,
-                    'percentage' => round($percentage, 2),
-                ],
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        $user = $request->user();
+
+        if (!$user->isEnrolledIn($quiz->course_id)) {
             return response()->json([
                 'success' => false,
-                'code' => 422,
-                'message' => 'field validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'code' => 500,
-                'message' => 'Internal Server Error',
-                'error' => $th->getMessage()
-            ], 500);
+                'code' => Response::HTTP_FORBIDDEN,
+                'message' => 'You are not enrolled in this course.'
+            ], Response::HTTP_FORBIDDEN);
         }
+
+        $quizDetails = QuizAssignment::with([
+            'questions.questionOptions',
+            'questions.quizAttempts' => function ($query) use ($user) {
+                $query->where('user_id', $user->user_id);
+            }
+        ])->find($quiz->quiz_id);
+
+        if (!$quizDetails) {
+            return response()->json([
+                'success' => false,
+                'code' => Response::HTTP_NOT_FOUND,
+                'message' => 'Quiz not found.'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $totalScore = 0;
+        $maxPossibleScore = 0;
+
+        $questionsData = $quizDetails->questions->map(function ($question) use ($user, &$totalScore, &$maxPossibleScore) {
+            $attempt = $question->quizAttempts->first();
+
+            $questionData = [
+                'question_id' => $question->question_id,
+                'question_text' => $question->question_text,
+                'type' => $question->type,
+                'points' => $question->points,
+                'attempted' => !!$attempt,
+                'given_answer' => null,
+                'selected_option_text' => null,
+                'correct_answer' => null,
+                'is_correct' => false,
+                'score' => 0,
+            ];
+
+            $maxPossibleScore += $question->points;
+
+            if ($attempt) {
+                if ($question->type === 'mcq') {
+                    $correctOption = $question->questionOptions->where('is_correct', true)->first();
+                    $selectedOption = $question->questionOptions->find($attempt->selected_option_id);
+
+                    $questionData['selected_option_text'] = $selectedOption?->option_text;
+                    $questionData['correct_answer'] = $correctOption?->option_text;
+                    $questionData['is_correct'] = $attempt->is_correct;
+
+                    if ($attempt->is_correct) {
+                        $questionData['score'] = $question->points;
+                        $totalScore += $question->points;
+                    }
+                } elseif ($question->type === 'essay') {
+                    $questionData['given_answer'] = $attempt->essay_answer;
+                    $questionData['status'] = 'pending_instructor_review';
+                }
+            }
+
+            return $questionData;
+        });
+
+        $percentage = $maxPossibleScore > 0 ? ($totalScore / $maxPossibleScore) * 100 : 0;
+
+        return response()->json([
+            'success' => true,
+            'code' => Response::HTTP_OK,
+            'message' => 'Quiz results retrieved successfully.',
+            'data' => [
+                'quiz_id' => $quizDetails->quiz_id,
+                'title' => $quizDetails->title,
+                'total_score' => $totalScore,
+                'max_score' => $maxPossibleScore,
+                'percentage' => round($percentage, 2),
+                'questions' => $questionsData
+            ]
+        ]);
     }
 }

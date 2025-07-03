@@ -81,21 +81,28 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/video/{videoId}', [QuizController::class, 'showQuizForVideo']);
         Route::post('/video/{videoId}', [QuizController::class, 'submitQuizAnswers']);
         Route::get('/video/{videoId}/quiz-results', [QuizController::class, 'getQuizResults']);
-        // LMS Course-level Quiz Endpoints
-        Route::get('/', [CourseQuizController::class, 'index']);
-        Route::get('/all', [CourseQuizController::class, 'index']);
-        Route::get('/course/{courseId}', [CourseQuizController::class, 'showQuizForCourse']);
-        Route::post('/course/{courseId}', [CourseQuizController::class, 'submitQuizAnswers']);
-        Route::get('/course/{courseId}/quiz-results', [CourseQuizController::class, 'getQuizResults']);
-        Route::post('/{quizId}/submit', [CourseQuizController::class, 'submitQuizById']);
-        Route::get('/{quizId}', [CourseQuizController::class, 'show']);
     });
+    // Course-level Quizzes (New LMS Routes)
+    Route::prefix('lms/quizzes')->group(function () {
+        Route::get('/course/{courseId}', [CourseQuizController::class, 'index']);
+        Route::get('/{quiz}', [CourseQuizController::class, 'show']); 
+        Route::post('/{quiz}/submit', [CourseQuizController::class, 'submit']);
+        Route::get('/{quiz}/results', [CourseQuizController::class, 'results']);
+    });
+    // Route::get('/', [CourseQuizController::class, 'index']);
+    // Route::get('/all', [CourseQuizController::class, 'index']);
+    // Route::get('/course/{courseId}', [CourseQuizController::class, 'showQuizForCourse']);
+    // Route::post('/course/{courseId}', [CourseQuizController::class, 'submitQuizAnswers']);
+    // Route::get('/course/{courseId}/quiz-results', [CourseQuizController::class, 'getQuizResults']);
+    // Route::post('/{quizId}/submit', [CourseQuizController::class, 'submitQuizById']);
+    // Route::get('/{quizId}', [CourseQuizController::class, 'show']);
 
     // User Progress Routes
     Route::prefix('progress')->group(function () {
         Route::get('/enrolled-courses', [ProgressController::class, 'enrolledCourses']);
         Route::get('/courses/{course}/progress', [ProgressController::class, 'courseProgress']);
-        Route::post('/videos/{video}/complete', [ProgressController::class, 'markVideoComplete']);
+        Route::post('
+        /videos/{video}/complete', [ProgressController::class, 'markVideoComplete']);
     });
 
     // User-Specific Course Routes
