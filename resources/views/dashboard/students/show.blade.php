@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3>Student Details</h3>
-            <a href="{{ route('console.students.absences', $student->id) }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('console.students.show', $student->id) }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-calendar-times me-2"></i>View Absences
             </a>
         </div>

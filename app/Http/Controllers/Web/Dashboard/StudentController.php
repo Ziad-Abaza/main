@@ -21,7 +21,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = ChildrenUniversity::with('user', 'level')->findOrFail($id);
-        return view('instructor.students.show', [
+        return view('dashboard.students.show', [
             'student' => $student
         ]);
     }
@@ -55,7 +55,7 @@ class StudentController extends Controller
     {
         $student = ChildrenUniversity::with('user', 'level')->findOrFail($id);
         $absences = $student->absences()->with('instructor')->latest('date')->latest('time')->get();
-        return view('dashboard.students.absences', [
+        return view('dashboard.absences.index', [
             'student' => $student,
             'absences' => $absences
         ]);

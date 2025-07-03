@@ -22,12 +22,17 @@ class AbsenceController extends Controller
      */
     public function scanQrCode()
     {
-        // admin and instructor can access this page
-        $recordRoute = Auth::user()->hasRole('admin')
+        $user = Auth::user();
+        $isAdmin = $user && method_exists($user, 'hasRole') && $user->hasRole('admin');
+        $recordRoute = $isAdmin
             ? route('console.absences.record')
             : route('dashboard.absences.record');
 
-        return view('instructor.absences.scan', compact('recordRoute'));
+        if ($isAdmin) {
+            return view('dashboard.absences.scan', compact('recordRoute'));
+        } else {
+            return view('instructor.absences.scan', compact('recordRoute'));
+        }
     }
 
     /**
@@ -115,18 +120,20 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->hasRole('admin')) {
+        if (\Auth::user() && \Auth::user()->hasRole('admin')) {
             $absences = Absence::with(['childUniversity.user', 'instructor'])
                 ->latest('date')->latest('time')
                 ->paginate(30);
+            // For admin, use dashboard view
+            return view('dashboard.absences.index', compact('absences'));
         } else {
-            $absences = Absence::where('instructor_id', Auth::id())
+            $absences = Absence::where('instructor_id', \Auth::id())
                 ->with('childUniversity.user')
                 ->latest('date')->latest('time')
                 ->paginate(30);
+            // For instructor, use instructor view
+            return view('instructor.absences.index', compact('absences'));
         }
-
-        return view('instructor.absences.index', compact('absences'));
     }
 
     /**
@@ -239,3 +246,4 @@ class AbsenceController extends Controller
         }
     }
 }
+
