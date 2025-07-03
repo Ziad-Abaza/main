@@ -22,7 +22,15 @@ class CourseQuizController extends Controller
     {
         try {
             $user = Auth::user();
-            $course = Course::findOrFail($courseId);
+            $course = Course::where('course_id', $courseId)->first();
+            if (!$course) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 404,
+                    'message' => 'Course not found.',
+                ], 404);
+            }
+
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -43,11 +51,16 @@ class CourseQuizController extends Controller
             }
             $quizData = $quizzes->map(function($quiz) use ($now) {
                 $status = 'open';
-                if ($quiz->end_at && $quiz->end_at->isPast()) {
+                $startAt = \Carbon\Carbon::parse($quiz->start_at);
+                $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
+
+                $status = 'open';
+                if ($endAt && $endAt->isPast()) {
                     $status = 'closed';
-                } elseif ($quiz->start_at && $now->lt($quiz->start_at)) {
+                } elseif ($startAt && $now->lt($startAt)) {
                     $status = 'scheduled';
                 }
+
                 return [
                     'quiz_id' => $quiz->quiz_id,
                     'title' => $quiz->title,
@@ -55,7 +68,7 @@ class CourseQuizController extends Controller
                     'duration_minutes' => $quiz->duration_minutes,
                     'end_at' => $quiz->end_at,
                     'status' => $status,
-                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . $quiz->start_at->format('M d, Y H:i') : null,
+                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
                 ];
             });
             return response()->json([
@@ -82,7 +95,15 @@ class CourseQuizController extends Controller
     {
         try {
             $user = Auth::user();
-            $course = Course::findOrFail($courseId);
+            $course = Course::where('course_id', $courseId)->first();
+            if (!$course) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 404,
+                    'message' => 'Course not found.',
+                ], 404);
+            }
+
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -160,7 +181,15 @@ class CourseQuizController extends Controller
     {
         try {
             $user = Auth::user();
-            $course = Course::findOrFail($courseId);
+            $course = Course::where('course_id', $courseId)->first();
+            if (!$course) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 404,
+                    'message' => 'Course not found.',
+                ], 404);
+            }
+
             if (!$user->isEnrolledIn($courseId)) {
                 return response()->json([
                     'success' => false,
@@ -218,11 +247,16 @@ class CourseQuizController extends Controller
                     ->get();
                 foreach ($quizzes as $quiz) {
                     $status = 'open';
-                    if ($quiz->end_at && $quiz->end_at->isPast()) {
+                    $startAt = \Carbon\Carbon::parse($quiz->start_at);
+                    $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
+
+                    $status = 'open';
+                    if ($endAt && $endAt->isPast()) {
                         $status = 'closed';
-                    } elseif ($quiz->start_at && $now->lt($quiz->start_at)) {
+                    } elseif ($startAt && $now->lt($startAt)) {
                         $status = 'scheduled';
                     }
+
                     $allQuizzes[] = [
                         'quiz_id' => $quiz->quiz_id,
                         'title' => $quiz->title,
@@ -230,7 +264,8 @@ class CourseQuizController extends Controller
                         'duration_minutes' => $quiz->duration_minutes,
                         'end_at' => $quiz->end_at,
                         'status' => $status,
-                        'message' => $status === 'scheduled' ? 'Quiz opens at ' . $quiz->start_at->format('M d, Y H:i') : null,
+                        'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
+
                         'course_id' => $course->course_id,
                         'course_title' => $course->title,
                     ];
@@ -259,9 +294,13 @@ class CourseQuizController extends Controller
             $quiz = QuizAssignment::with('questions.questionOptions')->findOrFail($quizId);
             $status = 'open';
             $now = now();
-            if ($quiz->end_at && $quiz->end_at->isPast()) {
+            $startAt = \Carbon\Carbon::parse($quiz->start_at);
+            $endAt = $quiz->end_at ? \Carbon\Carbon::parse($quiz->end_at) : null;
+
+            $status = 'open';
+            if ($endAt && $endAt->isPast()) {
                 $status = 'closed';
-            } elseif ($quiz->start_at && $now->lt($quiz->start_at)) {
+            } elseif ($startAt && $now->lt($startAt)) {
                 $status = 'scheduled';
             }
             $questions = $quiz->questions->map(function($q) {
@@ -288,7 +327,7 @@ class CourseQuizController extends Controller
                     'duration_minutes' => $quiz->duration_minutes,
                     'end_at' => $quiz->end_at,
                     'status' => $status,
-                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . $quiz->start_at->format('M d, Y H:i') : null,
+                    'message' => $status === 'scheduled' ? 'Quiz opens at ' . \Carbon\Carbon::parse($quiz->start_at)->format('M d, Y H:i') : null,
                     'questions' => $questions,
                     'course_id' => $quiz->course_id,
                 ]
