@@ -70,9 +70,10 @@ class ChildrenStudentImportServicecopy
                     $levelName = $rowData['level'] ?? null;
                     $levelId = null;
                     if ($levelName) {
-                        // Ensure levelName is a string
+                        // Ensure levelName is a string, trim, and lowercase for comparison
                         $levelName = is_array($levelName) ? implode(' ', $levelName) : (string) $levelName;
-                        $level = \App\Models\Level::where('name', $levelName)->first();
+                        $levelName = trim($levelName);
+                        $level = \App\Models\Level::whereRaw('LOWER(TRIM(name)) = ?', [mb_strtolower($levelName)])->first();
                         if ($level) {
                             $levelId = $level->level_id;
                         } else {

@@ -161,7 +161,8 @@ class ChildrenStudentImportService
     private function resolveLevelId($levelName)
     {
         $levelName = $this->ensureString($levelName);
-        $level = Level::where('name', $levelName)->first();
+        $levelName = trim($levelName);
+        $level = Level::whereRaw('LOWER(TRIM(name)) = ?', [mb_strtolower($levelName)])->first();
         return $level?->level_id;
     }
 

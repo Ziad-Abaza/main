@@ -5,7 +5,20 @@
         <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a href="{{ route('dashboard') }}" class="m-0 ms-2 block d-flex align-items-center justify-content-center" style="width: 180px;">
-                <img src="{{ asset('assets/image/brand/brand-logo.png') }}" alt="main_logo" class="w-100 h-auto">
+                <img src="{{ asset('assets/image/brand/logo.png') }}" alt="main_logo" class="w-100 h-auto me-2" style="max-width: 90px; min-width: 60px;">
+                <span class="fw-bold ms-1 align-middle"
+                    style="
+                        font-size: 0.95rem;
+                        letter-spacing: 2px;
+                        background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        text-fill-color: transparent;
+                        vertical-align: middle;
+                        white-space: nowrap;
+                    "
+                >CTU</span>
             </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
