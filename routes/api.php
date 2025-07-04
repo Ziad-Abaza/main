@@ -17,6 +17,8 @@ use App\Http\Controllers\Api\Lms\CourseQuizController;
 use App\Http\Controllers\Api\General\FaqController as ApiFaqController;
 use App\Http\Controllers\Api\General\BlogController as ApiBlogController;
 use App\Http\Controllers\Api\General\ContactController as ApiContactController;
+use App\Http\Controllers\Api\User\OverviewController;
+use App\Http\Controllers\Api\User\SettingsController;
 /*
 |===========================================
 |> Authentication Routes
@@ -32,9 +34,7 @@ Route::prefix('auth')->group(function () {
     // Sanctum protected routes
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/user', function (Request $request) {
-            return $request->user();
-        });
+        Route::get('/user', [AuthController::class, 'user']);
     });
 });
 
@@ -88,7 +88,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Course-level Quizzes (New LMS Routes)
     Route::prefix('lms/quizzes')->group(function () {
         Route::get('/course/{courseId}', [CourseQuizController::class, 'index']);
-        Route::get('/{quiz}', [CourseQuizController::class, 'show']); 
+        Route::get('/{quiz}', [CourseQuizController::class, 'show']);
         Route::post('/{quiz}/submit', [CourseQuizController::class, 'submit']);
         Route::get('/{quiz}/results', [CourseQuizController::class, 'results']);
     });
@@ -133,6 +133,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::post('/{submission}', [SubmissionController::class, 'update']);
         });
     });
+
+    // Overview (Dashboard) Stats Routes
+    Route::prefix('overview')->group(function () {
+        Route::get('/courses-stats', [OverviewController::class, 'coursesStats']);
+        Route::get('/assignments-stats', [OverviewController::class, 'assignmentsStats']);
+        Route::get('/graph-data', [OverviewController::class, 'graphData']);
+    });
+
+    // User Settings Route
+    Route::patch('/user/settings', [SettingsController::class, 'update']);
+    Route::post('/user/settings', [SettingsController::class, 'update']);
 });
 
 

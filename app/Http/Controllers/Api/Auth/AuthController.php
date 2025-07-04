@@ -169,10 +169,13 @@ class AuthController extends Controller
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
+            $userArray = $user->toArray();
+            $userArray['avatar_url'] = $user->getAvatar();
+
             return response()->json([
                 'success' => true,
                 'code' => 200,
-                'user' => $user,
+                'user' => $userArray,
             ], Response::HTTP_OK);
         } catch (Throwable $th) {
             return response()->json([

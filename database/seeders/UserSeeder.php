@@ -45,6 +45,12 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
             ],
+            [
+                'name' => 'yosif el-admin',
+                'email' => 'yosif@gmail.com',
+                'password' => Hash::make('123456789'),
+                'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
+            ],
         ];
 
         // Create 2 admins
