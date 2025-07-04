@@ -896,7 +896,6 @@ mount();
     }
 }
 
-/* Enhanced Professional Particle Animations */
 .particle-1 {
     animation: float 4s ease-in-out infinite;
 }
