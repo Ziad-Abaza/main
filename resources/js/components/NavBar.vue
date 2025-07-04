@@ -287,7 +287,8 @@ onUnmounted(() => {
     background: #ffffff !important;
     color: #1e293b;
     border-bottom: 1px solid #e2e8f0;
-    box-shadow: 0 4px 24px 0 rgba(14, 165, 233, 0.08), 0 1px 3px 0 rgba(14, 165, 233, 0.05);
+    box-shadow: 0 4px 24px 0 rgba(14, 165, 233, 0.08),
+        0 1px 3px 0 rgba(14, 165, 233, 0.05);
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
 }
@@ -296,7 +297,8 @@ onUnmounted(() => {
     --navbar-bg: rgba(255, 255, 255, 0.95);
     background: rgba(255, 255, 255, 0.95) !important;
     border-bottom: 1px solid #cbd5e1;
-    box-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.12), 0 4px 16px 0 rgba(14, 165, 233, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.12),
+        0 4px 16px 0 rgba(14, 165, 233, 0.08);
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
 }
@@ -329,7 +331,12 @@ onUnmounted(() => {
 }
 
 :deep(.modern-navbar):not(.dark) .bg-gradient-to-r {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%) !important;
+    background: linear-gradient(
+        135deg,
+        #0ea5e9 0%,
+        #0284c7 50%,
+        #0369a1 100%
+    ) !important;
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
@@ -338,9 +345,15 @@ onUnmounted(() => {
 }
 
 @keyframes gradient-text {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 :deep(.modern-navbar):not(.dark) .text-teal-400 {
@@ -571,13 +584,23 @@ a:focus {
 
 /* Enhanced login button styling */
 :deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-teal-600 {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%) !important;
+    background: linear-gradient(
+        135deg,
+        #0ea5e9 0%,
+        #0284c7 50%,
+        #0369a1 100%
+    ) !important;
     box-shadow: 0 4px 16px rgba(14, 165, 233, 0.25);
     border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 :deep(.modern-navbar):not(.dark) .bg-gradient-to-r.from-teal-600:hover {
-    background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1e40af 100%) !important;
+    background: linear-gradient(
+        135deg,
+        #0284c7 0%,
+        #0369a1 50%,
+        #1e40af 100%
+    ) !important;
     box-shadow: 0 6px 24px rgba(14, 165, 233, 0.35);
     transform: translateY(-1px);
 }
