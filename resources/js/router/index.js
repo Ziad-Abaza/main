@@ -21,6 +21,7 @@ import Terms from '../views/Terms.vue';
 import FAQ from '../views/FAQ.vue';
 import Blog from '../views/Blog.vue';
 import Contact from '../views/Contact.vue';
+import Hack from '../views/Hack.vue';
 
 const routes = [{
         path: '/',
@@ -150,6 +151,11 @@ const routes = [{
         path: '/contact',
         name: 'contact',
         component: Contact,
+    },
+    {
+        path: '/hack',
+        name: 'hack',
+        component: Hack,
     },
     {
         path: '/:pathMatch(.*)*',
