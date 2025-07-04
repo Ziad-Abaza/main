@@ -1,5 +1,12 @@
 <template>
-  <div class="relative w-full h-80 perspective-1000" @click="flipCard" @mouseenter="handleHover" @mouseleave="handleHover">
+  <div
+    class="relative w-full h-80 perspective-1000"
+    @click="handleClick"
+    @mouseenter="handleHover"
+    @mouseleave="handleHover"
+    @touchstart="handleTouchStart"
+    @touchend="handleTouchEnd"
+  >
     <!-- Front of card -->
     <div :class="[
       'absolute inset-0 rounded-2xl shadow-lg p-6 flex flex-col items-center transition-all duration-500 transform-style-preserve-3d backface-hidden cursor-pointer',
@@ -156,6 +163,8 @@ import { useTheme } from '../composables/useTheme'
 const { isDark } = useTheme()
 const isFlipped = ref(false)
 const isHovered = ref(false)
+const touchStartTime = ref(0)
+const isTouchDevice = ref(false)
 
 defineProps({
   member: {
@@ -164,19 +173,52 @@ defineProps({
   }
 })
 
-// Flip card on click
+// Detect touch device
+const detectTouchDevice = () => {
+  isTouchDevice.value = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
+// Initialize touch detection
+detectTouchDevice()
+
+// Handle click events
+const handleClick = (event) => {
+  // Only handle click on non-touch devices or if it's not a touch event
+  if (!isTouchDevice.value) {
+    flipCard()
+  }
+}
+
+// Handle touch events
+const handleTouchStart = (event) => {
+  touchStartTime.value = Date.now()
+}
+
+const handleTouchEnd = (event) => {
+  const touchDuration = Date.now() - touchStartTime.value
+
+  // Only flip if it's a quick tap (less than 300ms) and not a long press
+  if (touchDuration < 300) {
+    flipCard()
+  }
+}
+
+// Flip card
 const flipCard = () => {
   isFlipped.value = !isFlipped.value
 }
 
-// Handle hover for desktop
+// Handle hover for desktop only
 const handleHover = (event) => {
-  if (event.type === 'mouseenter') {
-    isHovered.value = true
-    isFlipped.value = true
-  } else if (event.type === 'mouseleave') {
-    isHovered.value = false
-    isFlipped.value = false
+  // Only handle hover on non-touch devices
+  if (!isTouchDevice.value) {
+    if (event.type === 'mouseenter') {
+      isHovered.value = true
+      isFlipped.value = true
+    } else if (event.type === 'mouseleave') {
+      isHovered.value = false
+      isFlipped.value = false
+    }
   }
 }
 </script>
@@ -200,5 +242,15 @@ const handleHover = (event) => {
 
 .rotate-y-0 {
   transform: rotateY(0deg);
+}
+
+/* Prevent text selection on touch devices */
+.perspective-1000 {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>
