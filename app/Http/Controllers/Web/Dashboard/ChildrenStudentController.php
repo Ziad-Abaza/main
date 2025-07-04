@@ -182,6 +182,7 @@ class ChildrenStudentController extends Controller
                 $childrenStudent->update([
                     'code' => $validated['code']
                 ]);
+
             });
 
             Log::info("Child updated successfully", ['id' => $childrenStudent->id]);

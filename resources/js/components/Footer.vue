@@ -140,6 +140,17 @@
                 >
                     <span class="relative z-10">{{ page.name }}</span>
                 </router-link>
+                <router-link
+                    to="/team"
+                    class="text-sm font-medium hover:underline transition-all duration-200 rounded px-2 py-1 group"
+                    :class="
+                        isDark
+                            ? 'text-slate-300 hover:text-purple-400 hover:bg-white/5'
+                            : 'text-slate-600 hover:text-purple-600 hover:bg-slate-100/60'
+                    "
+                >
+                    <span class="relative z-10">Our Team</span>
+                </router-link>
             </div>
 
             <!-- Search & Map -->

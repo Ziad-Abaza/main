@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\UserCourseProgress;
 use App\Models\Level;
 use App\Models\Role;
+use App\Models\CourseEnrollment;
 
 class ChildrenStudentImportService
 {
@@ -125,7 +126,7 @@ class ChildrenStudentImportService
 
     private function ensureString($value)
     {
-        return is_array($value) ? implode(' ', $value) : (string)$value;
+        return is_array($value) ? implode(' ', $value) : (string) $value;
     }
 
     private function getCodeFromRow($rowData)
@@ -180,8 +181,8 @@ class ChildrenStudentImportService
     {
         DB::transaction(function () use ($data, $email, $hashedPassword, $encryptPassword, $levelId, $className, $image) {
             $user = User::create([
-                'name'     => $data['name'],
-                'email'    => $email,
+                'name' => $data['name'],
+                'email' => $email,
                 'password' => $hashedPassword,
             ]);
 
@@ -191,22 +192,36 @@ class ChildrenStudentImportService
             }
 
             ChildrenUniversity::create([
-                'code'      => $data['code'],
-                'user_id'   => $user->user_id,
-                'password'  => $encryptPassword,
-                'level_id'  => $levelId,
-                'class_name'=> $className,
-                'meta'      => $data['meta'],
-                'image'     => $image,
+                'code' => $data['code'],
+                'user_id' => $user->user_id,
+                'password' => $encryptPassword,
+                'level_id' => $levelId,
+                'class_name' => $className,
+                'meta' => $data['meta'],
+                'image' => $image,
             ]);
 
             $courseIds = $this->getCoursesByLevelId($levelId);
 
             foreach ($courseIds as $courseId) {
+                // Create or update CourseEnrollment with status 'approved'
+                CourseEnrollment::updateOrCreate(
+                    [
+                        'user_id' => $user->user_id,
+                        'course_id' => $courseId,
+                    ],
+                    [
+                        'max_students' => 0,
+                        'current_students' => 0,
+                        'status' => 'approved',
+                        'is_processing_enrollment' => false,
+                    ]
+                );
+                // Create UserCourseProgress as before (without 'enrolled')
                 UserCourseProgress::create([
                     'user_course_id' => (string) Str::uuid(),
-                    'user_id'        => $user->user_id,
-                    'course_id'      => $courseId,
+                    'user_id' => $user->user_id,
+                    'course_id' => $courseId,
                     'completion_percentage' => 0,
                 ]);
             }
@@ -235,7 +250,7 @@ class ChildrenStudentImportService
     public function extractArabicInitials($name)
     {
         if (!is_string($name)) {
-            $name = (string)$name;
+            $name = (string) $name;
         }
 
         $map = [
@@ -285,5 +300,37 @@ class ChildrenStudentImportService
         }
 
         return strtoupper($initials);
+    }
+
+    public function syncStudentLevelCourses($userId, $levelId)
+    {
+        $courseIds = $this->getCoursesByLevelId($levelId);
+
+        foreach ($courseIds as $courseId) {
+            // Ensure enrollment exists and is approved
+            \App\Models\CourseEnrollment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'course_id' => $courseId,
+                ],
+                [
+                    'max_students' => 0,
+                    'current_students' => 0,
+                    'status' => 'approved',
+                    'is_processing_enrollment' => false,
+                ]
+            );
+
+            // Ensure course progress exists
+            \App\Models\UserCourseProgress::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'course_id' => $courseId,
+                ],
+                [
+                    'completion_percentage' => 0,
+                ]
+            );
+        }
     }
 }

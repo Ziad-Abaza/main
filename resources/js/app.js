@@ -5,6 +5,8 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import UiToast from './components/ui/Toast.vue';
+import 'flowbite';
+import { FwbAlert, FwbButton, FwbCard, FwbAvatar } from 'flowbite-vue';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -23,6 +25,7 @@ import {
     faBookOpen,
     faCertificate,
     faClock,
+    faStar
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Chart, registerables } from 'chart.js';
@@ -42,7 +45,8 @@ library.add(
     faArrowRight,
     faBookOpen,
     faCertificate,
-    faClock
+    faClock,
+    faStar
 );
 
 
@@ -56,4 +60,8 @@ app.use(pinia);
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('UiToast', UiToast);
+app.component('FwbAlert', FwbAlert);
+app.component('FwbButton', FwbButton);
+app.component('FwbCard', FwbCard);
+app.component('FwbAvatar', FwbAvatar);
 app.mount('#app');

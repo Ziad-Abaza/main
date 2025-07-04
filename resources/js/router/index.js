@@ -22,6 +22,7 @@ import FAQ from '../views/FAQ.vue';
 import Blog from '../views/Blog.vue';
 import Contact from '../views/Contact.vue';
 import Hack from '../views/Hack.vue';
+import TeamView from '../views/TeamView.vue';
 
 const routes = [{
         path: '/',
@@ -156,6 +157,11 @@ const routes = [{
         path: '/hack',
         name: 'hack',
         component: Hack,
+    },
+    {
+        path: '/team',
+        name: 'team',
+        component: TeamView,
     },
     {
         path: '/:pathMatch(.*)*',

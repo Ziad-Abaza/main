@@ -40,8 +40,7 @@ export const useTheme = () => {
         isDark,
         (newValue) => {
             document.documentElement.classList.toggle("dark", newValue);
-        },
-        { immediate: true }
+        }, { immediate: true }
     );
 
     return {

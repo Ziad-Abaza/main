@@ -104,6 +104,9 @@ class LevelCourseController extends Controller
         try {
             $level->courses()->sync($validated['course_ids'] ?? []);
 
+            // Dispatch a job to sync enrollments and progress for all students in this level
+            \App\Jobs\SyncLevelStudentsJob::dispatch($level->level_id);
+
             return redirect()->route('console.level-courses.index')->with('success', 'تم تحديث الكورسات المرتبطة');
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
