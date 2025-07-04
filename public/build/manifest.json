@@ -1,0 +1,127 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-D1TO16hK.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-B_Ycmbaq.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/views/lmsDynamicPage.vue",
+      "resources/js/views/AssignmentPage.vue",
+      "resources/js/views/NotFound.vue"
+    ],
+    "css": [
+      "assets/app-Bg0nGhW-.css"
+    ],
+    "assets": [
+      "assets/logo-BfY4g-WJ.png",
+      "assets/EduStream-BKqSlTo-.jpg",
+      "assets/instructor2-DCVaURsO.png",
+      "assets/SnapAny-DDy3Mcc0.mp4"
+    ]
+  },
+  "resources/js/assets/icons/EduStream.jpg": {
+    "file": "assets/EduStream-BKqSlTo-.jpg",
+    "src": "resources/js/assets/icons/EduStream.jpg"
+  },
+  "resources/js/assets/icons/instructor2.png": {
+    "file": "assets/instructor2-DCVaURsO.png",
+    "src": "resources/js/assets/icons/instructor2.png"
+  },
+  "resources/js/assets/icons/logo.png": {
+    "file": "assets/logo-BfY4g-WJ.png",
+    "src": "resources/js/assets/icons/logo.png"
+  },
+  "resources/js/assets/images/404_bg.png": {
+    "file": "assets/404_bg-C_p3xjAB.png",
+    "src": "resources/js/assets/images/404_bg.png"
+  },
+  "resources/js/assets/images/404_ground.png": {
+    "file": "assets/404_ground-BN9J0FeD.png",
+    "src": "resources/js/assets/images/404_ground.png"
+  },
+  "resources/js/assets/images/dark_404.png": {
+    "file": "assets/dark_404-Cw3shbeb.png",
+    "src": "resources/js/assets/images/dark_404.png"
+  },
+  "resources/js/assets/images/light_404.png": {
+    "file": "assets/light_404-DeHfioS6.png",
+    "src": "resources/js/assets/images/light_404.png"
+  },
+  "resources/js/assets/videos/SnapAny.mp4": {
+    "file": "assets/SnapAny-DDy3Mcc0.mp4",
+    "src": "resources/js/assets/videos/SnapAny.mp4"
+  },
+  "resources/js/views/AssignmentPage.vue": {
+    "file": "assets/AssignmentPage-CMMpGPfL.js",
+    "name": "AssignmentPage",
+    "src": "resources/js/views/AssignmentPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/AssignmentPage-BSlwTSFi.css"
+    ]
+  },
+  "resources/js/views/CourseQuiz.vue": {
+    "file": "assets/CourseQuiz-DpihG2qv.js",
+    "name": "CourseQuiz",
+    "src": "resources/js/views/CourseQuiz.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/CourseQuiz-tn0RQdqM.css"
+    ]
+  },
+  "resources/js/views/CourseQuizResults.vue": {
+    "file": "assets/CourseQuizResults-C26k6kqp.js",
+    "name": "CourseQuizResults",
+    "src": "resources/js/views/CourseQuizResults.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/CourseQuizResults-Cdpyvys1.css"
+    ]
+  },
+  "resources/js/views/NotFound.vue": {
+    "file": "assets/NotFound-B3Ir0sOJ.js",
+    "name": "NotFound",
+    "src": "resources/js/views/NotFound.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/NotFound-Nw0h8kIk.css"
+    ],
+    "assets": [
+      "assets/dark_404-Cw3shbeb.png",
+      "assets/light_404-DeHfioS6.png",
+      "assets/404_bg-C_p3xjAB.png",
+      "assets/404_ground-BN9J0FeD.png"
+    ]
+  },
+  "resources/js/views/lmsDynamicPage.vue": {
+    "file": "assets/lmsDynamicPage-DVRxvV0S.js",
+    "name": "lmsDynamicPage",
+    "src": "resources/js/views/lmsDynamicPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "dynamicImports": [
+      "resources/js/views/CourseQuiz.vue",
+      "resources/js/views/CourseQuizResults.vue",
+      "resources/js/views/NotFound.vue"
+    ]
+  }
+}
