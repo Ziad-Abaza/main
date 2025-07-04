@@ -5,120 +5,28 @@
                 ? 'min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white'
                 : 'min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-white text-slate-800'
         "
-        class="relative px-4 py-10 md:px-10 md:py-16"
     >
-        <!-- Fixed Background Shapes -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <!-- Scattered Dots -->
-            <div
-                :class="isDark ? 'bg-blue-400/30' : 'bg-blue-400/20'"
-                class="absolute w-3 h-3 rounded-full top-20 left-10"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-purple-400/30' : 'bg-purple-400/20'"
-                class="absolute w-2 h-2 rounded-full top-40 right-20"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-cyan-400/30' : 'bg-cyan-400/20'"
-                class="absolute w-4 h-4 rounded-full top-60 left-1/4"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-teal-400/30' : 'bg-teal-400/20'"
-                class="absolute w-1 h-1 rounded-full top-80 right-1/3"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-pink-400/30' : 'bg-pink-400/20'"
-                class="absolute w-3 h-3 rounded-full top-1/3 left-1/2"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-yellow-400/30' : 'bg-yellow-400/20'"
-                class="absolute w-2 h-2 rounded-full top-2/3 right-1/4"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-green-400/30' : 'bg-green-400/20'"
-                class="absolute w-1 h-1 rounded-full bottom-40 left-1/6"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-orange-400/30' : 'bg-orange-400/20'"
-                class="absolute w-3 h-3 rounded-full bottom-20 right-1/5"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-red-400/30' : 'bg-red-400/20'"
-                class="absolute w-2 h-2 rounded-full bottom-1/3 left-1/3"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-indigo-400/30' : 'bg-indigo-400/20'"
-                class="absolute w-1 h-1 rounded-full top-1/4 right-1/6"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-emerald-400/30' : 'bg-emerald-400/20'"
-                class="absolute w-4 h-4 rounded-full top-3/4 left-1/5"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-violet-400/30' : 'bg-violet-400/20'"
-                class="absolute w-2 h-2 rounded-full bottom-1/4 right-1/2"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-amber-400/30' : 'bg-amber-400/20'"
-                class="absolute w-1 h-1 rounded-full top-1/2 left-1/6"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-rose-400/30' : 'bg-rose-400/20'"
-                class="absolute w-3 h-3 rounded-full bottom-1/6 left-1/4"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-sky-400/30' : 'bg-sky-400/20'"
-                class="absolute w-2 h-2 rounded-full top-1/6 right-1/3"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-lime-400/30' : 'bg-lime-400/20'"
-                class="absolute w-1 h-1 rounded-full top-5/6 left-1/2"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-fuchsia-400/30' : 'bg-fuchsia-400/20'"
-                class="absolute w-3 h-3 rounded-full bottom-1/3 right-1/6"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-slate-400/30' : 'bg-slate-400/20'"
-                class="absolute w-2 h-2 rounded-full top-2/5 left-1/8"
-            ></div>
-
-            <div
-                :class="isDark ? 'bg-gray-400/30' : 'bg-gray-400/20'"
-                class="absolute w-1 h-1 rounded-full bottom-2/5 right-1/8"
-            ></div>
-        </div>
-
         <!-- Floating particles background -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-                class="absolute w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse opacity-30"
-                style="top: 15%; left: 5%; animation-delay: 0s"
+                class="absolute w-2 h-2 bg-teal-400 rounded-full animate-pulse opacity-40"
+                style="top: 25%; left: 15%; animation-delay: 0s"
             ></div>
             <div
-                class="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse opacity-40"
-                style="top: 70%; left: 90%; animation-delay: 1.5s"
+                class="absolute w-1 h-1 bg-cyan-400 rounded-full animate-pulse opacity-30"
+                style="top: 75%; left: 80%; animation-delay: 1.5s"
             ></div>
             <div
-                class="absolute w-2 h-2 bg-cyan-400 rounded-full animate-pulse opacity-30"
-                style="top: 45%; left: 15%; animation-delay: 3s"
+                class="absolute w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse opacity-40"
+                style="top: 35%; left: 75%; animation-delay: 2.5s"
+            ></div>
+            <div
+                class="absolute w-1 h-1 bg-blue-400 rounded-full animate-pulse opacity-35"
+                style="top: 85%; left: 25%; animation-delay: 3.5s"
+            ></div>
+            <div
+                class="absolute w-2 h-2 bg-pink-400 rounded-full animate-pulse opacity-30"
+                style="top: 15%; left: 85%; animation-delay: 4s"
             ></div>
         </div>
 
@@ -188,38 +96,37 @@
         <!-- Courses Grid -->
         <div
             v-if="!loading && !error"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
             <div
                 v-for="c in courses"
                 :key="c.course_id"
                 :class="[
-                    'group relative overflow-hidden rounded-3xl p-8 md:p-10 shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2',
+                    'group relative overflow-hidden rounded-3xl p-6 shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2',
                     isDark
                         ? 'glass-card-premium border border-white/10'
-                        : 'bg-white border border-teal-100 hover:shadow-2xl',
+                        : 'bg-white border border-blue-100 hover:shadow-2xl',
                 ]"
-                style="backdrop-filter: blur(20px)"
             >
                 <!-- Background gradient overlay -->
                 <div
-                    class="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 ></div>
 
                 <!-- Content -->
                 <div class="relative z-10">
                     <!-- Course Icon -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <div
                             :class="
                                 isDark
                                     ? 'bg-gradient-to-br from-blue-900 to-purple-900'
                                     : 'bg-gradient-to-br from-blue-50 to-purple-50'
                             "
-                            class="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-white/10"
+                            class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
                         >
                             <svg
-                                class="w-10 h-10 text-blue-500"
+                                class="w-8 h-8 text-blue-500"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -235,9 +142,9 @@
                     </div>
 
                     <!-- Course Info -->
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <h3
-                            class="text-2xl font-bold mb-2 group-hover:text-teal-500 transition-colors duration-300 tracking-tight"
+                            class="text-xl font-bold mb-2 group-hover:text-blue-500 transition-colors duration-300"
                         >
                             {{ c.title }}
                         </h3>
@@ -246,7 +153,7 @@
                                 :class="
                                     isDark ? 'bg-slate-700' : 'bg-slate-100'
                                 "
-                                class="px-4 py-1 rounded-full"
+                                class="px-3 py-1 rounded-full"
                             >
                                 <p
                                     :class="
@@ -269,10 +176,10 @@
                     >
                         <button
                             :class="[
-                                'w-full px-8 py-3 rounded-2xl font-bold text-white text-base transition-all duration-300 transform hover:scale-105 shadow-lg',
+                                'w-full px-6 py-3 rounded-2xl font-bold text-white text-sm transition-all duration-300 transform hover:scale-105 shadow-lg',
                                 isDark
-                                    ? 'bg-gradient-to-r from-purple-600 to-teal-600 hover:from-purple-500 hover:to-teal-500 hover:shadow-purple-500/25'
-                                    : 'bg-gradient-to-r from-teal-600 to-purple-600 hover:from-teal-500 hover:to-purple-500 hover:shadow-teal-500/25',
+                                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 hover:shadow-purple-500/25'
+                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:shadow-blue-500/25',
                             ]"
                         >
                             <span
@@ -299,10 +206,10 @@
 
                 <!-- Decorative elements -->
                 <div
-                    class="absolute top-6 right-6 w-3 h-3 bg-blue-400 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"
+                    class="absolute top-4 right-4 w-2 h-2 bg-blue-400 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"
                 ></div>
                 <div
-                    class="absolute bottom-6 left-6 w-2 h-2 bg-purple-400 rounded-full opacity-40 group-hover:opacity-80 transition-opacity duration-300"
+                    class="absolute bottom-4 left-4 w-1 h-1 bg-purple-400 rounded-full opacity-40 group-hover:opacity-80 transition-opacity duration-300"
                 ></div>
             </div>
         </div>
