@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useProfileStore = defineStore("profile", {
+export const useLmsStore = defineStore("lms", {
     state: () => ({
         assignments: [],
         submissions: [],
@@ -29,7 +29,7 @@ export const useProfileStore = defineStore("profile", {
                 this.assignments = res.data.data;
             } catch (e) {
                 this.error =
-                    e.response?.data?.message || "Failed to load assignments";
+                    e.response ?.data ?.message || "Failed to load assignments";
             } finally {
                 this.loading = false;
             }
@@ -43,14 +43,14 @@ export const useProfileStore = defineStore("profile", {
                     "/api/assignments?status=submitted&per_page=50"
                 );
                 this.submissions = res.data.data.map((a) => ({
-                    id: a.submission?.id ?? a.id,
+                    id: a.submission ?.id ?? a.id,
                     assignment_title: a.title,
-                    created_at: a.submission?.created_at,
-                    file_url: a.submission?.file_url,
+                    created_at: a.submission ?.created_at,
+                    file_url: a.submission ?.file_url,
                 }));
             } catch (e) {
                 this.errorSubs =
-                    e.response?.data?.message || "Failed to load submissions";
+                    e.response ?.data ?.message || "Failed to load submissions";
             } finally {
                 this.loadingSubs = false;
             }

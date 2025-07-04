@@ -25,6 +25,9 @@ import {
     faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+
 library.add(
     faGraduationCap,
     faHouse,

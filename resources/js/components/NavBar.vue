@@ -107,7 +107,7 @@
 
                 <!-- Auth Actions -->
                 <router-link
-                    to="/profile"
+                    to="/lms"
                     v-if="authStore.user"
                     class="flex items-center space-x-3"
                 >

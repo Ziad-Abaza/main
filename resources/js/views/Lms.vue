@@ -30,16 +30,17 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useProfileStore } from '@/stores/profile';
-import OverviewSection from '../components/profile/OverviewSection.vue';
-import CoursesSection from '../components/profile/CoursesSection.vue';
-import QuizzesSection from '../components/profile/QuizzesSection.vue';
-import AssignmentsSection from '../components/profile/AssignmentsSection.vue';
+import { useLmsStore } from '@/stores/lms';
+import OverviewSection from '../components/lms/OverviewSection.vue';
+import CoursesSection from '../components/lms/CoursesSection.vue';
+import QuizzesSection from '../components/lms/QuizzesSection.vue';
+import AssignmentsSection from '../components/lms/AssignmentsSection.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useTheme } from '../composables/useTheme';
+import SettingsSection from '../views/LmsSettings.vue';
 
 const { isDark } = useTheme();
-const store = useProfileStore();
+const store = useLmsStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -47,7 +48,8 @@ const menu = [
     { key: 'overview', label: 'Overview', icon: '🏠' },
     { key: 'courses', label: 'My Courses', icon: '📚' },
     { key: 'course-quizzes', label: 'Course Quizzes', icon: '📝' },
-    { key: 'assignments', label: 'Assignments', icon: '📂' }
+    { key: 'assignments', label: 'Assignments', icon: '📂' },
+    { key: 'settings', label: 'Settings', icon: '⚙️' }
 ];
 
 const currentTab = computed(() => route.params.page || 'overview');
@@ -57,13 +59,14 @@ const componentMap = {
     overview: OverviewSection,
     courses: CoursesSection,
     'course-quizzes': QuizzesSection,
-    assignments: AssignmentsSection
+    assignments: AssignmentsSection,
+    settings: SettingsSection
 };
 
 const currentComponent = computed(() => componentMap[currentTab.value] || OverviewSection);
 
 function goToTab(tab) {
-    router.push(`/profile/${tab.key}`);
+    router.push(`/lms/${tab.key}`);
 }
 
 const mounted = () => {

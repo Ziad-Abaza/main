@@ -14,7 +14,7 @@ import Instructors from '../views/Instructors.vue';
 import Quiz from '../views/Quiz.vue';
 import QuizResult from '../views/QuizResults.vue';
 import InstructorProfile from '../views/InstructorProfile.vue';
-import Profile from '../views/Profile.vue';
+import lms from '../views/Lms.vue';
 import About from '../views/About.vue';
 import Privacy from '../views/Privacy.vue';
 import Terms from '../views/Terms.vue';
@@ -91,23 +91,23 @@ const routes = [{
         props: true,
     },
     {
-        path: '/profile/:page/:id',
-        name: 'profile-page-id',
+        path: '/lms/:page/:id',
+        name: 'lms-page-id',
         component: () =>
-            import ('../views/ProfileDynamicPage.vue'),
+            import ('../views/lmsDynamicPage.vue'),
         props: true,
         meta: { requiresAuth: true }
     },
     {
-        path: '/profile/:page',
-        name: 'profile-page',
-        component: Profile,
+        path: '/lms/:page',
+        name: 'lms-page',
+        component: lms,
         props: true,
         meta: { requiresAuth: true }
     },
     {
-        path: '/profile',
-        redirect: '/profile/overview'
+        path: '/lms',
+        redirect: '/lms/overview'
     },
     {
         path: '/assignments/:id',

@@ -65,10 +65,10 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useProfileStore } from '@/stores/profile';
+import { useLmsStore } from '@/stores/lms';
 import { useTheme } from '../../composables/useTheme';
 
-const store = useProfileStore();
+const store = useLmsStore();
 const { isDark } = useTheme();
 
 const isWithinDays = (dueDate, days) => {
