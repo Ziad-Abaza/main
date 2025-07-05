@@ -54,7 +54,7 @@ class QuizAssignment extends Model
             : ($this->end_at ? Carbon::parse($this->end_at) : null);
 
         if (!$startAt) {
-            return 'not_scheduled'; 
+            return 'not_scheduled';
         }
 
         if ($now->lt($startAt)) {

@@ -5,7 +5,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "js/app-2xKR6Rsh.js",
+    "file": "js/app-Coj84lGv.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -15,7 +15,7 @@
       "resources/js/views/NotFound.vue"
     ],
     "css": [
-      "css/app-Cv3kKoog.css"
+      "css/app-C1v77DVu.css"
     ],
     "assets": [
       "assets/logo-BfY4g-WJ.png",
@@ -77,7 +77,7 @@
     "src": "resources/js/assets/videos/SnapAny.mp4"
   },
   "resources/js/views/AssignmentPage.vue": {
-    "file": "js/AssignmentPage-Dx84Ezm5.js",
+    "file": "js/AssignmentPage-LjsoAclt.js",
     "name": "AssignmentPage",
     "src": "resources/js/views/AssignmentPage.vue",
     "isDynamicEntry": true,
@@ -89,7 +89,7 @@
     ]
   },
   "resources/js/views/CourseQuiz.vue": {
-    "file": "js/CourseQuiz-Na8luLH5.js",
+    "file": "js/CourseQuiz-uXxQcC3A.js",
     "name": "CourseQuiz",
     "src": "resources/js/views/CourseQuiz.vue",
     "isDynamicEntry": true,
@@ -101,7 +101,7 @@
     ]
   },
   "resources/js/views/CourseQuizResults.vue": {
-    "file": "js/CourseQuizResults-BxE8VgyD.js",
+    "file": "js/CourseQuizResults-CIwhKmVx.js",
     "name": "CourseQuizResults",
     "src": "resources/js/views/CourseQuizResults.vue",
     "isDynamicEntry": true,
@@ -113,7 +113,7 @@
     ]
   },
   "resources/js/views/NotFound.vue": {
-    "file": "js/NotFound-BXrvDZS1.js",
+    "file": "js/NotFound-o5vEAlAk.js",
     "name": "NotFound",
     "src": "resources/js/views/NotFound.vue",
     "isDynamicEntry": true,
@@ -121,7 +121,7 @@
       "resources/js/app.js"
     ],
     "css": [
-      "css/NotFound-ttFetNpW.css"
+      "css/NotFound-Bi7w78x4.css"
     ],
     "assets": [
       "assets/dark_404-Cw3shbeb.png",
@@ -131,7 +131,7 @@
     ]
   },
   "resources/js/views/lmsDynamicPage.vue": {
-    "file": "js/lmsDynamicPage-avJSkTA6.js",
+    "file": "js/lmsDynamicPage-sRLNhHHH.js",
     "name": "lmsDynamicPage",
     "src": "resources/js/views/lmsDynamicPage.vue",
     "isDynamicEntry": true,
