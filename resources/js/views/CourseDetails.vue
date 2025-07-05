@@ -278,7 +278,7 @@ const videos = computed(() => courseDetailsStore.course.videos || []);
 const certificates = computed(() => courseDetailsStore.course.certificates || []);
 const coupons = computed(() => courseDetailsStore.course.coupons || []);
 const enrolled = computed(() => courseDetailsStore.enrolled || false);
-const is_processing_enrollment = computed(() => courseDetailsStore.course.enrollment?.is_processing > 0);
+const is_processing_enrollment = computed(() => courseDetailsStore.course.is_processing_enrollment || false);
 
 // Methods
 const defaultImage = "https://i.ibb.co/67ZKPkmK/logo.png ";

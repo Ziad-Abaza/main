@@ -1,11 +1,11 @@
 {
   "resources/css/app.css": {
-    "file": "css/app-VPbRw5s4.css",
+    "file": "css/app-CkhQw89I.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "js/app-kj7IVoV0.js",
+    "file": "js/app-QjE9n316.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -15,7 +15,7 @@
       "resources/js/views/NotFound.vue"
     ],
     "css": [
-      "css/app-BOcpQawC.css"
+      "css/app-joihx2oA.css"
     ],
     "assets": [
       "assets/logo-BfY4g-WJ.png",
@@ -77,7 +77,7 @@
     "src": "resources/js/assets/videos/SnapAny.mp4"
   },
   "resources/js/views/AssignmentPage.vue": {
-    "file": "js/AssignmentPage-CN8EpV9H.js",
+    "file": "js/AssignmentPage-Cq-qJOlA.js",
     "name": "AssignmentPage",
     "src": "resources/js/views/AssignmentPage.vue",
     "isDynamicEntry": true,
@@ -89,7 +89,7 @@
     ]
   },
   "resources/js/views/CourseQuiz.vue": {
-    "file": "js/CourseQuiz-DZYBJ0Kq.js",
+    "file": "js/CourseQuiz-eLaSjPVA.js",
     "name": "CourseQuiz",
     "src": "resources/js/views/CourseQuiz.vue",
     "isDynamicEntry": true,
@@ -101,7 +101,7 @@
     ]
   },
   "resources/js/views/CourseQuizResults.vue": {
-    "file": "js/CourseQuizResults-C-xQ2cMT.js",
+    "file": "js/CourseQuizResults-CnW2Fxr4.js",
     "name": "CourseQuizResults",
     "src": "resources/js/views/CourseQuizResults.vue",
     "isDynamicEntry": true,
@@ -113,7 +113,7 @@
     ]
   },
   "resources/js/views/NotFound.vue": {
-    "file": "js/NotFound-CD-a-9UH.js",
+    "file": "js/NotFound-DI5tiEPu.js",
     "name": "NotFound",
     "src": "resources/js/views/NotFound.vue",
     "isDynamicEntry": true,
@@ -131,7 +131,7 @@
     ]
   },
   "resources/js/views/lmsDynamicPage.vue": {
-    "file": "js/lmsDynamicPage-NaJuxwYu.js",
+    "file": "js/lmsDynamicPage-xLRV5Bw-.js",
     "name": "lmsDynamicPage",
     "src": "resources/js/views/lmsDynamicPage.vue",
     "isDynamicEntry": true,

@@ -25,7 +25,7 @@
             </div>
 
             <h2
-                class="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-teal-400 via-cyan-400 to-purple-500 bg-clip-text text-transparent drop-shadow-2xl tracking-tight text-center relative"
+                class="text-4xl sm:text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-teal-400 via-cyan-400 to-purple-500 bg-clip-text text-transparent drop-shadow-2xl tracking-tight text-center relative px-4"
             >
                 Learning Dashboard
             </h2>
@@ -42,7 +42,7 @@
                 <!-- Courses Card -->
                 <div
                     :class="[
-                        'group rounded-3xl p-8 shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 relative overflow-hidden',
+                        'group rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 relative overflow-hidden',
                         isDark
                             ? 'glass-card-premium border border-white/10'
                             : 'bg-white border border-teal-100 hover:shadow-2xl',
@@ -58,7 +58,7 @@
                     >
                         <div>
                             <h3
-                                class="text-3xl font-black bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent mb-2"
+                                class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent mb-2"
                             >
                                 Courses
                             </h3>
@@ -90,19 +90,19 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 relative z-10">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
                         <div
                             :class="
                                 isDark
                                     ? 'bg-gradient-to-br from-slate-800 to-slate-700 text-cyan-300 border border-slate-600/50'
                                     : 'bg-gradient-to-br from-slate-50 to-slate-100 text-cyan-700 border border-slate-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ coursesStats.total }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 Total
                             </div>
                         </div>
@@ -112,12 +112,12 @@
                                     ? 'bg-gradient-to-br from-green-900/30 to-green-800/30 text-green-400 border border-green-700/50'
                                     : 'bg-gradient-to-br from-green-50 to-green-100 text-green-700 border border-green-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ coursesStats.completed }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 Completed
                             </div>
                         </div>
@@ -127,12 +127,12 @@
                                     ? 'bg-gradient-to-br from-yellow-900/30 to-yellow-800/30 text-yellow-400 border border-yellow-700/50'
                                     : 'bg-gradient-to-br from-yellow-50 to-yellow-100 text-yellow-700 border border-yellow-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ coursesStats.in_progress }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 In Progress
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                 <!-- Assignments Card -->
                 <div
                     :class="[
-                        'group rounded-3xl p-8 shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 relative overflow-hidden',
+                        'group rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 relative overflow-hidden',
                         isDark
                             ? 'glass-card-premium border border-white/10'
                             : 'bg-white border border-purple-100 hover:shadow-2xl',
@@ -158,7 +158,7 @@
                     >
                         <div>
                             <h3
-                                class="text-3xl font-black bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent mb-2"
+                                class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent mb-2"
                             >
                                 Assignments
                             </h3>
@@ -190,19 +190,19 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 relative z-10">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
                         <div
                             :class="
                                 isDark
                                     ? 'bg-gradient-to-br from-slate-800 to-slate-700 text-purple-300 border border-slate-600/50'
                                     : 'bg-gradient-to-br from-slate-50 to-slate-100 text-purple-700 border border-slate-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ assignmentsStats.total }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 Total
                             </div>
                         </div>
@@ -212,12 +212,12 @@
                                     ? 'bg-gradient-to-br from-green-900/30 to-green-800/30 text-green-400 border border-green-700/50'
                                     : 'bg-gradient-to-br from-green-50 to-green-100 text-green-700 border border-green-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ assignmentsStats.completed }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 Completed
                             </div>
                         </div>
@@ -227,12 +227,12 @@
                                     ? 'bg-gradient-to-br from-yellow-900/30 to-yellow-800/30 text-yellow-400 border border-yellow-700/50'
                                     : 'bg-gradient-to-br from-yellow-50 to-yellow-100 text-yellow-700 border border-yellow-200'
                             "
-                            class="text-center p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                            class="text-center p-4 sm:p-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-lg"
                         >
-                            <div class="text-4xl font-black mb-2">
+                            <div class="text-3xl sm:text-4xl font-black mb-2">
                                 {{ assignmentsStats.pending }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-xs sm:text-sm font-semibold opacity-80">
                                 Pending
                             </div>
                         </div>

@@ -112,15 +112,24 @@ class CourseController extends Controller
             }
 
             $enrolled = false;
+            $isProcessingEnrollment = false;
+            $userEnrollment = null;
+
             if (auth('sanctum')->check()) {
                 $user = auth('sanctum')->user();
                 $enrolled = UserCourseProgress::where([
                     'user_id' => $user->user_id,
                     'course_id' => $id
                 ])->exists();
-            }
 
-            $isProcessingEnrollment = $course->enrollment ? $course->enrollment->is_processing_enrollment : false;
+                // Get the specific user's enrollment record
+                $userEnrollment = CourseEnrollment::where([
+                    'user_id' => $user->user_id,
+                    'course_id' => $id
+                ])->first();
+
+                $isProcessingEnrollment = $userEnrollment ? $userEnrollment->is_processing_enrollment : false;
+            }
 
             $courseDetails = [
                 'course' => [
@@ -155,7 +164,7 @@ class CourseController extends Controller
                     'max_students' => $course->enrollment->max_students,
                     'current_students' => $course->enrollment->current_students,
                     'available_seats' => $course->enrollment->availableSeats(),
-                    'is_processing' => $course->enrollment->is_processing_enrollment,
+                    'is_processing' => $userEnrollment ? $userEnrollment->is_processing_enrollment : false,
                 ] : null,
                 'pricing' => $discountInfo,
                 'enrolled' => $enrolled,

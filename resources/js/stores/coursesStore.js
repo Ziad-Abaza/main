@@ -2,6 +2,10 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { useAuthStore } from '@/stores/auth';
 
+// Default images
+const defaultImage = "https://i.ibb.co/67ZKPkmK/logo.png";
+const defaultIcon = "https://i.ibb.co/67ZKPkmK/logo.png";
+
 export const useCourseStore = defineStore("courseDetails", {
     state: () => ({
         course: {
@@ -47,6 +51,7 @@ export const useCourseStore = defineStore("courseDetails", {
                     this.course.certificates =
                         data.relationships.certificates || [];
                     this.course.coupons = data.relationships.coupons || [];
+                    this.course.is_processing_enrollment = data.is_processing_enrollment || false;
 
                     this.enrolled = response.data.data.enrolled;
                 } else {
@@ -111,8 +116,6 @@ export const useCourseStore = defineStore("courseDetails", {
                     const now = new Date();
 
                     this.courses = response.data.data.map((course) => {
-
-
                         const originalPrice = parseFloat(
                             course.pricing ?.price || 0
                         );
