@@ -48,11 +48,11 @@ const teamMembers = [
     {
         id: 2,
         name: 'omar algamel',
-        role: 'full stack developer',
+        role: 'full stack developer & ai engineer',
         photo: omarPhoto,
-        bio: 'Full-stack developer & AI engineer designing delightful user experiences with a modern touch. Passionate about solving real-world problems through clean design and intelligent automation.',
-        skills: ['Laravel', 'Vue', 'Flutter', 'Python', 'AI', 'REST APIs', 'OpenCV', 'TensorFlow'],
-        experience: '3+ years building websites · 2+ years creating and deploying AI models',
+        bio: 'Web developer, full stack developer, AI Developer specializing in Object Detection, Self-Driving Car technology, and embedded systems expert with IoT, Arduino, Raspberry Pi, and custom microcontroller boards.',
+        skills: ['Vue.js', 'Laravel', 'Flutter', 'Python', 'TensorFlow', 'OpenCV', 'YOLO', 'Mediapipe', 'Arduino', 'Raspberry Pi', 'Object Detection', 'IoT'],
+        experience: 'Expert in web development, AI/ML, computer vision, and embedded systems. Building self-driving cars and smart IoT solutions.',
         email: 'omeralgamel@gmail.com',
         location: 'alexandria egypt',
         socials: {
