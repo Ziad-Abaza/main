@@ -1,11 +1,11 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-Cd9c4fKY.css",
+    "file": "assets/app-COclgi6C.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CJevM5Yo.js",
+    "file": "assets/app-F_nRrMVQ.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -15,7 +15,7 @@
       "resources/js/views/NotFound.vue"
     ],
     "css": [
-      "assets/app-C1L_elAc.css"
+      "assets/app-BH7U9HGz.css"
     ],
     "assets": [
       "assets/logo-BfY4g-WJ.png",
@@ -77,7 +77,7 @@
     "src": "resources/js/assets/videos/SnapAny.mp4"
   },
   "resources/js/views/AssignmentPage.vue": {
-    "file": "assets/AssignmentPage-Ci2voIlk.js",
+    "file": "assets/AssignmentPage-PGuywbpI.js",
     "name": "AssignmentPage",
     "src": "resources/js/views/AssignmentPage.vue",
     "isDynamicEntry": true,
@@ -89,7 +89,7 @@
     ]
   },
   "resources/js/views/CourseQuiz.vue": {
-    "file": "assets/CourseQuiz-Re0P8HMx.js",
+    "file": "assets/CourseQuiz-Bj6XV4hH.js",
     "name": "CourseQuiz",
     "src": "resources/js/views/CourseQuiz.vue",
     "isDynamicEntry": true,
@@ -101,7 +101,7 @@
     ]
   },
   "resources/js/views/CourseQuizResults.vue": {
-    "file": "assets/CourseQuizResults-DDHDdblH.js",
+    "file": "assets/CourseQuizResults-Dluvjpke.js",
     "name": "CourseQuizResults",
     "src": "resources/js/views/CourseQuizResults.vue",
     "isDynamicEntry": true,
@@ -113,7 +113,7 @@
     ]
   },
   "resources/js/views/NotFound.vue": {
-    "file": "assets/NotFound-BcF8gdt0.js",
+    "file": "assets/NotFound-pgbuIGVp.js",
     "name": "NotFound",
     "src": "resources/js/views/NotFound.vue",
     "isDynamicEntry": true,
@@ -131,7 +131,7 @@
     ]
   },
   "resources/js/views/lmsDynamicPage.vue": {
-    "file": "assets/lmsDynamicPage-AMAsRV8T.js",
+    "file": "assets/lmsDynamicPage-DGDRNkQo.js",
     "name": "lmsDynamicPage",
     "src": "resources/js/views/lmsDynamicPage.vue",
     "isDynamicEntry": true,
