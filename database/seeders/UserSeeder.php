@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
         $admins = [
             [
                 'name' => 'Ziad Hassan',
-                'email' => 'ziad@gmail.com',
+                'email' => 'ziad.h.abaza@gmail.com',
                 'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/9DxRVC8/2.jpg'
             ],
@@ -46,14 +46,13 @@ class UserSeeder extends Seeder
                 'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
             ],
             [
-                'name' => 'yosif el-admin',
+                'name' => 'يوسف النقاش',
                 'email' => 'yosif@gmail.com',
                 'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
             ],
         ];
 
-        // Create 2 admins
         // Create 2 admins
         $adminAvatars = [
             'https://i.ibb.co/9DxRVC8/2.jpg',
@@ -76,36 +75,36 @@ class UserSeeder extends Seeder
         }
 
         // Create 4 instructors
-        for ($i = 1; $i <= 4; $i++) {
-            $user = User::create([
-                'user_id' => Str::uuid()->toString(),
-                'name' => "Instructor $i",
-                'email' => "instructor$i@example.com",
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            $user->roles()->attach($instructorRole->role_id);
+        // for ($i = 1; $i <= 4; $i++) {
+        //     $user = User::create([
+        //         'user_id' => Str::uuid()->toString(),
+        //         'name' => "Instructor $i",
+        //         'email' => "instructor$i@example.com",
+        //         'password' => Hash::make('password'),
+        //         'email_verified_at' => now(),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        //     $user->roles()->attach($instructorRole->role_id);
 
-            $user->addMediaFromUrl("https://th.bing.com/th/id/OIP.m9dTL6OertLrSmrJfL3TRwHaE6?o=7rm=3&rs=1&pid=ImgDetMain")->toMediaCollection('avatar');
-        }
+        //     $user->addMediaFromUrl("https://th.bing.com/th/id/OIP.m9dTL6OertLrSmrJfL3TRwHaE6?o=7rm=3&rs=1&pid=ImgDetMain")->toMediaCollection('avatar');
+        // }
 
         // Create 7 students
-        for ($i = 1; $i <= 7; $i++) {
-            $user = User::create([
-                'user_id' => Str::uuid()->toString(),
-                'name' => "Student $i",
-                'email' => "student$i@example.com",
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            $user->roles()->attach($studentRole->role_id);
+        // for ($i = 1; $i <= 7; $i++) {
+        //     $user = User::create([
+        //         'user_id' => Str::uuid()->toString(),
+        //         'name' => "Student $i",
+        //         'email' => "student$i@example.com",
+        //         'password' => Hash::make('password'),
+        //         'email_verified_at' => now(),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        //     $user->roles()->attach($studentRole->role_id);
 
-            $user->addMediaFromUrl("https://th.bing.com/th/id/R.dbabab887a119175ba22c8341e67de37?rik=n%2bIvPpmqpsc22g&pid=ImgRaw&r=0")->toMediaCollection('avatar');
-        }
+        //     $user->addMediaFromUrl("https://th.bing.com/th/id/R.dbabab887a119175ba22c8341e67de37?rik=n%2bIvPpmqpsc22g&pid=ImgRaw&r=0")->toMediaCollection('avatar');
+        // }
 
     }
 }

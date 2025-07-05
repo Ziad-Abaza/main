@@ -20,24 +20,24 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
-            InstructorProfileSeeder::class,
-            CategorySeeder::class,
-            CourseSeeder::class,
-            VideoSeeder::class,
-            QuestionSeeder::class,
-            QuestionOptionSeeder::class,
-            QuizAttemptSeeder::class, // Assuming this should run after users, questions, options
-            CertificateSeeder::class, // Assuming this runs after users and courses
-            UserCourseProgressSeeder::class, // After users and courses
-            UserVideoProgressSeeder::class, // After users and videos
-            CoursePricingsSeeder::class,
-            CourseDetailsSeeder::class,
-            CourseEnrollmentsSeeder::class,
-            ChildrenUniversitySeeder::class,
-            AbsenceSeeder::class,
-            FaqSeeder::class,
-            BlogSeeder::class,
-            ContactSeeder::class,
+            // InstructorProfileSeeder::class,
+            // CategorySeeder::class,
+            // CourseSeeder::class,
+            // VideoSeeder::class,
+            // QuestionSeeder::class,
+            // QuestionOptionSeeder::class,
+            // QuizAttemptSeeder::class, // Assuming this should run after users, questions, options
+            // CertificateSeeder::class, // Assuming this runs after users and courses
+            // UserCourseProgressSeeder::class, // After users and courses
+            // UserVideoProgressSeeder::class, // After users and videos
+            // CoursePricingsSeeder::class,
+            // CourseDetailsSeeder::class,
+            // CourseEnrollmentsSeeder::class,
+            // ChildrenUniversitySeeder::class,
+            // AbsenceSeeder::class,
+            // FaqSeeder::class,
+            // BlogSeeder::class,
+            // ContactSeeder::class,
         ]);
     }
 }
