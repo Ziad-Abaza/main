@@ -9,7 +9,7 @@ export default defineConfig({
         laravel({
             input: ["resources/css/app.css", "resources/js/app.js"],
             publicDirectory: "public",
-            buildDirectory: "build", // سيقرأ من public/build
+            buildDirectory: "build",
             refresh: false,
         }),
     ],
