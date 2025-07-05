@@ -29,6 +29,14 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->user_id . ',user_id',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'bio' => 'nullable|string|max:2000',
+            'specialization' => 'nullable|string|max:255',
+            'experience' => 'nullable|string|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'github_url' => 'nullable|url|max:255',
+            'website_url' => 'nullable|url|max:255',
+            'skills' => 'nullable|array',
+            'skills.*' => 'nullable|string|max:100',
         ]);
 
         /**
@@ -43,8 +51,32 @@ class ProfileController extends Controller
             $user->setAvatar($request->file('avatar'));
         }
 
+        // Update instructor profile fields if profile exists
+        $profile = $user->instructorProfile;
+        if ($profile) {
+            // Handle skills as comma-separated string from form
+            $skillsInput = $request->skills;
+            if (is_string($skillsInput)) {
+                $skillsArray = array_filter(array_map('trim', explode(',', $skillsInput)));
+            } elseif (is_array($skillsInput)) {
+                $skillsArray = $skillsInput;
+            } else {
+                $skillsArray = [];
+            }
+            $profile->update([
+                'bio' => $request->bio,
+                'specialization' => $request->specialization,
+                'experience' => $request->experience,
+                'linkedin_url' => $request->linkedin_url,
+                'github_url' => $request->github_url,
+                'website_url' => $request->website_url,
+                'skills' => json_encode($skillsArray),
+            ]);
+        }
+
         return redirect()->route('dashboard.profile.index')->with('success', 'Profile updated successfully.');
     }
+
     public function changePassword()
     {
         return view('instructor.profile.change-password');
@@ -71,5 +103,5 @@ class ProfileController extends Controller
         ]);
 
         return redirect()->route('dashboard.profile.index')->with('success', 'Password updated successfully.');
-
-    }}
+    }
+}

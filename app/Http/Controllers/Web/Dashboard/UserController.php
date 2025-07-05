@@ -104,6 +104,27 @@ class UserController extends Controller
             $validRoleIds = Role::whereIn('role_id', $request->roles)->pluck('role_id')->toArray();
             $user->roles()->sync($validRoleIds);
 
+            // InstructorProfile logic
+            $instructorRole = Role::where('name', 'instructor')->first();
+            $hasInstructorRole = in_array($instructorRole?->role_id, $validRoleIds);
+            $hasProfile = $user->instructorProfile()->exists();
+
+            if ($hasInstructorRole && !$hasProfile) {
+                // Create InstructorProfile with default/empty values
+                $user->instructorProfile()->create([
+                    'bio' => '',
+                    'specialization' => '',
+                    'experience' => '',
+                    'linkedin_url' => '',
+                    'github_url' => '',
+                    'website_url' => '',
+                    'skills' => json_encode([]),
+                ]);
+            } elseif (!$hasInstructorRole && $hasProfile) {
+                // Remove InstructorProfile
+                $user->instructorProfile()->delete();
+            }
+
             return redirect()->route('console.users.index')
                 ->with('success', 'User updated successfully');
         } catch (Throwable $th) {
