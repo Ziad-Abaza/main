@@ -1,249 +1,430 @@
 <template>
     <div
-        :class="
-            isDark
-                ? 'min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white'
-                : 'min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-white text-slate-800'
-        "
+        :class="isDark ? 'text-white' : 'text-slate-800'"
+        class="relative min-h-screen"
     >
-        <!-- Floating particles background -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div
-                class="absolute w-2 h-2 bg-teal-400 rounded-full animate-pulse opacity-40"
-                style="top: 25%; left: 15%; animation-delay: 0s"
-            ></div>
-            <div
-                class="absolute w-1 h-1 bg-cyan-400 rounded-full animate-pulse opacity-30"
-                style="top: 75%; left: 80%; animation-delay: 1.5s"
-            ></div>
-            <div
-                class="absolute w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse opacity-40"
-                style="top: 35%; left: 75%; animation-delay: 2.5s"
-            ></div>
-            <div
-                class="absolute w-1 h-1 bg-blue-400 rounded-full animate-pulse opacity-35"
-                style="top: 85%; left: 25%; animation-delay: 3.5s"
-            ></div>
-            <div
-                class="absolute w-2 h-2 bg-pink-400 rounded-full animate-pulse opacity-30"
-                style="top: 15%; left: 85%; animation-delay: 4s"
-            ></div>
-        </div>
-
-        <!-- Header Section -->
-        <div class="mb-8 relative z-10">
-            <h2
-                class="text-4xl font-black mb-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent"
-            >
-                My Courses
-            </h2>
-            <div
-                class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-            ></div>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="loading" class="flex items-center justify-center py-12">
-            <div class="flex items-center space-x-3">
-                <div
-                    class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"
-                ></div>
-                <span
-                    :class="isDark ? 'text-gray-400' : 'text-gray-500'"
-                    class="text-lg font-medium"
-                >
-                    Loading courses...
-                </span>
-            </div>
-        </div>
-
-        <!-- Error State -->
-        <div v-if="error" class="flex items-center justify-center py-12">
+        <!-- Unique Animated Background -->
+        <div class="absolute inset-0">
+            <!-- Flowing Waves -->
             <div
                 :class="
                     isDark
-                        ? 'bg-red-900/20 border-red-700/50'
-                        : 'bg-red-50 border-red-200'
+                        ? 'absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-teal-500/20 to-transparent transform -skew-y-6'
+                        : 'absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-teal-400/30 to-transparent transform -skew-y-6'
                 "
-                class="border rounded-2xl p-6 max-w-md w-full"
-            >
-                <div class="flex items-center space-x-3">
-                    <div class="p-2 bg-red-100 rounded-full">
-                        <svg
-                            class="w-6 h-6 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+            ></div>
+            <div
+                :class="
+                    isDark
+                        ? 'absolute top-20 right-0 w-full h-24 bg-gradient-to-b from-purple-500/15 to-transparent transform skew-y-3'
+                        : 'absolute top-20 right-0 w-full h-24 bg-gradient-to-b from-purple-400/25 to-transparent transform skew-y-3'
+                "
+            ></div>
+            <div
+                :class="
+                    isDark
+                        ? 'absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-cyan-500/20 to-transparent transform skew-y-6'
+                        : 'absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-cyan-400/30 to-transparent transform skew-y-6'
+                "
+            ></div>
+
+            <!-- Geometric Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div
+                    v-for="i in 15"
+                    :key="i"
+                    :class="[
+                        'absolute rounded-full',
+                        isDark
+                            ? 'bg-gradient-to-r from-teal-400/20 to-cyan-400/20'
+                            : 'bg-gradient-to-r from-teal-500/30 to-cyan-500/30',
+                    ]"
+                    :style="{
+                        width: `${30 + i * 10}px`,
+                        height: `${30 + i * 10}px`,
+                        top: `${Math.random() * 100}%`,
+                        left: `${Math.random() * 100}%`,
+                        animationDelay: `${i * 0.2}s`,
+                    }"
+                ></div>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="mb-16 relative z-10 px-6 py-12">
+            <div class="text-center mb-12">
+                <div class="relative inline-block mb-8">
+                    <div
+                        :class="
+                            isDark
+                                ? 'absolute inset-0 bg-gradient-to-r from-teal-500 to-purple-500 rounded-full blur-xl opacity-30'
+                                : 'absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 rounded-full blur-xl opacity-40'
+                        "
+                    ></div>
+                    <div
+                        :class="
+                            isDark
+                                ? 'relative px-8 py-4 bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-400/30 rounded-full backdrop-blur-sm'
+                                : 'relative px-8 py-4 bg-gradient-to-r from-teal-200/60 to-purple-200/60 border border-teal-300/50 rounded-full backdrop-blur-sm'
+                        "
+                    >
+                        <span
+                            :class="
+                                isDark
+                                    ? 'text-lg font-bold text-teal-300'
+                                    : 'text-lg font-bold text-teal-700'
+                            "
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
+                            📚 My Learning Journey
+                        </span>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-red-600">
-                            Error
-                        </h3>
-                        <p class="text-red-500 text-sm">{{ error }}</p>
+                </div>
+
+                <h2 class="text-6xl md:text-8xl font-black mb-8 relative">
+                    <span
+                        :class="
+                            isDark
+                                ? 'bg-gradient-to-r from-white via-teal-200 to-purple-200 bg-clip-text text-transparent'
+                                : 'bg-gradient-to-r from-slate-900 via-teal-700 to-purple-700 bg-clip-text text-transparent'
+                        "
+                    >
+                        My
+                    </span>
+                    <br />
+                    <span
+                        :class="
+                            isDark
+                                ? 'bg-gradient-to-r from-teal-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent'
+                                : 'bg-gradient-to-r from-teal-500 via-cyan-500 to-purple-500 bg-clip-text text-transparent'
+                        "
+                    >
+                        Courses
+                    </span>
+                </h2>
+
+                <div
+                    :class="
+                        isDark
+                            ? 'w-32 h-1 bg-gradient-to-r from-teal-500 to-purple-500 mx-auto mb-8 rounded-full'
+                            : 'w-32 h-1 bg-gradient-to-r from-teal-500 to-purple-500 mx-auto mb-8 rounded-full'
+                    "
+                ></div>
+
+                <!-- Stats Row -->
+                <div
+                    v-if="!loading && !error"
+                    class="flex justify-center gap-8 mb-8"
+                >
+                    <div
+                        :class="
+                            isDark
+                                ? 'px-6 py-4 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-400/30 rounded-2xl backdrop-blur-sm'
+                                : 'px-6 py-4 bg-gradient-to-r from-teal-100/60 to-cyan-100/60 border border-teal-300/50 rounded-2xl backdrop-blur-sm'
+                        "
+                    >
+                        <div class="text-center">
+                            <div
+                                :class="
+                                    isDark
+                                        ? 'text-3xl font-bold text-teal-400'
+                                        : 'text-3xl font-bold text-teal-600'
+                                "
+                            >
+                                {{ courses.length }}
+                            </div>
+                            <div
+                                :class="
+                                    isDark ? 'text-slate-300' : 'text-slate-600'
+                                "
+                                class="text-sm font-medium"
+                            >
+                                Enrolled Courses
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Courses Grid -->
-        <div
-            v-if="!loading && !error"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-            <div
-                v-for="c in courses"
-                :key="c.course_id"
-                :class="[
-                    'group relative overflow-hidden rounded-3xl p-6 shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2',
-                    isDark
-                        ? 'glass-card-premium border border-white/10'
-                        : 'bg-white border border-blue-100 hover:shadow-2xl',
-                ]"
-            >
-                <!-- Background gradient overlay -->
+        <!-- Loading State -->
+        <div v-if="loading" class="text-center py-20">
+            <div class="relative">
                 <div
-                    class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    :class="
+                        isDark
+                            ? 'w-20 h-20 border-4 border-teal-500/30 border-t-teal-500 rounded-full animate-spin mx-auto'
+                            : 'w-20 h-20 border-4 border-teal-500/30 border-t-teal-500 rounded-full animate-spin mx-auto'
+                    "
                 ></div>
+                <div
+                    :class="
+                        isDark
+                            ? 'absolute inset-0 w-20 h-20 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto'
+                            : 'absolute inset-0 w-20 h-20 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto'
+                    "
+                    style="
+                        animation-direction: reverse;
+                        animation-duration: 1.5s;
+                    "
+                ></div>
+            </div>
+            <p
+                :class="
+                    isDark
+                        ? 'mt-6 text-lg text-slate-400'
+                        : 'mt-6 text-lg text-slate-600'
+                "
+            >
+                Loading your learning journey...
+            </p>
+        </div>
 
-                <!-- Content -->
-                <div class="relative z-10">
-                    <!-- Course Icon -->
-                    <div class="mb-4">
-                        <div
-                            :class="
-                                isDark
-                                    ? 'bg-gradient-to-br from-blue-900 to-purple-900'
-                                    : 'bg-gradient-to-br from-blue-50 to-purple-50'
-                            "
-                            class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
-                        >
-                            <svg
-                                class="w-8 h-8 text-blue-500"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                                />
-                            </svg>
-                        </div>
-                    </div>
+        <!-- Error State -->
+        <div v-if="error" class="text-center py-20">
+            <div
+                :class="
+                    isDark
+                        ? 'inline-flex items-center p-8 bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-400/30 rounded-2xl backdrop-blur-sm'
+                        : 'inline-flex items-center p-8 bg-gradient-to-r from-red-100/80 to-orange-100/80 border border-red-300/50 rounded-2xl backdrop-blur-sm'
+                "
+            >
+                <div class="text-red-400 text-xl font-bold">
+                    {{ error }}
+                </div>
+            </div>
+        </div>
 
-                    <!-- Course Info -->
-                    <div class="mb-6">
-                        <h3
-                            class="text-xl font-bold mb-2 group-hover:text-blue-500 transition-colors duration-300"
-                        >
-                            {{ c.title }}
-                        </h3>
-                        <div class="flex items-center space-x-2">
+        <!-- Unique Courses Layout -->
+        <div
+            v-if="!loading && !error && courses.length > 0"
+            class="max-w-7xl mx-auto px-6 pb-12"
+        >
+            <div class="space-y-16">
+                <div
+                    v-for="(course, index) in courses"
+                    :key="course.course_id"
+                    class="relative"
+                >
+                    <!-- Alternating Layout -->
+                    <div
+                        :class="[
+                            'flex flex-col lg:flex-row gap-12 items-center',
+                            index % 2 === 1 ? 'lg:flex-row-reverse' : '',
+                        ]"
+                    >
+                        <!-- Visual Element -->
+                        <div class="lg:w-1/2 relative">
                             <div
                                 :class="
-                                    isDark ? 'bg-slate-700' : 'bg-slate-100'
+                                    isDark
+                                        ? 'relative p-8 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-purple-500/10 rounded-3xl border border-white/10 backdrop-blur-sm'
+                                        : 'relative p-8 bg-gradient-to-br from-teal-100/60 via-cyan-100/60 to-purple-100/60 rounded-3xl border border-teal-200/40 backdrop-blur-sm'
                                 "
-                                class="px-3 py-1 rounded-full"
                             >
+                                <!-- Decorative Elements -->
+                                <div
+                                    :class="
+                                        isDark
+                                            ? 'absolute top-4 left-4 w-16 h-16 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-2xl rotate-12'
+                                            : 'absolute top-4 left-4 w-16 h-16 bg-gradient-to-br from-teal-400/30 to-cyan-400/30 rounded-2xl rotate-12'
+                                    "
+                                ></div>
+                                <div
+                                    :class="
+                                        isDark
+                                            ? 'absolute bottom-4 right-4 w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl -rotate-12'
+                                            : 'absolute bottom-4 right-4 w-12 h-12 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-xl -rotate-12'
+                                    "
+                                ></div>
+
+                                <!-- Course Image Container -->
+                                <div class="relative z-10">
+                                    <div
+                                        :class="[
+                                            'w-full h-64 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 group-hover:scale-105',
+                                            isDark
+                                                ? 'bg-slate-800'
+                                                : 'bg-slate-100',
+                                        ]"
+                                    >
+                                        <img
+                                            v-if="course.image"
+                                            :src="course.image"
+                                            :alt="course.title"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        />
+                                        <div
+                                            v-else
+                                            :class="[
+                                                'w-full h-full flex items-center justify-center',
+                                                isDark
+                                                    ? 'bg-slate-800'
+                                                    : 'bg-slate-100',
+                                            ]"
+                                        >
+                                            <font-awesome-icon
+                                                icon="book"
+                                                :class="
+                                                    isDark
+                                                        ? 'text-4xl text-slate-400'
+                                                        : 'text-4xl text-slate-400'
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- Course Number Badge -->
+                                    <div
+                                        :class="
+                                            isDark
+                                                ? 'absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg'
+                                                : 'absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg'
+                                        "
+                                    >
+                                        <span
+                                            class="text-white font-bold text-lg"
+                                        >
+                                            {{ index + 1 }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Category Badge -->
+                                    <div
+                                        :class="
+                                            isDark
+                                                ? 'absolute -top-4 -right-4 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-full shadow-lg'
+                                                : 'absolute -top-4 -right-4 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-full shadow-lg'
+                                        "
+                                    >
+                                        {{ course.category_name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="lg:w-1/2 space-y-8">
+                            <div>
+                                <h3
+                                    :class="
+                                        isDark
+                                            ? 'text-4xl font-bold text-white mb-6'
+                                            : 'text-4xl font-bold text-slate-900 mb-6'
+                                    "
+                                >
+                                    {{ course.title }}
+                                </h3>
                                 <p
                                     :class="
                                         isDark
-                                            ? 'text-gray-300'
-                                            : 'text-gray-600'
+                                            ? 'text-lg text-slate-300 leading-relaxed'
+                                            : 'text-lg text-slate-600 leading-relaxed'
                                     "
-                                    class="text-sm font-medium"
                                 >
-                                    {{ c.category_name }}
+                                    Continue your learning journey with this
+                                    amazing course. Dive deep into the content
+                                    and enhance your skills.
                                 </p>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div class="pt-4">
+                                <button
+                                    @click="
+                                        $router.push(
+                                            `/courses/${course.course_id}`
+                                        )
+                                    "
+                                    :class="
+                                        isDark
+                                            ? 'group relative px-10 py-5 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-2xl'
+                                            : 'group relative px-10 py-5 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-2xl'
+                                    "
+                                >
+                                    <span class="flex items-center gap-3">
+                                        <span>Continue Learning</span>
+                                        <font-awesome-icon
+                                            icon="arrow-right"
+                                            class="transition-transform duration-300 group-hover:translate-x-2"
+                                        />
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Action Button -->
-                    <router-link
-                        :to="`/courses/${c.course_id}`"
-                        class="block w-full"
-                    >
-                        <button
-                            :class="[
-                                'w-full px-6 py-3 rounded-2xl font-bold text-white text-sm transition-all duration-300 transform hover:scale-105 shadow-lg',
-                                isDark
-                                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 hover:shadow-purple-500/25'
-                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:shadow-blue-500/25',
-                            ]"
-                        >
-                            <span
-                                class="flex items-center justify-center space-x-2"
-                            >
-                                <span>Open Course</span>
-                                <svg
-                                    class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    />
-                                </svg>
-                            </span>
-                        </button>
-                    </router-link>
+                    <!-- Separator -->
+                    <div
+                        v-if="index < courses.length - 1"
+                        :class="
+                            isDark
+                                ? 'mt-16 w-full h-px bg-gradient-to-r from-transparent via-teal-500/30 to-transparent'
+                                : 'mt-16 w-full h-px bg-gradient-to-r from-transparent via-teal-500/50 to-transparent'
+                        "
+                    ></div>
                 </div>
-
-                <!-- Decorative elements -->
-                <div
-                    class="absolute top-4 right-4 w-2 h-2 bg-blue-400 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"
-                ></div>
-                <div
-                    class="absolute bottom-4 left-4 w-1 h-1 bg-purple-400 rounded-full opacity-40 group-hover:opacity-80 transition-opacity duration-300"
-                ></div>
             </div>
         </div>
 
-        <!-- Empty State -->
+        <!-- Enhanced Empty State -->
         <div
             v-if="!loading && !error && courses.length === 0"
-            class="flex flex-col items-center justify-center py-16"
+            class="flex flex-col items-center justify-center py-24 px-6"
         >
-            <div
-                :class="isDark ? 'bg-slate-800/50' : 'bg-slate-100'"
-                class="w-24 h-24 rounded-full flex items-center justify-center mb-6"
-            >
-                <svg
-                    class="w-12 h-12 text-slate-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <div class="text-center max-w-md">
+                <div
+                    :class="[
+                        'w-32 h-32 rounded-full flex items-center justify-center mb-8 mx-auto shadow-2xl',
+                        isDark
+                            ? 'bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm'
+                            : 'bg-gradient-to-br from-slate-50 to-slate-100',
+                    ]"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    <font-awesome-icon
+                        icon="book-open"
+                        :class="
+                            isDark
+                                ? 'text-4xl text-slate-400'
+                                : 'text-4xl text-slate-400'
+                        "
                     />
-                </svg>
+                </div>
+                <h3
+                    :class="
+                        isDark
+                            ? 'text-2xl font-bold text-white mb-4'
+                            : 'text-2xl font-bold text-slate-800 mb-4'
+                    "
+                >
+                    Start Your Learning Journey
+                </h3>
+                <p
+                    :class="
+                        isDark
+                            ? 'text-slate-300 text-lg leading-relaxed mb-8'
+                            : 'text-slate-600 text-lg leading-relaxed mb-8'
+                    "
+                >
+                    You haven't enrolled in any courses yet. Explore our amazing
+                    courses and begin your educational adventure!
+                </p>
+                <router-link
+                    to="/courses"
+                    :class="
+                        isDark
+                            ? 'inline-flex items-center px-8 py-4 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-2xl'
+                            : 'inline-flex items-center px-8 py-4 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-2xl'
+                    "
+                >
+                    <span class="flex items-center gap-3">
+                        <span>Browse Courses</span>
+                        <font-awesome-icon
+                            icon="arrow-right"
+                            class="transition-transform duration-300 group-hover:translate-x-2"
+                        />
+                    </span>
+                </router-link>
             </div>
-            <h3 class="text-xl font-bold mb-2 text-slate-500">
-                No courses yet
-            </h3>
-            <p class="text-slate-400 text-center max-w-md">
-                You haven't enrolled in any courses yet. Start exploring and
-                find the perfect course for you!
-            </p>
         </div>
     </div>
 </template>
@@ -251,7 +432,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+    faBook,
+    faBookOpen,
+    faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "../../composables/useTheme";
+
+library.add(faBook, faBookOpen, faArrowRight);
+
 const { isDark } = useTheme();
 
 const loading = ref(false);
@@ -260,11 +451,13 @@ const courses = ref([]);
 
 const fetchCourses = async () => {
     loading.value = true;
+    error.value = null;
     try {
         const res = await axios.get("/api/user/courses");
-        courses.value = res.data.data ?? res.data; // depending on API
+        courses.value = res.data.data ?? res.data;
     } catch (e) {
-        error.value = "Failed to fetch courses";
+        error.value = "Failed to load courses";
+        console.error("Error fetching courses:", e);
     } finally {
         loading.value = false;
     }
@@ -274,25 +467,45 @@ onMounted(fetchCourses);
 </script>
 
 <style scoped>
-.glass-card-premium {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-@keyframes pulse {
-    0%,
-    100% {
-        opacity: 0.3;
-    }
-    50% {
-        opacity: 0.8;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }
 
-.animate-pulse {
-    animation: pulse 3s ease-in-out infinite;
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+button:focus,
+a:focus {
+    outline: 2px solid #14b8a6;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #14b8a6;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.2);
+}
+
+@media (max-width: 768px) {
+    .text-6xl {
+        font-size: 3rem;
+    }
+    .text-8xl {
+        font-size: 4rem;
+    }
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.group:hover {
+    transform: translateY(-5px);
 }
 </style>
