@@ -77,13 +77,13 @@ class CourseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
 
-            if (!empty($data['image'])) {
-                $course->addMediaFromUrl($data['image'])->toMediaCollection('course_image');
-            }
+            // if (!empty($data['image'])) {
+            //     $course->addMediaFromUrl($data['image'])->toMediaCollection('course_image');
+            // }
 
-            if (!empty($data['icon'])) {
-                $course->addMediaFromUrl($data['icon'])->toMediaCollection('course_icon');
-            }
+            // if (!empty($data['icon'])) {
+            //     $course->addMediaFromUrl($data['icon'])->toMediaCollection('course_icon');
+            // }
         }
     }
 }
