@@ -4,24 +4,24 @@ import vue from "@vitejs/plugin-vue";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/", 
-  plugins: [
-    tailwindcss(),
-    laravel({
-      input: ["resources/css/app.css", "resources/js/app.js"],
-      refresh: true,
-    }),
-    vue({
-      template: {
-        transformAssetUrls: {
-          base: null,
-          includeAbsolute: false,
-        },
-      },
-    }),
-  ],
-  build: {
-    outDir: "public/build",
-    emptyOutDir: true,
-  },
+    plugins: [
+        tailwindcss(),
+        laravel({
+            input: ["resources/css/app.css", "resources/js/app.js"],
+            refresh: true,
+        }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
+    ],
+    build: {
+        manifest: true,
+        outDir: "public_html/build",
+        emptyOutDir: true,
+    },
 });
