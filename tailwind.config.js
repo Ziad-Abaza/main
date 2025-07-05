@@ -1,18 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: "class",
+    content: [
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+    ],
     theme: {
         extend: {
             colors: {
-                primary: '#2563eb', // Blue-600
-                accent: '#6366f1', // Indigo-500
+                primary: "#2563eb", // Blue-600
+                accent: "#6366f1", // Indigo-500
                 text: {
-                    DEFAULT: '#222',
-                    light: '#fff',
+                    DEFAULT: "#222",
+                    light: "#fff",
                 },
                 background: {
-                    DEFAULT: '#f8fafc',
-                    dark: '#18181b',
+                    DEFAULT: "#f8fafc",
+                    dark: "#18181b",
                 },
                 // Light Mode Palette
                 light: {
@@ -47,22 +52,31 @@ module.exports = {
             },
             backgroundImage: {
                 // Light mode gradients
-                "gradient-light-main": "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 25%, #E0F2FE 50%, #F0F9FF 100%)",
-                "gradient-light-hero": "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #EFF6FF 100%)",
-                "glass-light": "linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%)",
+                "gradient-light-main":
+                    "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 25%, #E0F2FE 50%, #F0F9FF 100%)",
+                "gradient-light-hero":
+                    "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #EFF6FF 100%)",
+                "glass-light":
+                    "linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%)",
 
                 // Dark mode gradients (current)
-                "gradient-dark-main": "linear-gradient(135deg, #0F172A 0%, #1E1B4B 25%, #312E81 50%, #1E293B 100%)",
-                "gradient-dark-hero": "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%)",
-                "glass-dark": "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+                "gradient-dark-main":
+                    "linear-gradient(135deg, #0F172A 0%, #1E1B4B 25%, #312E81 50%, #1E293B 100%)",
+                "gradient-dark-hero":
+                    "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%)",
+                "glass-dark":
+                    "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
             },
             boxShadow: {
-                "glass-light": "0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
-                "glass-dark": "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                "card-light": "0 4px 24px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(0, 0, 0, 0.04)",
+                "glass-light":
+                    "0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+                "glass-dark":
+                    "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                "card-light":
+                    "0 4px 24px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(0, 0, 0, 0.04)",
                 "card-dark": "0 8px 32px rgba(0, 0, 0, 0.3)",
-                'soft': '0 4px 24px 0 rgba(30, 41, 59, 0.06)',
-                'card': '0 2px 8px 0 rgba(30, 41, 59, 0.08)',
+                soft: "0 4px 24px 0 rgba(30, 41, 59, 0.06)",
+                card: "0 2px 8px 0 rgba(30, 41, 59, 0.08)",
             },
         },
     },
