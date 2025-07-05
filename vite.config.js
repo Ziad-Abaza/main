@@ -4,7 +4,6 @@ import vue from "@vitejs/plugin-vue";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-    base: "/build/", // ✅ Add this line
     plugins: [
         tailwindcss(),
         laravel({
@@ -22,7 +21,7 @@ export default defineConfig({
     ],
     build: {
         manifest: true,
-        outDir: "build",
+        outDir: "public_html/build",
         emptyOutDir: true,
     },
 });
