@@ -35,13 +35,22 @@
             <!-- Floating Particles -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
                 <div
-                    class="absolute top-1/4 left-1/4 w-2 h-2 bg-teal-400 rounded-full animate-float"
+                    :class="[
+                        'absolute top-1/4 left-1/4 w-2 h-2 rounded-full animate-float',
+                        isDark ? 'bg-teal-400' : 'bg-teal-600',
+                    ]"
                 ></div>
                 <div
-                    class="absolute top-1/3 left-3/4 w-1.5 h-1.5 bg-purple-400 rounded-full animate-float-delayed"
+                    :class="[
+                        'absolute top-1/3 left-3/4 w-1.5 h-1.5 rounded-full animate-float-delayed',
+                        isDark ? 'bg-purple-400' : 'bg-purple-600',
+                    ]"
                 ></div>
                 <div
-                    class="absolute top-2/3 left-1/6 w-2.5 h-2.5 bg-cyan-400 rounded-full animate-float-slow"
+                    :class="[
+                        'absolute top-2/3 left-1/6 w-2.5 h-2.5 rounded-full animate-float-slow',
+                        isDark ? 'bg-cyan-400' : 'bg-cyan-600',
+                    ]"
                 ></div>
             </div>
 
@@ -50,26 +59,30 @@
             <div class="absolute inset-0 pointer-events-none">
                 <div
                     :class="[
-                        'absolute top-8 left-8 w-16 h-16 rotate-45 opacity-20',
-                        isDark ? 'bg-teal-400' : 'bg-teal-300',
+                        'absolute top-8 left-8 w-16 h-16 rotate-45',
+                        isDark
+                            ? 'bg-teal-400 opacity-20'
+                            : 'bg-teal-600 opacity-30',
                     ]"
                 ></div>
 
                 <!-- Triangle Shape - Top Right -->
                 <div
                     :class="[
-                        'absolute top-12 right-12 w-0 h-0 opacity-15',
+                        'absolute top-12 right-12 w-0 h-0',
                         isDark
-                            ? 'border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-purple-400'
-                            : 'border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-purple-300',
+                            ? 'border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-purple-400 opacity-15'
+                            : 'border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-purple-600 opacity-25',
                     ]"
                 ></div>
 
                 <!-- Hexagon Shape - Bottom Left -->
                 <div
                     :class="[
-                        'absolute bottom-16 left-12 w-12 h-12 opacity-25',
-                        isDark ? 'bg-cyan-400' : 'bg-cyan-300',
+                        'absolute bottom-16 left-12 w-12 h-12',
+                        isDark
+                            ? 'bg-cyan-400 opacity-25'
+                            : 'bg-cyan-600 opacity-35',
                     ]"
                     style="
                         clip-path: polygon(
@@ -86,24 +99,30 @@
                 <!-- Square Shape - Bottom Right -->
                 <div
                     :class="[
-                        'absolute bottom-20 right-16 w-10 h-10 rotate-12 opacity-18',
-                        isDark ? 'bg-teal-400' : 'bg-teal-300',
+                        'absolute bottom-20 right-16 w-10 h-10 rotate-12',
+                        isDark
+                            ? 'bg-teal-400 opacity-18'
+                            : 'bg-teal-600 opacity-28',
                     ]"
                 ></div>
 
                 <!-- Circle Shape - Middle Left -->
                 <div
                     :class="[
-                        'absolute top-1/2 left-6 w-8 h-8 rounded-full opacity-12',
-                        isDark ? 'bg-purple-400' : 'bg-purple-300',
+                        'absolute top-1/2 left-6 w-8 h-8 rounded-full',
+                        isDark
+                            ? 'bg-purple-400 opacity-12'
+                            : 'bg-purple-600 opacity-22',
                     ]"
                 ></div>
 
                 <!-- Star Shape - Middle Right -->
                 <div
                     :class="[
-                        'absolute top-1/2 right-8 w-6 h-6 opacity-20',
-                        isDark ? 'bg-cyan-400' : 'bg-cyan-300',
+                        'absolute top-1/2 right-8 w-6 h-6',
+                        isDark
+                            ? 'bg-cyan-400 opacity-20'
+                            : 'bg-cyan-600 opacity-30',
                     ]"
                     style="
                         clip-path: polygon(
@@ -124,38 +143,38 @@
                 <!-- Small Triangles - Scattered -->
                 <div
                     :class="[
-                        'absolute top-1/4 right-6 w-0 h-0 opacity-10',
+                        'absolute top-1/4 right-6 w-0 h-0',
                         isDark
-                            ? 'border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[14px] border-b-teal-400'
-                            : 'border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[14px] border-b-teal-300',
+                            ? 'border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[14px] border-b-teal-400 opacity-10'
+                            : 'border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[14px] border-b-teal-600 opacity-20',
                     ]"
                 ></div>
 
                 <div
                     :class="[
-                        'absolute bottom-1/3 left-4 w-0 h-0 opacity-12',
+                        'absolute bottom-1/3 left-4 w-0 h-0',
                         isDark
-                            ? 'border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-purple-400'
-                            : 'border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-purple-300',
+                            ? 'border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-purple-400 opacity-12'
+                            : 'border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-purple-600 opacity-22',
                     ]"
                 ></div>
 
                 <!-- Abstract Lines -->
                 <div
                     :class="[
-                        'absolute top-1/3 left-2 w-12 h-0.5 rotate-45 opacity-8',
+                        'absolute top-1/3 left-2 w-12 h-0.5 rotate-45',
                         isDark
-                            ? 'bg-gradient-to-r from-teal-400 to-transparent'
-                            : 'bg-gradient-to-r from-teal-300 to-transparent',
+                            ? 'bg-gradient-to-r from-teal-400 to-transparent opacity-8'
+                            : 'bg-gradient-to-r from-teal-600 to-transparent opacity-18',
                     ]"
                 ></div>
 
                 <div
                     :class="[
-                        'absolute bottom-1/4 right-2 w-8 h-0.5 -rotate-30 opacity-8',
+                        'absolute bottom-1/4 right-2 w-8 h-0.5 -rotate-30',
                         isDark
-                            ? 'bg-gradient-to-r from-purple-400 to-transparent'
-                            : 'bg-gradient-to-r from-purple-300 to-transparent',
+                            ? 'bg-gradient-to-r from-purple-400 to-transparent opacity-8'
+                            : 'bg-gradient-to-r from-purple-600 to-transparent opacity-18',
                     ]"
                 ></div>
             </div>

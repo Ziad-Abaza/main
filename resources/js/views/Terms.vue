@@ -1,34 +1,257 @@
 <template>
-  <section class="min-h-screen py-16 px-4 md:px-0 flex flex-col items-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950 transition-colors duration-500">
-    <div class="max-w-3xl w-full text-center mb-10">
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Terms of Service</h1>
-      <p class="text-sm text-slate-500 dark:text-slate-400">Last updated: June 2024</p>
+    <div
+        :class="
+            isDark
+                ? 'min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white'
+                : 'min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-white text-slate-800'
+        "
+    >
+        <!-- Simple Background -->
+        <div class="absolute inset-0">
+            <div
+                :class="
+                    isDark
+                        ? 'absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-purple-500/10 to-transparent'
+                        : 'absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-purple-400/20 to-transparent'
+                "
+            ></div>
+            <div
+                :class="
+                    isDark
+                        ? 'absolute bottom-0 right-0 w-full h-24 bg-gradient-to-t from-cyan-500/10 to-transparent'
+                        : 'absolute bottom-0 right-0 w-full h-24 bg-gradient-to-t from-cyan-400/20 to-transparent'
+                "
+            ></div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="pt-20 pb-16 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bold mb-8">
+                    <span
+                        :class="
+                            isDark
+                                ? 'bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent'
+                                : 'bg-gradient-to-r from-slate-900 to-purple-700 bg-clip-text text-transparent'
+                        "
+                    >
+                        Terms of Service
+                    </span>
+                </h2>
+
+                <div
+                    :class="
+                        isDark
+                            ? 'w-24 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto mb-8 rounded-full'
+                            : 'w-24 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto mb-8 rounded-full'
+                    "
+                ></div>
+
+                <p
+                    :class="
+                        isDark
+                            ? 'text-lg text-slate-300 max-w-2xl mx-auto'
+                            : 'text-lg text-slate-600 max-w-2xl mx-auto'
+                    "
+                >
+                    Please read these terms carefully before using our services
+                </p>
+            </div>
+        </div>
+
+        <!-- Simple Content Layout -->
+        <div class="max-w-4xl mx-auto px-6 pb-20 relative z-10">
+            <div
+                :class="
+                    isDark
+                        ? 'bg-white/10 backdrop-blur-sm rounded-2xl p-12 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300'
+                        : 'bg-white/90 backdrop-blur-sm rounded-2xl p-12 shadow-xl border border-purple-200/40 hover:shadow-2xl transition-all duration-300'
+                "
+            >
+                <div class="text-center mb-12">
+                    <div
+                        :class="
+                            isDark
+                                ? 'w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg hover:scale-110 transition-transform duration-300'
+                                : 'w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg hover:scale-110 transition-transform duration-300'
+                        "
+                    >
+                        <svg
+                            class="w-8 h-8 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                        </svg>
+                    </div>
+                    <h3
+                        :class="
+                            isDark
+                                ? 'text-2xl font-bold text-white mb-4'
+                                : 'text-2xl font-bold text-slate-900 mb-4'
+                        "
+                    >
+                        Service Terms
+                    </h3>
+                    <p
+                        :class="
+                            isDark
+                                ? 'text-slate-300 leading-relaxed'
+                                : 'text-slate-600 leading-relaxed'
+                        "
+                    >
+                        These terms govern your use of our services and outline the rules and guidelines for using our platform.
+                    </p>
+                </div>
+
+                <!-- Simple Content -->
+                <div class="space-y-8">
+                    <div 
+                        :class="
+                            isDark
+                                ? 'p-6 bg-gradient-to-r from-purple-500/5 to-cyan-500/5 rounded-xl border border-purple-400/10'
+                                : 'p-6 bg-gradient-to-r from-purple-50/50 to-cyan-50/50 rounded-xl border border-purple-200/30'
+                        "
+                    >
+                        <div class="flex items-center mb-3">
+                            <div
+                                :class="
+                                    isDark
+                                        ? 'w-3 h-3 bg-purple-400 rounded-full mr-3'
+                                        : 'w-3 h-3 bg-purple-500 rounded-full mr-3'
+                                "
+                            ></div>
+                            <h4
+                                :class="
+                                    isDark
+                                        ? 'text-lg font-semibold text-purple-300'
+                                        : 'text-lg font-semibold text-purple-700'
+                                "
+                            >
+                                Acceptance of Terms
+                            </h4>
+                        </div>
+                        <p
+                            :class="
+                                isDark
+                                    ? 'text-slate-300 leading-relaxed pl-6'
+                                    : 'text-slate-600 leading-relaxed pl-6'
+                            "
+                        >
+                            This terms of service document will be updated with specific details about usage rules, 
+                            user responsibilities, and service guidelines.
+                        </p>
+                    </div>
+
+                    <div 
+                        :class="
+                            isDark
+                                ? 'p-6 bg-gradient-to-r from-cyan-500/5 to-teal-500/5 rounded-xl border border-cyan-400/10'
+                                : 'p-6 bg-gradient-to-r from-cyan-50/50 to-teal-50/50 rounded-xl border border-cyan-200/30'
+                        "
+                    >
+                        <div class="flex items-center mb-3">
+                            <div
+                                :class="
+                                    isDark
+                                        ? 'w-3 h-3 bg-cyan-400 rounded-full mr-3'
+                                        : 'w-3 h-3 bg-cyan-500 rounded-full mr-3'
+                                "
+                            ></div>
+                            <h4
+                                :class="
+                                    isDark
+                                        ? 'text-lg font-semibold text-cyan-300'
+                                        : 'text-lg font-semibold text-cyan-700'
+                                "
+                            >
+                                User Guidelines
+                            </h4>
+                        </div>
+                        <p
+                            :class="
+                                isDark
+                                    ? 'text-slate-300 leading-relaxed pl-6'
+                                    : 'text-slate-600 leading-relaxed pl-6'
+                            "
+                        >
+                            For questions about these terms, please contact our support team.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div
+                    :class="
+                        isDark
+                            ? 'text-center mt-12 pt-8 border-t border-slate-700/50'
+                            : 'text-center mt-12 pt-8 border-t border-slate-300/30'
+                    "
+                >
+                    <div
+                        :class="
+                            isDark
+                                ? 'inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-400/20 rounded-xl backdrop-blur-sm'
+                                : 'inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-100/60 to-cyan-100/60 border border-purple-300/40 rounded-xl backdrop-blur-sm'
+                        "
+                    >
+                        <svg
+                            class="w-5 h-5 mr-3"
+                            :class="isDark ? 'text-purple-300' : 'text-purple-600'"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
+                        </svg>
+                        <h4
+                            :class="
+                                isDark
+                                    ? 'text-lg font-semibold text-purple-300'
+                                    : 'text-lg font-semibold text-purple-700'
+                            "
+                        >
+                            Contact Support
+                        </h4>
+                    </div>
+                    <p
+                        :class="
+                            isDark
+                                ? 'text-slate-300 mt-4'
+                                : 'text-slate-600 mt-4'
+                        "
+                    >
+                        For questions about these terms of service, please reach out to our team.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="max-w-2xl w-full bg-white/80 dark:bg-slate-900/80 rounded-2xl shadow p-8 flex flex-col gap-6 text-left">
-      <section>
-        <h2 class="text-xl font-bold mb-2 text-blue-600 dark:text-blue-300">Acceptance of Terms</h2>
-        <p class="text-slate-700 dark:text-slate-300">By accessing or using our services, you agree to be bound by these Terms of Service. (Add more details as needed.)</p>
-      </section>
-      <section>
-        <h2 class="text-xl font-bold mb-2 text-purple-600 dark:text-purple-300">User Responsibilities</h2>
-        <p class="text-slate-700 dark:text-slate-300">You agree to use our services lawfully and respectfully. (Add more details as needed.)</p>
-      </section>
-      <section>
-        <h2 class="text-xl font-bold mb-2 text-emerald-600 dark:text-emerald-300">Intellectual Property</h2>
-        <p class="text-slate-700 dark:text-slate-300">All content and materials are the property of CTU or its licensors. (Add more details as needed.)</p>
-      </section>
-      <section>
-        <h2 class="text-xl font-bold mb-2 text-pink-600 dark:text-pink-300">Limitation of Liability</h2>
-        <p class="text-slate-700 dark:text-slate-300">CTU is not liable for any damages arising from the use of our services. (Add more details as needed.)</p>
-      </section>
-      <section>
-        <h2 class="text-xl font-bold mb-2 text-slate-600 dark:text-slate-300">Contact</h2>
-        <p class="text-slate-700 dark:text-slate-300">If you have any questions about these Terms, please contact us at <a href="mailto:info@ctu.edu.eg" class="text-blue-500 underline">info@ctu.edu.eg</a>.</p>
-      </section>
-    </div>
-  </section>
 </template>
 
 <script setup>
-// No logic needed for placeholder
+import { useTheme } from "../composables/useTheme";
+const { isDark } = useTheme();
 </script>
+
+<style scoped>
+@media (max-width: 768px) {
+    .text-5xl {
+        font-size: 2.5rem;
+    }
+    .text-6xl {
+        font-size: 3rem;
+    }
+}
+</style>

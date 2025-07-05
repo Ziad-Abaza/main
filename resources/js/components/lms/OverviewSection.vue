@@ -10,25 +10,35 @@
         <div class="pt-16 pb-8 flex flex-col items-center relative">
             <!-- Floating particles background -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute w-2 h-2 bg-teal-400 rounded-full animate-pulse opacity-40" 
-                     style="top: 20%; left: 10%; animation-delay: 0s;"></div>
-                <div class="absolute w-1 h-1 bg-cyan-400 rounded-full animate-pulse opacity-30" 
-                     style="top: 60%; left: 85%; animation-delay: 1s;"></div>
-                <div class="absolute w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse opacity-40" 
-                     style="top: 40%; left: 20%; animation-delay: 2s;"></div>
+                <div
+                    class="absolute w-2 h-2 bg-teal-400 rounded-full animate-pulse opacity-40"
+                    style="top: 20%; left: 10%; animation-delay: 0s"
+                ></div>
+                <div
+                    class="absolute w-1 h-1 bg-cyan-400 rounded-full animate-pulse opacity-30"
+                    style="top: 60%; left: 85%; animation-delay: 1s"
+                ></div>
+                <div
+                    class="absolute w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse opacity-40"
+                    style="top: 40%; left: 20%; animation-delay: 2s"
+                ></div>
             </div>
-            
+
             <h2
                 class="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-teal-400 via-cyan-400 to-purple-500 bg-clip-text text-transparent drop-shadow-2xl tracking-tight text-center relative"
             >
-                Welcome back!
+                Learning Dashboard
             </h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-teal-400 to-purple-500 rounded-full"></div>
+            <div
+                class="w-24 h-1 bg-gradient-to-r from-teal-400 to-purple-500 rounded-full"
+            ></div>
         </div>
 
         <!-- Stats Cards Section -->
         <div class="px-6 mb-16">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            <div
+                class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto"
+            >
                 <!-- Courses Card -->
                 <div
                     :class="[
@@ -39,16 +49,22 @@
                     ]"
                 >
                     <!-- Background gradient overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div class="flex items-center justify-between mb-8 relative z-10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    ></div>
+
+                    <div
+                        class="flex items-center justify-between mb-8 relative z-10"
+                    >
                         <div>
                             <h3
                                 class="text-3xl font-black bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent mb-2"
                             >
                                 Courses
                             </h3>
-                            <div class="w-16 h-0.5 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"></div>
+                            <div
+                                class="w-16 h-0.5 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"
+                            ></div>
                         </div>
                         <div
                             :class="
@@ -73,7 +89,7 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-3 gap-4 relative z-10">
                         <div
                             :class="
@@ -86,7 +102,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ coursesStats.total }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">Total</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                Total
+                            </div>
                         </div>
                         <div
                             :class="
@@ -99,7 +117,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ coursesStats.completed }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">Completed</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                Completed
+                            </div>
                         </div>
                         <div
                             :class="
@@ -112,7 +132,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ coursesStats.in_progress }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">In Progress</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                In Progress
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,16 +149,22 @@
                     ]"
                 >
                     <!-- Background gradient overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div class="flex items-center justify-between mb-8 relative z-10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    ></div>
+
+                    <div
+                        class="flex items-center justify-between mb-8 relative z-10"
+                    >
                         <div>
                             <h3
                                 class="text-3xl font-black bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent mb-2"
                             >
                                 Assignments
                             </h3>
-                            <div class="w-16 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                            <div
+                                class="w-16 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                            ></div>
                         </div>
                         <div
                             :class="
@@ -161,7 +189,7 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-3 gap-4 relative z-10">
                         <div
                             :class="
@@ -174,7 +202,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ assignmentsStats.total }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">Total</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                Total
+                            </div>
                         </div>
                         <div
                             :class="
@@ -187,7 +217,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ assignmentsStats.completed }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">Completed</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                Completed
+                            </div>
                         </div>
                         <div
                             :class="
@@ -200,7 +232,9 @@
                             <div class="text-4xl font-black mb-2">
                                 {{ assignmentsStats.pending }}
                             </div>
-                            <div class="text-sm font-semibold opacity-80">Pending</div>
+                            <div class="text-sm font-semibold opacity-80">
+                                Pending
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,7 +243,9 @@
 
         <!-- Charts Section -->
         <div class="px-6 pb-16">
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            <div
+                class="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-7xl mx-auto"
+            >
                 <!-- Course Progress Chart -->
                 <div
                     :class="[
@@ -220,16 +256,22 @@
                     ]"
                 >
                     <!-- Background gradient overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div class="flex items-center justify-between mb-8 relative z-10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    ></div>
+
+                    <div
+                        class="flex items-center justify-between mb-8 relative z-10"
+                    >
                         <div>
                             <h3
                                 class="text-2xl font-black text-cyan-700 dark:text-cyan-300 mb-2"
                             >
                                 Course Progress Over Time
                             </h3>
-                            <div class="w-12 h-0.5 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"></div>
+                            <div
+                                class="w-12 h-0.5 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full"
+                            ></div>
                         </div>
                         <div
                             :class="
@@ -254,7 +296,7 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <div class="relative z-10">
                         <BarChart
                             v-if="graphData.coursesProgress.length"
@@ -274,16 +316,22 @@
                     ]"
                 >
                     <!-- Background gradient overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div class="flex items-center justify-between mb-8 relative z-10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    ></div>
+
+                    <div
+                        class="flex items-center justify-between mb-8 relative z-10"
+                    >
                         <div>
                             <h3
                                 class="text-2xl font-black text-purple-700 dark:text-purple-300 mb-2"
                             >
                                 Assignments Completed Over Time
                             </h3>
-                            <div class="w-12 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                            <div
+                                class="w-12 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                            ></div>
                         </div>
                         <div
                             :class="
@@ -308,7 +356,7 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <div class="relative z-10">
                         <LineChart
                             v-if="graphData.assignmentsOverTime.length"
@@ -405,11 +453,18 @@ const lineChartOptions = {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.8; }
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.8;
+    }
+
 }
 
 .animate-pulse {
     animation: pulse 3s ease-in-out infinite;
 }
 </style>
+

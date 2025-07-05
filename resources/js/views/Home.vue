@@ -45,7 +45,7 @@
                 ></div>
             </div>
 
-            <div class="container mx-auto px-6 py-20 md:py-32 relative z-10">
+            <div class="container mx-auto px-6 py-12 md:py-20 relative z-10">
                 <!-- Main Hero Content -->
                 <div
                     class="flex flex-col lg:flex-row items-center justify-between gap-16"
@@ -123,6 +123,39 @@
                         <div
                             class="flex flex-wrap justify-center lg:justify-start gap-8 py-6"
                         >
+                            <!-- Store Stats (Debug Info) -->
+                            <div
+                                v-if="false"
+                                :class="
+                                    isDark
+                                        ? 'group p-4 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm'
+                                        : 'group p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50'
+                                "
+                            >
+                                <div class="text-center">
+                                    <div
+                                        :class="
+                                            isDark
+                                                ? 'text-sm text-slate-300'
+                                                : 'text-sm text-slate-600'
+                                        "
+                                    >
+                                        Store Stats
+                                    </div>
+                                    <div
+                                        class="grid grid-cols-2 gap-2 mt-2 text-xs"
+                                    >
+                                        <div>Courses: {{ totalCourses }}</div>
+                                        <div>
+                                            Categories: {{ totalCategories }}
+                                        </div>
+                                        <div>
+                                            Instructors: {{ totalInstructors }}
+                                        </div>
+                                        <div>Offers: {{ totalOffers }}</div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Quality Education Card -->
                             <div
                                 :class="
@@ -294,7 +327,7 @@
                                 :class="
                                     isDark
                                         ? 'inline-flex items-center px-8 py-4 bg-white text-cyan-700 font-bold rounded-2xl shadow-2xl shadow-cyan-500/25 border border-cyan-400 hover:bg-cyan-700 hover:text-white hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900'
-                                        : 'inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-bold rounded-2xl shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-white'
+                                        : 'inline-flex items-center px-8 py-4 bg-slate-800/10 backdrop-blur-sm border border-slate-800/20 text-slate-800 font-bold rounded-2xl hover:bg-slate-800/15 hover:border-slate-800/30 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-slate-800 focus:ring-offset-2 focus:ring-offset-white'
                                 "
                             >
                                 <span class="mr-2">Explore All Categories</span>
@@ -656,7 +689,7 @@
                 </p>
             </div>
 
-            <!-- loading and Error States -->
+            <!-- Loading and Error States -->
             <div v-if="loading" class="text-center">
                 <div
                     :class="
@@ -668,7 +701,7 @@
                     <div
                         class="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-500"
                     ></div>
-                    <span>Loading course...</span>
+                    <span>Loading courses...</span>
                 </div>
             </div>
 
@@ -676,8 +709,30 @@
                 v-if="error"
                 class="text-center p-8 glass-card-premium rounded-2xl border border-red-500/20"
             >
-                <div class="text-red-400 text-lg font-semibold">
+                <div class="text-red-400 text-lg font-semibold mb-4">
                     {{ error }}
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button
+                        @click="refreshData"
+                        :class="
+                            isDark
+                                ? 'px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors'
+                                : 'px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors'
+                        "
+                    >
+                        Refresh Data
+                    </button>
+                    <button
+                        @click="clearError"
+                        :class="
+                            isDark
+                                ? 'px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg transition-colors'
+                                : 'px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg transition-colors'
+                        "
+                    >
+                        Dismiss
+                    </button>
                 </div>
             </div>
 
@@ -1860,7 +1915,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import defaultImage from "@/assets/icons/EduStream.jpg";
@@ -1892,51 +1947,78 @@ library.add(
 );
 
 const homeStore = useHomeStore();
-const featuredCourses = ref([]);
-const popularCategories = ref([]);
-const limitedTimeOffers = ref([]);
-const topInstructors = ref([]);
-const loading = ref(true);
-const error = ref(null);
 const defaultLogo = "https://i.ibb.co/67ZKPkmK/logo.png";
 
 // Random course selection
 const randomCourse = ref(null);
 
+// Computed properties from store
+const featuredCourses = computed(() => homeStore.featuredCourses);
+const popularCategories = computed(() => homeStore.popularCategories);
+const limitedTimeOffers = computed(() => homeStore.limitedTimeOffers);
+const topInstructors = computed(() => homeStore.topInstructors);
+const loading = computed(() => homeStore.isLoading);
+const error = computed(() => homeStore.getError);
+
+// Additional computed properties for enhanced functionality
+const totalCourses = computed(() => homeStore.totalFeaturedCourses);
+const totalCategories = computed(() => homeStore.totalCategories);
+const totalInstructors = computed(() => homeStore.totalInstructors);
+const totalOffers = computed(() => homeStore.totalOffers);
+
+// Get top rated courses
+const topRatedCourses = computed(() => homeStore.getTopRatedCourses(3));
+
+// Get most enrolled courses
+const mostEnrolledCourses = computed(() => homeStore.getMostEnrolledCourses(3));
+
 // Function to get a random course
 const getRandomCourse = () => {
-    if (!featuredCourses.value || featuredCourses.value.length === 0)
-        return null;
-    const randomIndex = Math.floor(
-        Math.random() * featuredCourses.value.length
-    );
-    return featuredCourses.value[randomIndex];
+    return homeStore.getRandomCourse();
 };
 
-const fetchHomeData = async () => {
+// Initialize data
+const initializeData = async () => {
     try {
         await homeStore.fetchHomeData();
-        featuredCourses.value = homeStore.featuredCourses;
-        popularCategories.value = homeStore.popularCategories;
-        limitedTimeOffers.value = homeStore.limitedTimeOffers;
-        topInstructors.value = homeStore.topInstructors;
-        loading.value = false;
-        error.value = null;
+        randomCourse.value = getRandomCourse();
     } catch (err) {
-        console.error("Error fetching home data:", err);
-        error.value = "Failed to load data. Please try again later.";
-        loading.value = false;
+        console.error("Error initializing home data:", err);
     }
 };
 
-fetchHomeData();
+// Refresh data function
+const refreshData = async () => {
+    try {
+        await homeStore.refreshData();
+        randomCourse.value = getRandomCourse();
+    } catch (err) {
+        console.error("Error refreshing home data:", err);
+    }
+};
+
+// Clear error function
+const clearError = () => {
+    homeStore.clearError();
+};
+
+// Auto-refresh random course every 10 seconds
+let randomCourseInterval;
 
 onMounted(async () => {
-    await fetchHomeData();
-    randomCourse.value = getRandomCourse();
-    setInterval(() => {
+    await initializeData();
+
+    // Set up interval for random course rotation
+    randomCourseInterval = setInterval(() => {
         randomCourse.value = getRandomCourse();
     }, 10000);
+});
+
+// Cleanup interval on unmount
+onUnmounted(() => {
+    if (randomCourseInterval) {
+        clearInterval(randomCourseInterval);
+    }
 });
 
 const { isDark } = useTheme();
@@ -2086,7 +2168,6 @@ a:focus {
     box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
 }
 
-/* Enhanced focus states for better accessibility */
 button:focus-visible,
 a:focus-visible,
 router-link:focus-visible {
@@ -2095,7 +2176,6 @@ router-link:focus-visible {
     box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
 }
 
-/* High contrast focus states for dark mode */
 .dark button:focus-visible,
 .dark a:focus-visible,
 .dark router-link:focus-visible {
