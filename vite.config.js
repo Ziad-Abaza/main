@@ -21,7 +21,7 @@ export default defineConfig({
     ],
     build: {
         manifest: true,
-        outDir: "build",
+        outDir: "public/build", // ✅ Directly build to the right place
         emptyOutDir: true,
     },
 });
