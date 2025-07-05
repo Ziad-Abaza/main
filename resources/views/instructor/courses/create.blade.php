@@ -142,7 +142,7 @@
 
                         <!-- Duration -->
                         <div class="mb-4">
-                            <x-inputs.number name="total_duration" label="Total Duration (Minutes)" min="1" required placeholder="Enter total duration in minutes"/>
+                            <x-inputs.number name="total_duration" label="Total Duration (Hours)" min="0.1" step="0.1" required placeholder="Enter total duration in hours" />
                         </div>
 
                         <!-- Pricing Section -->

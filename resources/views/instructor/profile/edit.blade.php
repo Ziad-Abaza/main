@@ -52,7 +52,7 @@
                             <x-inputs.text name="specialization" label="Specialization" :value="old('specialization', $profile->specialization)" />
                         </div>
                         <div class="mb-3">
-                            <x-inputs.text name="experience" label="Experience" :value="old('experience', $profile->experience)" />
+                            <x-inputs.number name="experience" label="Years of Experience" :value="old('experience', $profile->experience)" min="0" max="60" />
                         </div>
                         <div class="mb-3">
                             <x-inputs.text name="linkedin_url" label="LinkedIn URL" :value="old('linkedin_url', $profile->linkedin_url)" />

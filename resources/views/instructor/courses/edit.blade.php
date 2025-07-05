@@ -149,8 +149,7 @@
 
                         <!-- Total Duration -->
                         <div class="mb-4">
-                            <x-inputs.number name="total_duration" label="Total Duration (Minutes)"
-                                :value="$course->details?->total_duration" min="1" required />
+                            <x-inputs.number name="total_duration" label="Total Duration (Hours)" :value="$course->details?->total_duration ? number_format($course->details->total_duration / 60, 1) : ''" min="0.1" step="0.1" required placeholder="Enter total duration in hours" />
                         </div>
 
                         <!-- Pricing Section -->

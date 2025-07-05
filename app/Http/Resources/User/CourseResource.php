@@ -32,7 +32,7 @@ class CourseResource extends JsonResource
                 'level' => $this->details->level,
                 'language' => $this->details->language,
                 'status' => $this->details->status,
-                'total_duration' => $this->details->total_duration,
+                'total_duration' => $this->details->total_duration ? round($this->details->total_duration / 60, 1) : 0.0,
             ] : null,
 
             'pricing' => $this->pricing ? [

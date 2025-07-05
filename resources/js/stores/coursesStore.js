@@ -111,9 +111,7 @@ export const useCourseStore = defineStore("courseDetails", {
                     const now = new Date();
 
                     this.courses = response.data.data.map((course) => {
-                        const durationMinutes =
-                            Math.floor(course.details ?.total_duration / 60) ||
-                            0;
+
 
                         const originalPrice = parseFloat(
                             course.pricing ?.price || 0
@@ -156,7 +154,7 @@ export const useCourseStore = defineStore("courseDetails", {
                                 level: course.details ?.level || "Not specified",
                                 language: course.details ?.language || "Not specified",
                                 status: course.details ?.status || "Unavailable",
-                                durationMinutes,
+                                total_duration: course.details ?.total_duration || "0:00",
                             },
                             pricing: {
                                 originalPrice,

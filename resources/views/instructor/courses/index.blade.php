@@ -118,7 +118,11 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-clock text-muted me-2"></i>
-                                        {{ $course->details?->total_duration ?? 0 }} min
+                                        @php
+                                            $durationMin = $course->details?->total_duration ?? 0;
+                                            $durationHrs = $durationMin / 60;
+                                        @endphp
+                                        {{ number_format($durationHrs, 1) }} hrs
                                     </div>
                                 </td>
 
@@ -254,7 +258,7 @@
                                     <i class="fas fa-clock text-info me-2"></i>
                                     <div>
                                         <small class="text-muted d-block">Duration</small>
-                                        <small class="fw-semibold">{{ $course->details?->total_duration ?? 0 }} min</small>
+                                        <small class="fw-semibold">{{ number_format(($course->details?->total_duration ?? 0) / 60, 1) }} hrs</small>
                                     </div>
                                 </div>
                             </div>

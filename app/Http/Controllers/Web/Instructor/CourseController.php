@@ -88,6 +88,8 @@ class CourseController extends Controller
                 $course->setIcon($request->file('course_icon'));
             }
 
+            $totalDurationMinutes = (int) round($request->total_duration * 60);
+
             CourseDetail::create([
                 'detail_id' => Str::uuid(),
                 'course_id' => $course->course_id,
@@ -97,7 +99,7 @@ class CourseController extends Controller
                 'objectives' => $request->objectives,
                 'prerequisites' => $request->prerequisites,
                 'content' => $request->content,
-                'total_duration' => $request->total_duration,
+                'total_duration' => $totalDurationMinutes,
             ]);
 
             Log::debug('CourseDetail created', [
