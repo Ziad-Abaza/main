@@ -84,7 +84,7 @@ class AssignmentController extends Controller
 
                 // Generate unique safe filename
                 $filename = uniqid() . '_' . sha1($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('', $filename, 'assignments'); 
+                $path = $file->storeAs('', $filename, 'assignments');
 
                 $assignment->attachment_path = $path;
             }

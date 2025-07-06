@@ -1785,7 +1785,7 @@ library.add(
 );
 
 const homeStore = useHomeStore();
-const defaultLogo = "https://i.ibb.co/67ZKPkmK/logo.png";
+const defaultLogo = "@/assets/icons/logo.png";
 
 // Random course selection
 const randomCourse = ref(null);

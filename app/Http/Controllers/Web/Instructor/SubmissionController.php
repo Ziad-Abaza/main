@@ -49,7 +49,7 @@ class SubmissionController extends Controller
         return back()->with('success','Submission graded successfully');
     }
 
-    private function authorizeAssignment(Course $course, Assignment $assignment, Submission $submission=null){
+    private function authorizeAssignment(Course $course, Assignment $assignment, ?Submission $submission = null){
         if($course->instructor_id!==Auth::id()||$assignment->course_id!==$course->course_id){
             abort(403);
         }
