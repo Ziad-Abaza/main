@@ -53,5 +53,6 @@ class SubmissionController extends Controller
         if($course->instructor_id!==Auth::id()||$assignment->course_id!==$course->course_id){
             abort(403);
         }
-        if($submission && $submission->assignment_id!==$assignment->id){abort(404);}    }
+        // if($submission && $submission->assignment_id!==$assignment->id){abort(404);}
+       }
 }
