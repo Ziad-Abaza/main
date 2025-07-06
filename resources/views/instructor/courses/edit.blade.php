@@ -1,6 +1,5 @@
 @extends('instructor.layouts.app')
 @section('title', 'Edit Course - Instructor Panel')
-
 @section('content')
 <style>
     .card {
@@ -48,7 +47,6 @@
         border-color: #1e7e34;
     }
 </style>
-
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
@@ -58,133 +56,131 @@
                     <i class="material-symbols-rounded fs-5 me-2">school</i>
                     <h5 class="mb-0">Edit Course</h5>
                 </div>
-
                 <!-- Form -->
                 <form action="{{ route('dashboard.courses.update', $course) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="card-body p-4">
-
                         <!-- Title -->
                         <div class="mb-4">
-                            <x-inputs.text name="title" label="Course Title" :value="$course->title" required />
+                            <x-inputs.text name="title" label="Course Title" :value="old('title', $course->title)"
+                                required />
                         </div>
-
                         <!-- Description -->
                         <div class="mb-4">
-                            <x-inputs.textarea name="description" label="Description" :value="$course->description"
-                                rows="3" />
+                            <x-inputs.textarea name="description" label="Description"
+                                :value="old('description', $course->description)" rows="3" />
                         </div>
-
                         <!-- Category -->
                         <div class="mb-4">
                             <x-inputs.select name="category_id" label="Category"
                                 :options="$categories->pluck('category_name', 'category_id')"
-                                :value="$course->category_id" placeholder="Select a category" required />
+                                :value="old('category_id', $course->category_id)" placeholder="Select a category"
+                                required />
                         </div>
-
                         <!-- Level & Language -->
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <x-inputs.select name="level" label="Level"
                                     :options="['beginner' => 'Beginner', 'intermediate' => 'Intermediate', 'advanced' => 'Advanced']"
-                                    :value="$course->details?->level" placeholder="Select level" required />
+                                    :value="old('level', $course->details?->level)" placeholder="Select level"
+                                    required />
                             </div>
                             <div class="col-md-6">
                                 <x-inputs.select name="language" label="Language"
                                     :options="['en' => 'English', 'ar' => 'Arabic', 'fr' => 'French']"
-                                    :value="$course->details?->language" placeholder="Select language" required />
+                                    :value="old('language', $course->details?->language)" placeholder="Select language"
+                                    required />
                             </div>
                         </div>
-
                         <!-- Status -->
                         <div class="mb-4">
-                            <x-inputs.select name="status" label="Course Status"
+                            <x-inputs.select name="course_status" label="Course Status"
                                 :options="['available' => 'Available', 'upcoming' => 'Upcoming', 'suspended' => 'Suspended']"
-                                :value="$course->details?->status" required />
+                                :value="old('course_status', $course->details?->status)" required />
                         </div>
-
                         <!-- Course Image -->
                         <div class="mb-4">
                             <x-inputs.file name="course_image" label="Course Image" accept="image/*"
                                 note="Upload a new cover image if needed." />
-
                             @if ($course->getImage())
                             <div class="mt-2">
                                 <img src="{{ $course->getImage() }}" alt="Current Image" style="max-height: 150px;">
                             </div>
                             @endif
                         </div>
-
                         <!-- Course Icon -->
                         <div class="mb-4">
                             <x-inputs.file name="course_icon" label="Course Icon" accept="image/*"
                                 note="Upload a new icon or logo if needed." />
-
                             @if ($course->getIcon())
                             <div class="mt-2">
                                 <img src="{{ $course->getIcon() }}" alt="Current Icon" style="max-height: 80px;">
                             </div>
                             @endif
                         </div>
-
                         <!-- Objectives -->
                         <div class="mb-4">
                             <x-quill-editor id="objectives" name="objectives" height="200px" label="Learning Objectives"
-                                :value="$course->details->objectives ?? ''" />
+                                :value="old('objectives', $course->details->objectives ?? '')" />
                         </div>
-
                         <!-- Prerequisites -->
                         <div class="mb-4">
                             <x-quill-editor id="prerequisites" name="prerequisites" height="150px"
-                                label="Prerequisites (Optional)" :value="$course->details->prerequisites ?? ''" />
+                                label="Prerequisites (Optional)"
+                                :value="old('prerequisites', $course->details->prerequisites ?? '')" />
                         </div>
-
                         <!-- Content -->
                         <div class="mb-4">
                             <x-quill-editor id="content" name="content" height="300px" label="Course Content Overview"
-                                :value="$course->details->content ?? ''" />
+                                :value="old('content', $course->details->content ?? '')" />
                         </div>
-
                         <!-- Total Duration -->
                         <div class="mb-4">
-                            <x-inputs.number name="total_duration" label="Total Duration (Hours)" :value="$course->details?->total_duration ? number_format($course->details->total_duration / 60, 1) : ''" min="0.1" step="0.1" required placeholder="Enter total duration in hours" />
+                            <x-inputs.number name="total_duration" label="Total Duration (Hours)"
+                                :value="old('total_duration', intval($course->details?->total_duration / 60))" min="1" step="1" required
+                                placeholder="Enter total duration in hours" />
                         </div>
-
                         <!-- Pricing Section -->
                         <div class="mt-4 pt-3 section-border">
                             <h6 class="fw-bold mb-3">Pricing</h6>
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <x-inputs.number name="price" label="Base Price (EGP)"
-                                        :value="$course->pricing?->price" min="0" required />
+                               <div class="col-md-6">
+                                    <x-inputs.number name="price" label="Base Price (EGP)" :value="old('price', intval($course->pricing?->price))"
+                                        min="0" required />
                                 </div>
                                 <div class="col-md-6">
                                     <x-inputs.number name="discount_price" label="Discounted Price (Optional)"
-                                        :value="$course->pricing?->discount_price" min="0" />
+                                        :value="old('discount_price', intval($course->pricing?->discount_price))" min="0" />
                                     <small class="text-muted">Must be less than base price</small>
                                 </div>
+                                @php
+                                $discountStart = old('discount_start')
+                                ? \Carbon\Carbon::parse(old('discount_start'))->format('Y-m-d\TH:i')
+                                : optional($course->pricing?->discount_start)->format('Y-m-d\TH:i');
+
+                                $discountEnd = old('discount_end')
+                                ? \Carbon\Carbon::parse(old('discount_end'))->format('Y-m-d\TH:i')
+                                : optional($course->pricing?->discount_end)->format('Y-m-d\TH:i');
+                                @endphp
+
                                 <div class="col-md-6">
-                                    <x-inputs.date name="discount_start" label="Discount Start Date"
-                                        :value="optional($course->pricing?->discount_start)->format('Y-m-d')" />
+                                    <x-inputs.date name="discount_start" label="Discount Start Date" :value="$discountStart" />
                                 </div>
                                 <div class="col-md-6">
-                                    <x-inputs.date name="discount_end" label="Discount End Date"
-                                        :value="optional($course->pricing?->discount_end)->format('Y-m-d')" />
+                                    <x-inputs.date name="discount_end" label="Discount End Date" :value="$discountEnd" />
                                 </div>
                             </div>
                         </div>
-
                         <!-- Enrollment Settings -->
                         <div class="mt-4 pt-3 section-border">
                             <h6 class="fw-bold mb-3">Enrollment Settings</h6>
                             <div class="mb-3">
                                 <x-inputs.number name="max_students" label="Maximum Students Allowed"
-                                    :value="$course->enrollment?->max_students" min="1" required />
+                                    :value="old('max_students', $course->enrollment?->max_students)" min="1" required />
                             </div>
                         </div>
-
                         <!-- Submit Buttons -->
                         <div class="d-flex gap-3 mt-4">
                             <button type="submit" class="btn btn-success px-4">
