@@ -29,8 +29,7 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
             const authStore = useAuthStore();
             try {
                 const response = await axios.get(
-                    `/api/quizzes/course/${courseId}/quiz-results`,
-                    {
+                    `/api/quizzes/course/${courseId}/quiz-results`, {
                         headers: {
                             Authorization: `Bearer ${authStore.token}`,
                             Accept: "application/json",
@@ -39,6 +38,7 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
                     }
                 );
                 const data = response.data.data;
+                console.log(data)
                 this.courseId = courseId;
                 this.totalQuestions = data.total_questions;
                 this.score = data.score;
@@ -55,7 +55,7 @@ export const useCourseQuizResultsStore = defineStore('courseQuizResultsStore', {
             } catch (error) {
                 console.error("Error fetching course quiz results:", error);
                 this.error =
-                    error.response?.data?.message ||
+                    error.response ?.data ?.message ||
                     "Failed to load course quiz results.";
                 throw error;
             } finally {

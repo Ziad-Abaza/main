@@ -11,10 +11,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import axios from 'axios';
-import AssignmentViewer from '../components/AssignmentViewer.vue';
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
+import AssignmentViewer from "../components/AssignmentViewer.vue";
 
 const route = useRoute();
 const assignment = ref(null);
@@ -28,7 +28,7 @@ const loadAssignment = async () => {
     const res = await axios.get(`/api/assignments/${route.params.id}`);
     assignment.value = res.data.data;
   } catch (e) {
-    error.value = 'Failed to load assignment. Please try again.';
+    error.value = "Failed to load assignment. Please try again.";
     console.error(e);
   } finally {
     loading.value = false;
@@ -36,9 +36,10 @@ const loadAssignment = async () => {
 };
 
 const handleSubmissionSuccess = (updatedAssignment) => {
-    assignment.value = updatedAssignment;
-    // Here you could trigger a global toast notification for better UX
-    alert('Submission successful!');
+  assignment.value = updatedAssignment;
+  //   console.log(assignment.value);
+  // Here you could trigger a global toast notification for better UX
+  //   alert("Submission successful!");
 };
 
 onMounted(loadAssignment);

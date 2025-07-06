@@ -56,6 +56,10 @@
                                                 class="btn btn-sm btn-outline-info" title="Edit">
                                                 <i class="material-symbols-rounded fs-6">edit</i>
                                             </a>
+                                            <a href="{{ route('dashboard.courses.videos.quiz.index', $video) }}"
+                                                class="btn btn-sm btn-outline-warning" title="Quiz">
+                                                <i class="material-symbols-rounded fs-6">quiz</i>
+                                            </a>
                                             <form
                                                 action="{{ route('dashboard.courses.videos.destroy', [$course, $video]) }}"
                                                 method="POST" class="d-inline">

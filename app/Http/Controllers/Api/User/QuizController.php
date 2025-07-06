@@ -234,9 +234,16 @@ class QuizController extends Controller
             })
                 ->where('user_id', $user->user_id)
                 ->with(['question', 'selectedOption'])
+                ->orderBy('attempt_time', 'desc')
                 ->get();
 
-            if ($quizAttempts->isEmpty()) {
+            // Only keep the last attempt for each question
+            $lastAttempts = collect();
+            if (!$quizAttempts->isEmpty()) {
+                $lastAttempts = $quizAttempts->unique('question_id');
+            }
+
+            if ($lastAttempts->isEmpty()) {
                 return response()->json([
                     'success' => false,
                     'code' => Response::HTTP_NOT_FOUND,
@@ -245,17 +252,15 @@ class QuizController extends Controller
             }
 
             // Get the quiz results for the given video
-            $totalQuestions = $quizAttempts->unique('question_id')->count();
-            $correctAnswers = $quizAttempts->where('is_correct', true)->unique('question_id')->count();
+            $totalQuestions = $lastAttempts->count();
+            $correctAnswers = $lastAttempts->where('is_correct', true)->count();
             $percentage = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100, 2) : 0;
-
 
             // Return the quiz results
             $nextVideo = Video::where('course_id', $video->course_id)
                 ->where('order_in_course', '>', $video->order_in_course)
                 ->orderBy('order_in_course')
                 ->first();
-
 
             return response()->json([
                 'success' => true,
@@ -271,7 +276,7 @@ class QuizController extends Controller
                         'title' => $nextVideo->title,
                         'order_in_course' => $nextVideo->order_in_course
                     ] : null,
-                    'attempts' => QuizAttemptResource::collection($quizAttempts),
+                    'attempts' => QuizAttemptResource::collection($lastAttempts),
                 ]
             ]);
         } catch (Throwable $th) {
