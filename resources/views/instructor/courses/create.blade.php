@@ -151,14 +151,14 @@
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                        <x-inputs.number name="price" placeholder="Base Price" label="Base Price (EGP)" min="0" required />
+                                        <x-inputs.number name="price" placeholder="Base Price" label="Base Price (EGP)" min="0" />
                                 </div>
                                 <div class="col-md-6">
                                     <x-inputs.number name="discount_price" placeholder="Discounted Price" label="Discounted Price (Optional)" min="0" />
                                     <small class="text-muted">Must be less than base price</small>
                                 </div>
                                 <div class="col-md-6">
-                                    <x-inputs.date name="discount_start" label="Discount Start Date" :required="true"
+                                    <x-inputs.date name="discount_start" label="Discount Start Date"
                                         min="{{ now()->toDateString() }}" />
                                 </div>
 

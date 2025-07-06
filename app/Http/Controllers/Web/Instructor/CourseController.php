@@ -211,13 +211,13 @@ class CourseController extends Controller
             Log::info('No course icon uploaded');
         }
 
-        $detailsUpdated = $course->details()->updateOrCreate([
+        $detailsUpdated = $course->details()->update([
             'level' => $request->level,
             'language' => $request->language,
             'objectives' => $request->objectives,
             'prerequisites' => $request->prerequisites,
             'content' => $request->content,
-            'total_duration' => $request->total_duration,
+            'total_duration' => (int) round($request->total_duration * 60),
             'status' => $request->input('course_status', 'available'),
         ]);
         Log::info('Course details updated', ['updated' => $detailsUpdated]);
@@ -236,10 +236,10 @@ class CourseController extends Controller
             $dataCoursePricing['discount_end'] = $request->discount_end;
         }
 
-        $pricingUpdated = $course->pricing()->updateOrCreate($dataCoursePricing);
+        $pricingUpdated = $course->pricing()->update($dataCoursePricing);
         Log::info('Course pricing updated', ['updated' => $pricingUpdated, 'data' => $dataCoursePricing]);
 
-        $enrollmentUpdated = $course->enrollment()->updateOrCreate([
+        $enrollmentUpdated = $course->enrollment()->update([
             'max_students' => $request->max_students,
         ]);
         Log::info('Course enrollment updated', ['updated' => $enrollmentUpdated]);

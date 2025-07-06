@@ -18,7 +18,7 @@
                 <i class="fas fa-plus"></i> Add Assignment
             </a>
         </div>
-        
+
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
