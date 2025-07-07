@@ -24,8 +24,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'course.enrolled' => \App\Http\Middleware\EnsureUserEnrolledInCourse::class,
     ]);
 
-        //
+
+    })
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('absences:delete-old-exported')
+            ->daily()
+            ->withoutOverlapping();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+

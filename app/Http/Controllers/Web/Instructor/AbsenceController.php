@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Exports\AbsencesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenceController extends Controller
 {
@@ -118,21 +120,33 @@ class AbsenceController extends Controller
     /**
      * Display a list of absences recorded by the instructor.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (\Auth::user() && \Auth::user()->hasRole('admin')) {
-            $absences = Absence::with(['childUniversity.user', 'instructor'])
-                ->latest('date')->latest('time')
-                ->paginate(30);
-            // For admin, use dashboard view
-            return view('dashboard.absences.index', compact('absences'));
+        $showAll = $request->has('show_all') && $request->show_all == 1;
+
+        if (Auth::user() && Auth::user()->hasRole('admin')) {
+            $query = Absence::with(['childUniversity.user', 'instructor'])
+                ->latest('date')->latest('time');
+
+            if (!$showAll) {
+                $query->whereNull('exported_at');
+            }
+
+            $absences = $query->paginate(30);
+
+            return view('dashboard.absences.index', compact('absences', 'showAll'));
         } else {
-            $absences = Absence::where('instructor_id', \Auth::id())
+            $query = Absence::where('instructor_id', Auth::id())
                 ->with('childUniversity.user')
-                ->latest('date')->latest('time')
-                ->paginate(30);
-            // For instructor, use instructor view
-            return view('instructor.absences.index', compact('absences'));
+                ->latest('date')->latest('time');
+
+            if (!$showAll) {
+                $query->whereNull('exported_at');
+            }
+
+            $absences = $query->paginate(30);
+
+            return view('instructor.absences.index', compact('absences', 'showAll'));
         }
     }
 
@@ -244,6 +258,19 @@ class AbsenceController extends Controller
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
             return back()->with('error', 'Failed to update absence');
         }
+    }
+
+    public function export()
+    {
+        $absences = Absence::whereNull('exported_at')->get();
+
+        $export = new AbsencesExport();
+        $download = Excel::download($export, 'absences.xlsx');
+        if ($absences->isNotEmpty()) {
+            Absence::whereIn('id', $absences->pluck('id'))
+                ->update(['exported_at' => now()]);
+        }
+        return $download;
     }
 }
 

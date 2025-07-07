@@ -9,10 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('translatable_tables', function (Blueprint $table) {
-            //
+        Schema::table('absences', function (Blueprint $table) {
+            $table->timestamp('exported_at')->nullable()->after('updated_at');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('translatable_tables', function (Blueprint $table) {
-            //
+        Schema::table('absences', function (Blueprint $table) {
+            $table->dropColumn('exported_at');
         });
     }
 };

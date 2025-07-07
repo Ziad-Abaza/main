@@ -8,9 +8,23 @@
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                     <h6>Recorded Absences</h6>
-                    <a href="{{ route('console.absences.scan') }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-qrcode me-2"></i>Scan QR Code
-                    </a>
+                    <div>
+                        <a href="{{ route('console.absences.scan') }}" class="btn btn-sm btn-primary me-2">
+                            <i class="fas fa-qrcode me-2"></i>Scan QR Code
+                        </a>
+                        <a href="{{ route('console.absences.export') }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-file-excel me-2"></i>Export to Excel
+                        </a>
+                        @if ($showAll ?? false)
+                        <a href="{{ route('console.absences.index') }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-filter me-2"></i>Show Only Non-Exported
+                        </a>
+                        @else
+                        <a href="{{ route('console.absences.index') . '?show_all=1' }}" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-list me-2"></i>Show All Records
+                        </a>
+                        @endif
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">

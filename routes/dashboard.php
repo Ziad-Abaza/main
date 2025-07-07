@@ -108,6 +108,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('console')->group(function () 
         Route::get('/{absence}/edit', [AbsenceController::class, 'edit'])->name('console.absences.edit');
         Route::post('/{absence}', [AbsenceController::class, 'update'])->name('console.absences.update');
         Route::delete('/{absence}', [AbsenceController::class, 'destroy'])->name('console.absences.delete');
+        Route::get('/export', [AbsenceController::class, 'export'])->name('console.absences.export');
     });
 
     // -----------------------------
