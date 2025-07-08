@@ -11,6 +11,9 @@
                     <a href="{{ route('dashboard.absences.scan') }}" class="btn btn-sm btn-primary">
                         <i class="fas fa-qrcode me-2"></i>Scan QR Code
                     </a>
+                    <a href="{{ route('dashboard.absences.export') }}" class="btn btn-sm btn-success">
+                        <i class="fas fa-file-excel me-2"></i>Export to Excel
+                    </a>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -18,6 +21,8 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Student</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Attendance</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Recorded By</th>
@@ -44,6 +49,9 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $absence->attendance_days ?? 0 }}</p>
+                                    <td>
                                     <td>
                                         <p class="text-xs font-weight-bold mb-0">{{ \Carbon\Carbon::parse($absence->date)->format('M d, Y') }}</p>
                                     </td>

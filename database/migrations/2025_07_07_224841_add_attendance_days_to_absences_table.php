@@ -12,17 +12,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('absences', function (Blueprint $table) {
-            $table->timestamp('exported_at')->nullable()->after('updated_at');
+            $table->integer('attendance_days')->default(1);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('absences', function (Blueprint $table) {
-            $table->dropColumn('exported_at');
+            $table->dropColumn('attendance_days');
         });
     }
 };

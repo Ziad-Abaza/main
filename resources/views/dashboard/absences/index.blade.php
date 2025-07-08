@@ -15,15 +15,6 @@
                         <a href="{{ route('console.absences.export') }}" class="btn btn-sm btn-success">
                             <i class="fas fa-file-excel me-2"></i>Export to Excel
                         </a>
-                        @if ($showAll ?? false)
-                        <a href="{{ route('console.absences.index') }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-filter me-2"></i>Show Only Non-Exported
-                        </a>
-                        @else
-                        <a href="{{ route('console.absences.index') . '?show_all=1' }}" class="btn btn-sm btn-outline-info">
-                            <i class="fas fa-list me-2"></i>Show All Records
-                        </a>
-                        @endif
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -32,6 +23,8 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Student</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Attendance</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Recorded By</th>
@@ -56,6 +49,8 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $absence->attendance_days ?? 0 }}</p>
                                     <td>
                                         <p class="text-xs font-weight-bold mb-0">{{ \Carbon\Carbon::parse($absence->date)->format('M d, Y') }}</p>
                                     </td>

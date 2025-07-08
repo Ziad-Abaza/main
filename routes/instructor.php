@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:instructor'])->prefix('dashboard')->group(funct
         Route::get('/generate', [AbsenceController::class, 'generateQrCodeView'])->name('generate');
         Route::get('/generate-qr', [AbsenceController::class, 'generateQrCode'])->name('generate-qr');
         Route::get('/download-qr', [AbsenceController::class, 'downloadQrCode'])->name('download-qr');
+        Route::get('/export', [AbsenceController::class, 'export'])->name('export');
     });
 
     Route::prefix('courses')->name('dashboard.')->group(function () {
@@ -111,7 +112,6 @@ Route::middleware(['auth', 'role:instructor'])->prefix('dashboard')->group(funct
         Route::post('/{quiz}/extend', [CourseQuizController::class, 'extend'])->name('quiz.extend');
         Route::post('/{quiz}/stop', [CourseQuizController::class, 'stop'])->name('quiz.stop');
     });
-
     Route::prefix('courses/{course}/quizzes/{quiz}/questions')->name('dashboard.courses.quiz.questions.')->group(function(){
         Route::get('/', [CourseQuizQuestionController::class, 'index'])->name('index');
         Route::get('/create', [CourseQuizQuestionController::class, 'create'])->name('create');

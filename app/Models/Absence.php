@@ -18,7 +18,7 @@ class Absence extends Model
         'date',
         'time',
         'scanned_by',
-        'exported_at',
+        'attendance_days',
     ];
 
     /**

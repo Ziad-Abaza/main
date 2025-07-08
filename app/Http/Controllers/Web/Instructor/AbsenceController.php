@@ -14,16 +14,19 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenceController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'role:instructor,admin']);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(['auth', 'role:instructor,admin']);
+    // }
 
     /**
      * Display the QR code scanner view.
      */
     public function scanQrCode()
     {
+        /**
+         * @var App\Models\User $user
+         */
         $user = Auth::user();
         $isAdmin = $user && method_exists($user, 'hasRole') && $user->hasRole('admin');
         $recordRoute = $isAdmin
@@ -50,58 +53,85 @@ class AbsenceController extends Controller
             $child = ChildrenUniversity::where('code', $validated['child_code'])->firstOrFail();
             $now = Carbon::now();
 
-            // Check for existing absence
             $existingAbsence = Absence::where('child_university_id', $child->id)
-                ->whereDate('date', $now->toDateString())
+                ->latest('updated_at')
                 ->first();
 
             if ($existingAbsence) {
+                $lastTime = Carbon::parse($existingAbsence->updated_at);
+
+                if ($lastTime->diffInHours($now) < 12) {
+                    $student = $child->load('user');
+                    $message = 'the student has already been marked present within the last 12 hours.';
+
+                    if ($request->wantsJson()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => $message,
+                            'student' => $student,
+                            'last_recorded_at' => $lastTime->toDateTimeString()
+                        ]);
+                    }
+
+                    return back()->with([
+                        'error' => $message,
+                        'student' => ['name' => $student->user->name, 'id' => $student->id],
+                        'absence' => ['date' => $existingAbsence->date, 'time' => $existingAbsence->time],
+                    ]);
+                }
+
+                $existingAbsence->increment('attendance_days');
+                $existingAbsence->update([
+                    'date' => $now->toDateString(),
+                    'time' => $now->toTimeString(),
+                    'scanned_by' => Auth::id(),
+                    'instructor_id' => Auth::id(),
+                ]);
+
                 $student = $child->load('user');
-                $absenceData = [
-                    'date' => $existingAbsence->date,
-                    'time' => $existingAbsence->time
-                ];
+                $message = 'the attendance days have been successfully updated.';
 
                 if ($request->wantsJson()) {
                     return response()->json([
-                        'success' => false,
-                        'message' => 'Absence already recorded for this student today',
+                        'success' => true,
+                        'message' => $message,
                         'student' => $student,
-                        'absence' => $absenceData
+                        'absence' => $existingAbsence
                     ]);
                 }
 
                 return back()->with([
-                    'error' => 'Absence already recorded for this student today',
+                    'success' => $message,
                     'student' => ['name' => $student->user->name, 'id' => $student->id],
-                    'absence' => $absenceData
+                    'absence' => ['date' => $existingAbsence->date, 'time' => $existingAbsence->time],
                 ]);
             }
 
-            // Create new absence
             $absence = Absence::create([
                 'child_university_id' => $child->id,
                 'instructor_id' => Auth::id(),
                 'date' => $now->toDateString(),
                 'time' => $now->toTimeString(),
                 'scanned_by' => Auth::id(),
+                'attendance_days' => 1,
             ]);
 
             $student = $child->load('user');
+            $message = 'the absence has been successfully recorded.';
 
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Attendance recorded successfully',
+                    'message' => $message,
                     'student' => $student,
                     'absence' => $absence
                 ]);
             }
 
             return back()->with([
-                'success' => 'Attendance recorded successfully',
+                'success' => $message,
                 'student' => ['name' => $student->user->name, 'id' => $student->id],
-                'absence' => ['date' => $absence->date, 'time' => $absence->time]
+                'absence' => ['date' => $absence->date, 'time' => $absence->time],
             ]);
         } catch (\Exception $e) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
@@ -109,44 +139,37 @@ class AbsenceController extends Controller
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error recording attendance'
+                    'message' => 'there was an error recording the absence',
                 ], 500);
             }
 
-            return back()->with('error', 'Error recording attendance');
+            return back()->with('error',  'There was an error recording the absence');
         }
     }
+
 
     /**
      * Display a list of absences recorded by the instructor.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $showAll = $request->has('show_all') && $request->show_all == 1;
-
-        if (Auth::user() && Auth::user()->hasRole('admin')) {
-            $query = Absence::with(['childUniversity.user', 'instructor'])
-                ->latest('date')->latest('time');
-
-            if (!$showAll) {
-                $query->whereNull('exported_at');
-            }
-
-            $absences = $query->paginate(30);
-
-            return view('dashboard.absences.index', compact('absences', 'showAll'));
+        $user = Auth::user();
+        /**
+         * @var App\Models\User $user
+         */
+        if ($user &&  $user->hasRole('admin')) {
+            $absences = Absence::with(['childUniversity.user', 'instructor'])
+                ->latest('date')->latest('time')
+                ->paginate(30);
+            // For admin, use dashboard view
+            return view('dashboard.absences.index', compact('absences'));
         } else {
-            $query = Absence::where('instructor_id', Auth::id())
+            $absences = Absence::where('instructor_id', Auth::id())
                 ->with('childUniversity.user')
-                ->latest('date')->latest('time');
-
-            if (!$showAll) {
-                $query->whereNull('exported_at');
-            }
-
-            $absences = $query->paginate(30);
-
-            return view('instructor.absences.index', compact('absences', 'showAll'));
+                ->latest('date')->latest('time')
+                ->paginate(30);
+            // For instructor, use instructor view
+            return view('instructor.absences.index', compact('absences'));
         }
     }
 
@@ -221,7 +244,11 @@ class AbsenceController extends Controller
                 $absence = Absence::findOrFail($request->input('absence_id'));
             }
             // Allow admin to delete any, instructor only their own
-            if (!Auth::user()->hasRole('admin') && $absence->instructor_id !== Auth::id()) {
+            /**
+             * @var App\Models\User $user
+             */
+            $user = Auth::user();
+            if (!$user->hasRole('admin') && $absence->instructor_id !== Auth::id()) {
                 return back()->with('error', 'You are not authorized to delete this absence.');
             }
             $absence->delete();
@@ -262,15 +289,7 @@ class AbsenceController extends Controller
 
     public function export()
     {
-        $absences = Absence::whereNull('exported_at')->get();
-
-        $export = new AbsencesExport();
-        $download = Excel::download($export, 'absences.xlsx');
-        if ($absences->isNotEmpty()) {
-            Absence::whereIn('id', $absences->pluck('id'))
-                ->update(['exported_at' => now()]);
-        }
-        return $download;
+        return Excel::download(new AbsencesExport(), 'absences.xlsx');
     }
 }
 
