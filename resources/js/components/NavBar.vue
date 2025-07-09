@@ -95,25 +95,27 @@
         </button>
 
         <!-- Auth Actions -->
-        <router-link to="/lms" v-if="authStore.user" class="flex items-center space-x-3">
-          <div
-            class="hidden md:flex items-center space-x-2 px-3 py-2 bg-white/5 rounded-lg"
-          >
-            <div class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
-            <span class="text-sm text-gray-300">
-              {{ authStore.name || authStore.user.email }}
-            </span>
-          </div>
-          <button
-            @click="authStore.logout()"
-            class="relative overflow-hidden text-sm px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group"
-          >
-            <span class="relative z-10">Logout</span>
+        <template v-if="authStore.user">
+          <div class="flex items-center space-x-3">
             <div
-              class="absolute inset-0 bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            ></div>
-          </button>
-        </router-link>
+              class="hidden md:flex items-center space-x-2 px-3 py-2 bg-white/5 rounded-lg"
+            >
+              <div class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
+              <span class="text-sm text-gray-300">
+                {{ authStore.name || authStore.user.email }}
+              </span>
+            </div>
+            <button
+              @click="authStore.logout()"
+              class="relative overflow-hidden text-sm px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group"
+            >
+              <span class="relative z-10">Logout</span>
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              ></div>
+            </button>
+          </div>
+        </template>
         <router-link
           v-else
           to="/login"

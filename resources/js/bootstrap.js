@@ -14,3 +14,25 @@ axios.interceptors.request.use(function(config) {
 }, function(error) {
     return Promise.reject(error);
 });
+
+import { useAuthStore } from './stores/auth'; // Import the auth store
+axios.interceptors.response.use(
+    response => response,
+    async error => {
+        if (error.response) {
+            const status = error.response.status;
+            const authStore = useAuthStore();
+            if (status === 401) {
+                // Only clear user data, do not redirect
+                await authStore.clearStorage();
+                localStorage.setItem('showLoginToast', '1');
+                window.location.assign('/login');
+            } else if (status === 405) {
+                // Clear user data and redirect to login
+                await authStore.clearStorage();
+                window.location.assign('/login');
+            }
+        }
+        return Promise.reject(error);
+    }
+);
