@@ -7,62 +7,73 @@
 
 @php
 $initialTags = old($name, $value);
-$initialTags = is_array($initialTags) ? $initialTags : explode(',', $initialTags);
+$initialTags = is_array($initialTags) ? $initialTags : array_filter(array_map('trim', explode(',', $initialTags)));
 @endphp
 
 <div class="mb-4">
-    <label class="form-label fw-bold">{{ $label }}</label>
+    <label for="{{ $name }}" class="form-label fw-bold">{{ $label }}</label>
 
+    <!-- Input + Add Button -->
     <div class="d-flex mb-2 gap-2">
-        <input type="text" class="form-control form-control-sm" id="{{ $name }}-input" placeholder="{{ $placeholder }}">
-        <button type="button" class="btn btn-dark btn-sm" onclick="addTag_{{ $name }}()">+</button>
+        <input type="text" id="{{ $name }}-input" class="form-control form-control-sm" placeholder="{{ $placeholder }}"
+            onkeypress="handleTagKeyPress(event, '{{ $name }}')">
+        <button type="button" class="btn btn-dark btn-sm" onclick="addTag('{{ $name }}')">
+            <i class="bi bi-plus-lg"></i>
+        </button>
     </div>
 
+    <!-- Tags Display -->
     <div id="{{ $name }}-tags" class="d-flex flex-wrap gap-2 mb-2">
         @foreach ($initialTags as $tag)
-        @if (trim($tag) !== '')
-        <span class="badge bg-dark text-white px-3 py-1 rounded-pill" onclick="removeTag_{{ $name }}(this)">
-            {{ $tag }} &times;
+        <span class="badge bg-dark text-white px-3 py-1 rounded-pill d-inline-flex align-items-center"
+            onclick="removeTag(this, '{{ $name }}')">
+            {{ $tag }} <span class="ms-2">×</span>
         </span>
-        @endif
         @endforeach
     </div>
 
+    <!-- Hidden Input -->
     <input type="hidden" name="{{ $name }}" id="{{ $name }}-hidden" value="{{ implode(',', $initialTags) }}">
 </div>
 
+@once
 @push('scripts')
 <script>
-    function addTag_{{ $name }}() {
-        const input = document.getElementById('{{ $name }}-input');
-        const tagsContainer = document.getElementById('{{ $name }}-tags');
-        const hiddenInput = document.getElementById('{{ $name }}-hidden');
-        let tags = hiddenInput.value ? hiddenInput.value.split(',') : [];
+    function handleTagKeyPress(event, name) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addTag(name);
+    }
+}
 
-        const newTag = input.value.trim();
-        if (newTag && !tags.includes(newTag)) {
-            tags.push(newTag);
-            hiddenInput.value = tags.join(',');
+function addTag(name) {
+    const input = document.getElementById(name + '-input');
+    const tagsContainer = document.getElementById(name + '-tags');
+    const hiddenInput = document.getElementById(name + '-hidden');
 
-            const tagElement = document.createElement('span');
-            tagElement.className = 'badge bg-dark text-white px-3 py-1 rounded-pill';
-            tagElement.innerHTML = `${newTag} &times;`;
-            tagElement.onclick = function() { removeTag_{{ $name }}(tagElement); };
+    let tags = hiddenInput.value ? hiddenInput.value.split(',').filter(Boolean) : [];
+    const newTag = input.value.trim();
 
-            tagsContainer.appendChild(tagElement);
-        }
-
+    if (newTag && !tags.includes(newTag)) {
+        tags.push(newTag);
+        updateTags(tags, tagsContainer, hiddenInput, name);
         input.value = '';
     }
+}
 
-    function removeTag_{{ $name }}(element) {
-        const hiddenInput = document.getElementById('{{ $name }}-hidden');
-        let tags = hiddenInput.value ? hiddenInput.value.split(',') : [];
-        const removedTag = element.textContent.replace('×', '').trim();
+function removeTag(element, name) {
+    const hiddenInput = document.getElementById(name + '-hidden');
+    let tags = hiddenInput.value ? hiddenInput.value.split(',').filter(Boolean) : [];
+    const removedTag = element.textContent.replace('×', '').trim();
 
-        tags = tags.filter(tag => tag !== removedTag);
-        hiddenInput.value = tags.join(',');
-        element.remove();
-    }
+    tags = tags.filter(tag => tag !== removedTag);
+    updateTags(tags, document.getElementById(name + '-tags'), hiddenInput, name);
+    element.remove();
+}
+
+function updateTags(tags, container, hiddenInput, name) {
+    hiddenInput.value = tags.join(',');
+}
 </script>
 @endpush
+@endonce
