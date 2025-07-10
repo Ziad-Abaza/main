@@ -2,38 +2,56 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Permission;
-use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 
 class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
         $permissions = [
-            ['name' => 'manage_students', 'description' => 'Full management of students (view, delete, approve)'],
-            ['name' => 'manage_users', 'description' => 'Full management of users (view, delete, add)'],
-            ['name' => 'manage_courses', 'description' => 'Manage educational courses'],
-            ['name' => 'manage_lessons', 'description' => 'Manage lessons and educational content'],
+            // User management
+            ['name' => 'manage_users', 'description' => 'Manage users (view, delete, add)'],
+
+            // Roles and permissions management
+            ['name' => 'manage_roles', 'description' => 'Create, update, and delete roles'],
+            ['name' => 'assign_admin', 'description' => 'Assign users as Admin'],
+            ['name' => 'assign_superadmin', 'description' => 'Assign users as Super Admin'],
+
+            // Courses and learning materials management
+            ['name' => 'manage_courses', 'description' => 'Manage courses (create, update, delete)'],
+            ['name' => 'manage_categories', 'description' => 'Manage categories (create, update, delete)'],
             ['name' => 'upload_materials', 'description' => 'Upload educational materials'],
             ['name' => 'delete_materials', 'description' => 'Delete educational materials'],
-            ['name' => 'manage_quizzes', 'description' => 'Manage quizzes and exams'],
-            ['name' => 'view_reports', 'description' => 'View general and detailed reports'],
-            ['name' => 'manage_settings', 'description' => 'Manage system settings'],
-            ['name' => 'manage_roles', 'description' => 'Create, edit, and delete roles'],
+            ['name' => 'manage_quizzes', 'description' => 'Manage quizzes and questions'],
+            ['name' => 'manage_assignments', 'description' => 'Manage assignments and tasks'],
+            ['name' => 'view_submissions', 'description' => 'View student assignment submissions'],
+
+            // Enrollments
+            ['name' => 'manage_enrollments', 'description' => 'Approve student enrollments in courses'],
+
+            // Students management
+            ['name' => 'manage_child', 'description' => 'Manage students (approve, reject, delete)'],
+            ['name' => 'manage_absences', 'description' => 'Manage student absences'],
+
+            // Site settings management
+            ['name' => 'manage_settings', 'description' => 'Manage general site settings (FAQs, contact messages)'],
+
+            // Content management
+            ['name' => 'manage_blog', 'description' => 'Manage blog and articles'],
+            ['name' => 'manage_levels', 'description' => 'Manage educational levels (beginner, advanced, etc.)'],
+
+            // view dashboard
+            ['name' => 'view_dashboard', 'description' => 'View the dashboard'],
+            // view console
+            ['name' => 'view_console', 'description' => 'View the console dashboard'],
         ];
 
-
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission['name']
-            ], [
-                'permission_id' => Str::uuid()->toString(),
-                'description' => $permission['description'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            Permission::firstOrCreate(
+                ['name' => $permission['name']],
+                ['description' => $permission['description']]
+            );
         }
     }
 }

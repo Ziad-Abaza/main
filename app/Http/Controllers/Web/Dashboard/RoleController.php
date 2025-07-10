@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Web\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Throwable;
 
 class RoleController extends Controller
 {
-    const PROTECTED_ROLES = ['admin', 'student', 'instructor'];
+    const PROTECTED_ROLES = ['admin', 'student', 'instructor', 'superadmin'];
 
     public function __construct()
     {
-        $this->middleware(['auth', 'role:admin']);
+        $this->middleware('auth');
     }
 
     /**
@@ -29,7 +28,7 @@ class RoleController extends Controller
             $roles = Role::withCount('users')->paginate(30);
             return view('dashboard.roles.index', compact('roles'));
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to retrieve roles');
         }
     }
@@ -43,7 +42,7 @@ class RoleController extends Controller
             $allPermissions = Permission::all();
             return view('dashboard.roles.create', compact('allPermissions'));
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to load create role form');
         }
     }
@@ -56,30 +55,27 @@ class RoleController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255|unique:roles,name',
-                'description' => 'nullable|string',
-                'permissions' => 'array|exists:permissions,name',
+                'description' => 'nullable|string|max:1000',
+                'permissions' => 'array',
+                'permissions.*' => 'exists:permissions,name',
             ]);
 
             $role = Role::create([
                 'name' => $validated['name'],
                 'description' => $validated['description'] ?? null,
+                'guard_name' => 'web',
             ]);
 
             if (!empty($validated['permissions'])) {
-                $permissionIds = Permission::whereIn('name', $validated['permissions'])
-                    ->pluck('permission_id')
-                    ->toArray();
-
-                $role->permissions()->sync($permissionIds);
+                $role->syncPermissions($validated['permissions']);
             }
 
-            return redirect()->route('console.roles.index')
-                ->with('success', 'Role created successfully');
+            return redirect()->route('console.roles.index')->with('success', 'Role created successfully');
         } catch (ValidationException $e) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
+            Log::error(__METHOD__ . ' - ' . $e->getMessage());
             return back()->withErrors($e->errors())->withInput();
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to create role');
         }
     }
@@ -93,7 +89,7 @@ class RoleController extends Controller
             $allPermissions = Permission::all();
             return view('dashboard.roles.edit', compact('role', 'allPermissions'));
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to load edit role form');
         }
     }
@@ -101,6 +97,7 @@ class RoleController extends Controller
     /**
      * Update role data.
      */
+
     public function update(Request $request, Role $role)
     {
         try {
@@ -109,9 +106,10 @@ class RoleController extends Controller
             }
 
             $validated = $request->validate([
-                'name' => "required|string|max:255|unique:roles,name," . $role->role_id . ',role_id',
-                'description' => 'nullable|string',
-                'permissions' => 'array|exists:permissions,name',
+                'name' => "required|string|max:255|unique:roles,name,{$role->id}",
+                'description' => 'nullable|string|max:1000',
+                'permissions' => 'array',
+                'permissions.*' => 'exists:permissions,name',
             ]);
 
             $role->update([
@@ -120,24 +118,19 @@ class RoleController extends Controller
             ]);
 
             if (!empty($validated['permissions'])) {
-                $permissionIds = Permission::whereIn('name', $validated['permissions'])
-                    ->pluck('permission_id')
-                    ->toArray();
-
-                $role->permissions()->sync($permissionIds);
+                $role->syncPermissions($validated['permissions']);
             }
 
-            return redirect()->route('console.roles.index')
-                ->with('success', 'Role updated successfully');
+            return redirect()->route('console.roles.index')->with('success', 'Role updated successfully');
         } catch (ValidationException $e) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
+            Log::error(__METHOD__ . ' - ' . $e->getMessage());
             return back()->withErrors($e->errors())->withInput();
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to update role');
         }
     }
-
+    
     /**
      * Delete a role.
      */
@@ -150,10 +143,9 @@ class RoleController extends Controller
 
             $role->delete();
 
-            return redirect()->route('console.roles.index')
-                ->with('success', 'Role deleted successfully');
+            return redirect()->route('console.roles.index')->with('success', 'Role deleted successfully');
         } catch (Throwable $th) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
+            Log::error(__METHOD__ . ' - ' . $th->getMessage());
             return back()->with('error', 'Failed to delete role');
         }
     }

@@ -16,9 +16,8 @@
 
                 <!-- Form -->
                 <div class="card-body p-4">
-                    <form action="{{ route('console.roles.update', $role->role_id) }}" method="POST">
+                    <form action="{{ route('console.roles.update', $role->id) }}" method="POST">
                         @csrf
-                        @method('POST')
 
                         <!-- Role Name -->
                         <x-inputs.text name="name" label="Role Name" :value="old('name', $role->name)"
@@ -26,8 +25,7 @@
 
                         <!-- Description -->
                         <x-inputs.textarea name="description" label="Description" rows="5"
-                            placeholder="Describe this role..." :value="old('description', $role->description)"
-                            required />
+                            placeholder="Describe this role..." :value="old('description', $role->description)" />
 
                         <!-- Permissions -->
                         <div class="mb-3">
@@ -60,6 +58,7 @@
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>

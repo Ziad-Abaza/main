@@ -12,8 +12,9 @@ class LevelController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'role:admin']);
+        $this->middleware(['auth', 'can:manage_levels']);
     }
+
 
     /**
      * Display a listing of the resource.

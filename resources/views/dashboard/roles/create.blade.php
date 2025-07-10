@@ -25,7 +25,7 @@
 
                         <!-- Description -->
                         <x-inputs.textarea name="description" label="Description" rows="5"
-                            placeholder="Describe this role..." :value="old('description')" required />
+                            placeholder="Describe this role..." :value="old('description')" />
 
                         <!-- Permissions -->
                         <div class="mb-3">

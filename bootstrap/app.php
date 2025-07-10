@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'panel.access' => \App\Http\Middleware\CheckPanelAccess::class,
             'auth' => \App\Http\Middleware\Authenticate::class,
             'login.throttle' => \App\Http\Middleware\ThrottleLoginAttempts::class,
             'course.enrolled' => \App\Http\Middleware\EnsureUserEnrolledInCourse::class,

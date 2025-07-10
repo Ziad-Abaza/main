@@ -34,7 +34,7 @@ Route::middleware('guest')->prefix('console')->group(function () {
 });
 
 
-Route::middleware(['auth', 'role:admin'])->prefix('console')->group(function () {
+Route::middleware(['auth', 'panel.access:console'])->prefix('console')->group(function () {
 
 
     Route::get('/', [DashboardController::class, 'index'])->name('console');

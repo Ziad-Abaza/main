@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Log;
 
 class QuizController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_courses']);
+    }
     /**
      * Display a listing of the quiz questions for the specified video.
      */

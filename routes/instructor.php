@@ -26,7 +26,7 @@ use App\Http\Controllers\Web\Instructor\StudentController;
 //     Route::post('/login', [AuthController::class, 'instructorLogin'])->name('dashboard.login.post')->middleware('login.throttle');
 // });
 
-Route::middleware(['auth', 'role:instructor'])->prefix('dashboard')->group(function () {
+Route::middleware(['auth', 'panel.access:dashboard'])->prefix('dashboard')->group(function () {
 
     // index
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

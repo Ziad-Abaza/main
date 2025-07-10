@@ -7,6 +7,11 @@ use App\Models\Faq;
 
 class FaqController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_settings']);
+    }
+
     public function index() {
         $faqs = Faq::all();
         return view('dashboard.faq.index', compact('faqs'));

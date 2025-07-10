@@ -15,6 +15,10 @@ use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_courses']);
+    }
     /**
      * Display a listing of the instructor's courses.
      */

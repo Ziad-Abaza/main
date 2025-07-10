@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,27 +21,26 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            // Validation
             $validated = $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+                'name'     => ['required', 'string', 'max:255'],
+                'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+                'avatar'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             ]);
 
-            // Create user
+            $email = strtolower(trim($validated['email']));
+
+            // Create the user
             $user = User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
+                'name'     => trim($validated['name']),
+                'email'    => $email,
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Handle avatar upload
             if ($request->hasFile('avatar')) {
                 $user->setAvatar($request->file('avatar'));
             }
 
-            // Assign default role 'user'
             $userRole = Role::where('name', 'student')->first();
 
             if (!$userRole) {
@@ -52,15 +51,17 @@ class AuthController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $user->roles()->attach($userRole);
+            $user->assignRole($userRole);
 
-            // Generate token
+            // Load roles and permissions
+            $user->load('roles.permissions');
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'success' => true,
                 'code' => 201,
-                'user' => $user->load('roles'),
+                'user' => $user,
                 'token' => $token,
             ], Response::HTTP_CREATED);
         } catch (ValidationException $e) {
@@ -84,14 +85,14 @@ class AuthController extends Controller
     {
         try {
             $request->validate([
-                'email' => ['required', 'string', 'email'],
+                'email'    => ['required', 'string', 'email'],
                 'password' => ['required', 'string'],
             ]);
 
             $credentials = $request->only('email', 'password');
-            $email = strtolower($request->email);
+            $email = strtolower(trim($credentials['email']));
 
-            if (!Auth::attempt($credentials)) {
+            if (!Auth::attempt(['email' => $email, 'password' => $credentials['password']])) {
                 return response()->json([
                     'success' => false,
                     'code' => 401,
@@ -99,13 +100,16 @@ class AuthController extends Controller
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            $user = User::where('email', $email)->with('roles')->firstOrFail();
+            $user = User::where('email', $email)
+                ->with('roles.permissions')
+                ->firstOrFail();
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             RateLimiter::clear('login-attempts:' . strtolower($user->email) . ':' . $request->ip());
             RateLimiter::clear('login-ip-global:' . $request->ip());
-            return response()->json([
 
+            return response()->json([
                 'success' => true,
                 'code' => 200,
                 'user' => $user,
@@ -127,6 +131,7 @@ class AuthController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function logout(Request $request)
     {
         try {

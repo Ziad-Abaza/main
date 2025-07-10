@@ -7,6 +7,10 @@ use App\Models\Blog;
 
 class BlogController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['auth', 'can:manage_blog']);
+    }
+    
     public function index() {
         $blogs = Blog::orderByDesc('published_at')->get();
         return view('dashboard.blog.index', compact('blogs'));

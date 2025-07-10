@@ -7,6 +7,10 @@ use App\Models\Contact;
 
 class ContactController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['auth', 'can:manage_settings']);
+    }
+    
     public function index() {
         $contacts = Contact::orderByDesc('created_at')->get();
         return view('dashboard.contact.index', compact('contacts'));

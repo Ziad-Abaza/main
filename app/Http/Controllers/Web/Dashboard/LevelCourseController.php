@@ -13,11 +13,12 @@ class LevelCourseController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'role:admin']);
+        $this->middleware(['auth', 'can:manage_levels']);
     }
 
+
     /**
-     * عرض الصفحة الرئيسية لربط الكورسات بالمستويات
+     *  view the main page for linking courses to levels
      */
     public function index(Request $request)
     {
@@ -28,12 +29,12 @@ class LevelCourseController extends Controller
             return view('dashboard.level-course.index', compact('levels'));
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
-            return redirect()->back()->with('error', 'فشل في جلب البيانات');
+            return redirect()->back()->with('error', 'Failed to fetch data');
         }
     }
 
     /**
-     * عرض نموذج إضافة كورس للمستوى
+     * view the form for adding a course to a level
      */
     public function create()
     {
@@ -44,12 +45,12 @@ class LevelCourseController extends Controller
             return view('dashboard.level-course.create', compact('levels', 'courses'));
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
-            return redirect()->back()->with('error', 'فشل في تحميل النموذج');
+            return redirect()->back()->with('error', 'Failed to load create form');
         }
     }
 
     /**
-     * تخزين ربط كورس بمستوى
+     * Store the linked courses to a level
      */
     public function store(Request $request)
     {
@@ -63,15 +64,15 @@ class LevelCourseController extends Controller
             $level = Level::findOrFail($validated['level_id']);
             $level->courses()->syncWithoutDetaching($validated['course_ids']);
 
-            return redirect()->route('console.level-courses.index')->with('success', 'تم ربط الكورسات بنجاح');
+            return redirect()->route('console.level-courses.index')->with('success', 'linked courses successfully');
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
-            return back()->withInput()->with('error', 'فشل في ربط الكورسات');
+            return back()->withInput()->with('error', 'Failed to link courses');
         }
     }
 
     /**
-     * عرض الكورسات المرتبطة بمستوى معين
+     * view the courses linked to a specific level
      */
     public function show(Level $level)
     {
@@ -81,7 +82,7 @@ class LevelCourseController extends Controller
     }
 
     /**
-     * تعديل الكورسات المرتبطة بمستوى
+     * view the form for editing the courses linked to a level
      */
     public function edit(Level $level)
     {
@@ -92,7 +93,7 @@ class LevelCourseController extends Controller
     }
 
     /**
-     * تحديث الكورسات المرتبطة بمستوى
+     *  Update the courses linked to a level
      */
     public function update(Request $request, Level $level)
     {
@@ -107,25 +108,25 @@ class LevelCourseController extends Controller
             // Dispatch a job to sync enrollments and progress for all students in this level
             \App\Jobs\SyncLevelStudentsJob::dispatch($level->level_id);
 
-            return redirect()->route('console.level-courses.index')->with('success', 'تم تحديث الكورسات المرتبطة');
+            return redirect()->route('console.level-courses.index')->with('success', 'Courses updated successfully');
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
-            return back()->withInput()->with('error', 'فشل في تحديث الكورسات');
+            return back()->withInput()->with('error', 'Failed to update courses');
         }
     }
 
     /**
-     * حذف كورس من مستوى
+     * Remove a course from a level
      */
     public function destroy(Level $level, Course $course)
     {
         try {
             $level->courses()->detach($course->course_id);
 
-            return redirect()->back()->with('success', 'تم إزالة الكورس من المستوى');
+            return redirect()->back()->with('success', 'Course removed successfully');
         } catch (\Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());
-            return redirect()->back()->with('error', 'فشل في إزالة الكورس');
+            return redirect()->back()->with('error', 'Failed to remove course');
         }
     }
 }

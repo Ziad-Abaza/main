@@ -14,6 +14,10 @@ use Throwable;
 
 class AssignmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_assignments']);
+    }
     /**
      * Display a listing of assignments for the current course and instructor.
      */

@@ -13,6 +13,11 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:view_console']);
+    }
+
     /**
      * Show the admin dashboard with system overview and recent activity.
      */

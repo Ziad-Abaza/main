@@ -2,49 +2,58 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Role;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        DB::table('role_user')->truncate();
-        Role::truncate();
-        Schema::enableForeignKeyConstraints();
+        // create roles or retrieve them if they already exist
+        $superAdmin  = Role::firstOrCreate(['name' => 'superadmin'],  ['guard_name' => 'web']);
+        $admin       = Role::firstOrCreate(['name' => 'admin'],       ['guard_name' => 'web']);
+        $instructor  = Role::firstOrCreate(['name' => 'instructor'],  ['guard_name' => 'web']);
+        $student     = Role::firstOrCreate(['name' => 'student'],     ['guard_name' => 'web']);
 
-        $roles = [
-            [
-                'role_id' => Str::uuid()->toString(),
-                'name' => 'admin',
-                'description' => 'Administrator with full access',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_id' => Str::uuid()->toString(),
-                'name' => 'instructor',
-                'description' => 'User who can create and manage courses',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_id' => Str::uuid()->toString(),
-                'name' => 'student',
-                'description' => 'User who can enroll in courses and learn',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        //all permissions
+        $allPermissions = Permission::pluck('name')->toArray();
+
+        // super admin assigned all permissions
+        $superAdmin->syncPermissions($allPermissions);
+
+        // admin permissions
+        $adminPermissions = [
+            'manage_users',
+            'manage_roles',
+            'manage_courses',
+            'upload_materials',
+            'delete_materials',
+            'manage_quizzes',
+            'manage_child',
+            'manage_absences',
+            'manage_settings',
+            'manage_blog',
+            'manage_levels',
+            'view_console',
+            'view_dashboard',
         ];
+        $admin->syncPermissions($adminPermissions);
 
-        Role::insert($roles);
+        // Instructor permissions
+        $instructorPermissions = [
+            'manage_courses',
+            'upload_materials',
+            'delete_materials',
+            'manage_quizzes',
+            'manage_assignments',
+            'manage_users',
+            'manage_child',
+            'manage_absences',
+            'view_submissions',
+            'manage_enrollments',
+            'view_dashboard'
+        ];
+        $instructor->syncPermissions($instructorPermissions);
     }
 }

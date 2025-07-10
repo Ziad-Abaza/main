@@ -186,9 +186,9 @@ class ChildrenStudentImportService
                 'password' => $hashedPassword,
             ]);
 
-            $role = Role::where('name', 'student')->first();
+            $role = \Spatie\Permission\Models\Role::where('name', 'student')->first();
             if ($role) {
-                $user->roles()->attach($role->role_id);
+                $user->assignRole($role);
             }
 
             ChildrenUniversity::create([
@@ -204,7 +204,6 @@ class ChildrenStudentImportService
             $courseIds = $this->getCoursesByLevelId($levelId);
 
             foreach ($courseIds as $courseId) {
-                // Create or update CourseEnrollment with status 'approved'
                 CourseEnrollment::updateOrCreate(
                     [
                         'user_id' => $user->user_id,
@@ -217,7 +216,7 @@ class ChildrenStudentImportService
                         'is_processing_enrollment' => false,
                     ]
                 );
-                // Create UserCourseProgress as before (without 'enrolled')
+
                 UserCourseProgress::create([
                     'user_course_id' => (string) Str::uuid(),
                     'user_id' => $user->user_id,

@@ -25,7 +25,7 @@
                             <p class="text-sm text-muted mb-1">{{ $role->description }}</p>
                             <p class="text-xs text-secondary mb-2">Users: {{ $role->users_count }}</p>
                             <div class="d-flex justify-content-end">
-                                @if (!in_array($role->name, ['admin', 'student', 'instructor']))
+                                @if (!in_array($role->name, ['admin', 'student', 'instructor', 'superadmin']))
                                 <a href="{{ route('console.roles.edit', $role) }}"
                                     class="btn btn-sm btn-outline-dark me-2" title="Edit">
                                     <i class="material-icons-round">edit</i>
@@ -74,7 +74,7 @@
                                     <span class="badge bg-gradient-info">{{ $role->users_count }}</span>
                                 </td>
                                 <td class="pe-4 text-end">
-                                    @if (!in_array($role->name, ['admin', 'student', 'instructor']))
+                                    @if (!in_array($role->name, ['admin', 'student', 'instructor', 'superadmin']))
                                     <a href="{{ route('console.roles.edit', $role) }}"
                                         class="btn btn-sm btn-outline-dark me-2" title="Edit">
                                         <i class="material-icons-round">edit</i>

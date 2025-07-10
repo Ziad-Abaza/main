@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class CourseQuizQuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_quizzes']);
+    }
+    
     public function index(Course $course, QuizAssignment $quiz)
     {
         $this->authorizeAccess($course, $quiz);
