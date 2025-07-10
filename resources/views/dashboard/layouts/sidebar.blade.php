@@ -83,6 +83,22 @@
                 </a>
             </li>
 
+            <!-- Separator -->
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">
+                    Website Content
+                </h6>
+            </li>
+
+            <!-- News -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/news*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.news.index') }}">
+                    <i class="material-symbols-rounded opacity-5">newspaper</i>
+                    <span class="nav-link-text ms-1">News</span>
+                </a>
+            </li>
+
             <!-- FAQ -->
             <li class="nav-item">
                 <a class="nav-link text-dark {{ Request::is('console/faqs*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"

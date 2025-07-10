@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\Dashboard\CourseController;
 use App\Http\Controllers\Web\Dashboard\LevelController;
 use App\Http\Controllers\Web\Dashboard\LevelCourseController;
 use App\Http\Controllers\Web\Dashboard\ChildrenStudentController;
+use App\Http\Controllers\Web\Dashboard\NewsController;
 use App\Http\Controllers\Web\Dashboard\DashboardController;
 use App\Http\Controllers\Web\Instructor\AbsenceController;
 use Illuminate\Support\Facades\Log;
@@ -174,6 +175,16 @@ Route::middleware(['auth', 'panel.access:console'])->prefix('console')->group(fu
         Route::delete('/delete/{blog}', [BlogController::class, 'destroy'])->name('dashboard.blog.destroy');
     });
 
+    // News Management
+    Route::prefix('news')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('console.news.index');
+        Route::get('/create', [NewsController::class, 'create'])->name('console.news.create');
+        Route::post('/store', [NewsController::class, 'store'])->name('console.news.store');
+        Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('console.news.edit');
+        Route::put('/{news}', [NewsController::class, 'update'])->name('console.news.update');
+        Route::delete('/{news}', [NewsController::class, 'destroy'])->name('console.news.destroy');
+    });
+
     // Contact Management
     Route::prefix('contacts')->group(function () {
         Route::get('/', [ContactController::class, 'index'])->name('dashboard.contact.index');
@@ -187,3 +198,4 @@ Route::middleware(['auth', 'panel.access:console'])->prefix('console')->group(fu
     Route::get('/students/{student}', [\App\Http\Controllers\Web\Dashboard\StudentController::class, 'show'])->name('console.students.show');
     Route::get('/students/{student}/absences', [\App\Http\Controllers\Web\Dashboard\StudentController::class, 'absences'])->name('console.students.absences');
 });
+
