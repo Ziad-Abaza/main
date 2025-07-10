@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:view_dashboard']);
+    }
+
     public function index()
     {
-
-        if(!Auth::check() || !Auth::user()->hasRole('instructor')) {
-            return redirect()->route('dashboard.login')->with('error', 'You must be logged in to access the dashboard.');
-        }
 
         $instructorId = Auth::id();
 

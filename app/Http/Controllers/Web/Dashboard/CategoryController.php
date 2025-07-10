@@ -20,7 +20,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'role:admin']);
+        $this->middleware(['auth', 'can:manage_categories']);
     }
 
     /**
@@ -29,7 +29,7 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $categories = Category::paginate(20); // ← استخدام pagination
+            $categories = Category::paginate(20);
             return view('dashboard.categories.index', compact('categories'));
         } catch (Throwable $th) {
             Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $th->getMessage());

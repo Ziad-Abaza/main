@@ -18,6 +18,10 @@ class VideoController extends Controller
      */
     public function index(Request $request, Course $course)
     {
+        if (! $request->user()->can('manage_courses')) {
+            abort(403, 'You are not authorized to view course videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to access this course.');
         }
@@ -37,6 +41,10 @@ class VideoController extends Controller
      */
     public function show(Course $course, Video $video, Request $request)
     {
+        if (! $request->user()->can('manage_courses')) {
+            abort(403, 'You are not authorized to view course videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to view this course.');
         }
@@ -55,6 +63,10 @@ class VideoController extends Controller
      */
     public function create(Course $course, Request $request)
     {
+        if (! $request->user()->can('upload_materials')) {
+            abort(403, 'You do not have permission to upload videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to add videos to this course.');
         }
@@ -68,6 +80,10 @@ class VideoController extends Controller
      */
     public function store(Request $request, Course $course)
     {
+        if (! $request->user()->can('upload_materials')) {
+            abort(403, 'You do not have permission to upload videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to add videos to this course.');
         }
@@ -119,6 +135,10 @@ class VideoController extends Controller
      */
     public function edit(Course $course, Video $video, Request $request)
     {
+        if (! $request->user()->can('upload_materials')) {
+            abort(403, 'You do not have permission to upload videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to edit this video.');
         }
@@ -135,6 +155,10 @@ class VideoController extends Controller
      */
     public function update(Request $request, Course $course, Video $video)
     {
+        if (! $request->user()->can('upload_materials')) {
+            abort(403, 'You do not have permission to upload videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to edit this video.');
         }
@@ -190,6 +214,10 @@ class VideoController extends Controller
      */
     public function destroy(Course $course, Video $video, Request $request)
     {
+        if (! $request->user()->can('delete_materials')) {
+            abort(403, 'You do not have permission to delete videos.');
+        }
+
         if ($course->instructor_id !== $request->user()->user_id) {
             return back()->with('error', 'You are not authorized to delete this video.');
         }

@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Storage;
 
 class SubmissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:view_submissions']);
+    }
+
     public function index(Course $course, Assignment $assignment)
     {
         $this->authorizeAssignment($course, $assignment);

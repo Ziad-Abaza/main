@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\InstructorProfile;
-use App\Models\Role;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class InstructorProfileSeeder extends Seeder
@@ -22,16 +19,8 @@ class InstructorProfileSeeder extends Seeder
         InstructorProfile::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $instructorRole = Role::where('name', 'instructor')->first();
 
-        if (!$instructorRole) {
-            $this->command->error('Instructor role not found. Please run RoleSeeder first.');
-            return;
-        }
-
-        $instructors = User::whereHas('roles', function ($query) use ($instructorRole) {
-            $query->where('role_user.role_id', $instructorRole->role_id);
-        })->get();
+        $instructors = User::role('instructor')->get();
 
         foreach ($instructors as $instructor) {
             InstructorProfile::create([

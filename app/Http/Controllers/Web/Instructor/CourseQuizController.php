@@ -11,6 +11,10 @@ use App\Models\QuizAssignment; // You need to create this model & migration
 
 class CourseQuizController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_quizzes']);
+    }
     /**
      * Display a listing of the quizzes for the specified course.
      */

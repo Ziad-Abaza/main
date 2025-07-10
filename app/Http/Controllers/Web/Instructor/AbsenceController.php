@@ -14,10 +14,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenceController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware(['auth', 'role:instructor,admin']);
-    // }
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_absences']);
+    }
 
     /**
      * Display the QR code scanner view.
@@ -28,17 +28,18 @@ class AbsenceController extends Controller
          * @var App\Models\User $user
          */
         $user = Auth::user();
-        $isAdmin = $user && method_exists($user, 'hasRole') && $user->hasRole('admin');
-        $recordRoute = $isAdmin
-            ? route('console.absences.record')
-            : route('dashboard.absences.record');
 
-        if ($isAdmin) {
+        if ($user->can('view_console')) {
+            $recordRoute = route('console.absences.record');
             return view('dashboard.absences.scan', compact('recordRoute'));
-        } else {
+        } elseif ($user->can('view_dashboard')) {
+            $recordRoute = route('dashboard.absences.record');
             return view('instructor.absences.scan', compact('recordRoute'));
         }
+
+        abort(403, 'You do not have permission to access this area.');
     }
+
 
     /**
      * Record an absence based on scanned QR code or manual input.
@@ -153,25 +154,29 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
         /**
          * @var App\Models\User $user
          */
-        if ($user &&  $user->hasRole('admin')) {
+        $user = Auth::user();
+
+        if ($user->can('view_console')) {
             $absences = Absence::with(['childUniversity.user', 'instructor'])
                 ->latest('date')->latest('time')
                 ->paginate(30);
-            // For admin, use dashboard view
+
             return view('dashboard.absences.index', compact('absences'));
-        } else {
-            $absences = Absence::where('instructor_id', Auth::id())
+        } elseif ($user->can('view_dashboard')) {
+            $absences = Absence::where('instructor_id', $user->id)
                 ->with('childUniversity.user')
                 ->latest('date')->latest('time')
                 ->paginate(30);
-            // For instructor, use instructor view
+
             return view('instructor.absences.index', compact('absences'));
         }
+
+        abort(403, 'You do not have permission to view absences.');
     }
+
 
     /**
      * Display the QR code generation view.
@@ -239,40 +244,58 @@ class AbsenceController extends Controller
     public function destroy(Request $request, Absence $absence = null)
     {
         try {
-            // If called from instructor dashboard, get absence by id from request
-            if (!$absence && $request->has('absence_id')) {
-                $absence = Absence::findOrFail($request->input('absence_id'));
-            }
-            // Allow admin to delete any, instructor only their own
             /**
              * @var App\Models\User $user
              */
             $user = Auth::user();
-            if (!$user->hasRole('admin') && $absence->instructor_id !== Auth::id()) {
-                return back()->with('error', 'You are not authorized to delete this absence.');
+
+            if (!$absence && $request->has('absence_id')) {
+                $absence = Absence::findOrFail($request->input('absence_id'));
             }
-            $absence->delete();
-            return back()->with('success', 'Absence deleted successfully');
+
+            if (
+                $user->can('view_console') ||
+                ($user->can('view_dashboard') && $absence->instructor_id === $user->id)
+            ) {
+                $absence->delete();
+                return back()->with('success', 'Absence deleted successfully');
+            }
+
+            return back()->with('error', 'You are not authorized to delete this absence.');
         } catch (\Exception $e) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
+            Log::channel('debug')->error(__METHOD__ . ' - ' . $e->getMessage());
             return back()->with('error', 'Failed to delete absence');
         }
     }
+
 
     /**
      * Show edit form for an absence (Admin only).
      */
     public function edit(Absence $absence)
     {
+        /**
+         * @var App\Models\User $user
+         */
+        $user = Auth::user();
+        if (!$user->can('view_console')) {
+            abort(403, 'You do not have permission to edit absences.');
+        }
+
         $absence->load(['childUniversity.user', 'instructor']);
         return view('instructor.absences.edit', compact('absence'));
     }
 
-    /**
-     * Update absence record (Admin only).
-     */
     public function update(Request $request, Absence $absence)
     {
+        /**
+         * @var App\Models\User $user
+         */
+        $user = Auth::user();
+        if (!$user->can('view_console')) {
+            abort(403, 'You do not have permission to update absences.');
+        }
+
         $validated = $request->validate([
             'date' => 'required|date',
             'time' => 'required',
@@ -282,7 +305,7 @@ class AbsenceController extends Controller
             $absence->update($validated);
             return redirect()->route('console.absences.index')->with('success', 'Absence updated successfully');
         } catch (\Exception $e) {
-            Log::channel('debug')->error('from : ' . __CLASS__ . '::' . __FUNCTION__ . ' - ' . $e->getMessage());
+            Log::channel('debug')->error(__METHOD__ . ' - ' . $e->getMessage());
             return back()->with('error', 'Failed to update absence');
         }
     }

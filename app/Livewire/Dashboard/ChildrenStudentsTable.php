@@ -52,7 +52,7 @@ class ChildrenStudentsTable extends Component
     {
         try {
             if ($this->confirmationCode !== '#CH5589') {
-                $this->addError('confirmationCode', 'الرمز غير صحيح');
+                $this->addError('confirmationCode', 'code is incorrect');
                 return;
             }
 
@@ -68,10 +68,10 @@ class ChildrenStudentsTable extends Component
                 }
             }
 
-            $this->dispatch('alert', 'تم حذف جميع الطلاب بنجاح!');
+            $this->dispatch('alert', 'All students deleted successfully!');
             $this->reset('confirmationCode');
         } catch (\Exception $e) {
-            $this->dispatch('alert', 'فشل الحذف الجماعي: ' . $e->getMessage());
+            $this->dispatch('alert', 'Field deleted students' . $e->getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ class ChildrenStudentsTable extends Component
             $student = ChildrenUniversity::with('user')->findOrFail($id);
 
             if ($student->user && $student->user->id === Auth::id()) {
-                $this->dispatch('alert', 'لا يمكنك حذف حسابك الخاص!');
+                $this->dispatch('alert', 'You cannot delete your own account!');
                 return;
             }
 
@@ -92,10 +92,10 @@ class ChildrenStudentsTable extends Component
                 $student->delete();
             });
 
-            $this->dispatch('alert', 'تم الحذف بنجاح!');
+            $this->dispatch('alert', 'Student deleted successfully!');
             $this->reset('studentToDeleteId');
         } catch (\Exception $e) {
-            $this->dispatch('alert', 'فشل الحذف: ' . $e->getMessage());
+            $this->dispatch('alert', 'Field deleted' . $e->getMessage());
         }
     }
 

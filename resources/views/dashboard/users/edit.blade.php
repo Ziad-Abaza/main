@@ -7,32 +7,39 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-12">
             <div class="card shadow-lg border-radius-lg">
+
+                <!-- Header -->
                 <div class="card-header bg-white pb-0">
                     <h5 class="mb-0">Edit User</h5>
-                    <p class="text-sm text-muted mb-0">Update user details below</p>
+                    <p class="text-sm text-muted mb-0">Update user details and roles.</p>
                 </div>
 
+                <!-- Body -->
                 <div class="card-body p-4">
+
+                    {{-- Success Message --}}
                     @if(session('success'))
                     <div class="alert alert-success text-white auto-hide" role="alert">
                         {{ session('success') }}
                     </div>
                     @endif
 
+                    {{-- Error Message --}}
                     @if(session('error'))
                     <div class="alert alert-danger text-white auto-hide" role="alert">
                         {{ session('error') }}
                     </div>
                     @endif
 
+                    {{-- Form Start --}}
                     <form action="{{ route('console.users.update', $user) }}" method="POST">
                         @csrf
                         @method('POST')
 
-                        <!-- Full Name -->
+                        <!-- Name -->
                         <x-inputs.text name="name" label="Full Name" :value="old('name', $user->name)" required />
 
-                        <!-- Email Address -->
+                        <!-- Email -->
                         <x-inputs.email name="email" label="Email Address" :value="old('email', $user->email)"
                             required />
 
@@ -42,9 +49,9 @@
                             <div class="row g-2">
                                 @foreach($roles as $role)
                                 <div class="col-md-4 col-6">
-                                    <x-inputs.checkbox name="roles[]" :value="$role->role_id"
-                                        :id="'role_'.$role->role_id" :label="ucfirst($role->name)"
-                                        :checked="in_array($role->role_id, old('roles', $user->roles->pluck('role_id')->toArray() ?? []))" />
+                                    <x-inputs.checkbox name="roles[]" :value="$role->id" :id="'role_'.$role->id"
+                                        :label="ucfirst($role->name)"
+                                        :checked="in_array($role->id, old('roles', $user->roles->pluck('id')->toArray() ?? []))" />
                                 </div>
                                 @endforeach
                             </div>
@@ -63,7 +70,9 @@
                             </button>
                         </div>
                     </form>
+                    {{-- Form End --}}
                 </div>
+
             </div>
         </div>
     </div>

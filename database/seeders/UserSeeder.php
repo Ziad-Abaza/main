@@ -2,79 +2,68 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         Schema::disableForeignKeyConstraints();
         User::truncate();
-        DB::table('role_user')->truncate();
+        DB::table('model_has_roles')->truncate(); // Spatie uses this table
         Schema::enableForeignKeyConstraints();
 
+        $superAdminRole = Role::where('name', 'superadmin')->first();
         $adminRole = Role::where('name', 'admin')->first();
         $instructorRole = Role::where('name', 'instructor')->first();
         $studentRole = Role::where('name', 'student')->first();
 
-        if (!$adminRole || !$instructorRole || !$studentRole) {
-            $this->command->error('Admin, Instructor, or Student role not found. Please run RoleSeeder first.');
+        if (!($superAdminRole && $adminRole && $instructorRole && $studentRole)) {
+            $this->command->error('One or more roles are missing. Run RoleSeeder first.');
             return;
         }
 
-        $admins = [
+        $superAdmins = [
             [
                 'name' => 'Ziad Hassan',
                 'email' => 'ziad.h.abaza@gmail.com',
-                'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/9DxRVC8/2.jpg'
             ],
             [
                 'name' => 'Omar algamel',
                 'email' => 'omeralgamel@gmail.com',
-                'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
             ],
             [
                 'name' => 'يوسف النقاش',
                 'email' => 'yosif@gmail.com',
-                'password' => Hash::make('123456789'),
                 'avatar' => 'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
             ],
         ];
 
-        // Create 2 admins
-        $adminAvatars = [
-            'https://i.ibb.co/9DxRVC8/2.jpg',
-            'https://i.ibb.co/4nKy2ftM/WIN-20250128-14-29-18-Pro.jpg'
-        ];
-
-        for ($i = 1; $i <= 2; $i++) {
+        foreach ($superAdmins as $adminData) {
             $user = User::create([
                 'user_id' => Str::uuid()->toString(),
-                'name' => $admins[$i - 1]['name'],
-                'email' => $admins[$i - 1]['email'],
-                'password' => $admins[$i - 1]['password'],
+                'name' => $adminData['name'],
+                'email' => $adminData['email'],
+                'password' => Hash::make('123456789'),
                 'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            $user->roles()->attach($adminRole->role_id);
 
-            $user->addMediaFromUrl($adminAvatars[$i - 1])->toMediaCollection('avatar');
+            $user->assignRole('superadmin');
+
+            $user->addMediaFromUrl($adminData['avatar'])->toMediaCollection('avatar');
         }
 
-        // Create 4 instructors
+        // ✅ Instructors
         // for ($i = 1; $i <= 4; $i++) {
         //     $user = User::create([
         //         'user_id' => Str::uuid()->toString(),
@@ -85,12 +74,13 @@ class UserSeeder extends Seeder
         //         'created_at' => now(),
         //         'updated_at' => now(),
         //     ]);
-        //     $user->roles()->attach($instructorRole->role_id);
+
+        //     $user->assignRole('instructor');
 
         //     $user->addMediaFromUrl("https://th.bing.com/th/id/OIP.m9dTL6OertLrSmrJfL3TRwHaE6?o=7rm=3&rs=1&pid=ImgDetMain")->toMediaCollection('avatar');
         // }
 
-        // Create 7 students
+        // ✅ Students
         // for ($i = 1; $i <= 7; $i++) {
         //     $user = User::create([
         //         'user_id' => Str::uuid()->toString(),
@@ -101,10 +91,10 @@ class UserSeeder extends Seeder
         //         'created_at' => now(),
         //         'updated_at' => now(),
         //     ]);
-        //     $user->roles()->attach($studentRole->role_id);
+
+        //     $user->assignRole('student');
 
         //     $user->addMediaFromUrl("https://th.bing.com/th/id/R.dbabab887a119175ba22c8341e67de37?rik=n%2bIvPpmqpsc22g&pid=ImgRaw&r=0")->toMediaCollection('avatar');
         // }
-
     }
 }

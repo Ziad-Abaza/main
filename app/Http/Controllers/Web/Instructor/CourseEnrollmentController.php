@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseEnrollmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:manage_enrollments']);
+    }
     /**
      * Display a listing of pending course enrollments for the instructor's courses.
      */

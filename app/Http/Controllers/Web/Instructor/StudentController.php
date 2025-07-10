@@ -8,6 +8,14 @@ use App\Models\ChildrenUniversity;
 
 class StudentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:manage_users')->only(['index', 'list']);
+        $this->middleware('can:manage_users')->only(['show']);
+        $this->middleware('can:manage_absences')->only(['scan']);
+    }
+
     // Show scan form (main page)
     public function index()
     {

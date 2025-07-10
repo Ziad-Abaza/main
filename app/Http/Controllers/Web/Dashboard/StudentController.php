@@ -8,7 +8,17 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    // List all students (admin)
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:manage_users')->only(['list']);
+        $this->middleware('can:manage_users')->only(['show']);
+        $this->middleware('can:manage_absences')->only(['absences', 'scanForm', 'scan']);
+    }
+
+    /**
+     * List all students
+     */
     public function list()
     {
         $students = ChildrenUniversity::with('user', 'level')->paginate(20);
@@ -17,7 +27,9 @@ class StudentController extends Controller
         ]);
     }
 
-    // Show details for a single student (admin)
+    /**
+     * Show student details
+     */
     public function show($id)
     {
         $student = ChildrenUniversity::with('user', 'level')->findOrFail($id);
@@ -26,13 +38,17 @@ class StudentController extends Controller
         ]);
     }
 
-    // Show scan form (admin)
+    /**
+     * Show scan form
+     */
     public function scanForm()
     {
         return view('dashboard.students.scan');
     }
 
-    // Process scan/code input (admin)
+    /**
+     * Process scan/code input
+     */
     public function scan(Request $request)
     {
         $request->validate([
@@ -50,11 +66,14 @@ class StudentController extends Controller
         return redirect()->route('console.students.show', $student->id);
     }
 
-    // Show all absences for a student (admin)
+    /**
+     * Show all absences for a student
+     */
     public function absences($id)
     {
         $student = ChildrenUniversity::with('user', 'level')->findOrFail($id);
         $absences = $student->absences()->with('instructor')->latest('date')->latest('time')->get();
+
         return view('dashboard.absences.index', [
             'student' => $student,
             'absences' => $absences

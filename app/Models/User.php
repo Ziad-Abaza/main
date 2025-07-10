@@ -11,14 +11,18 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @method bool hasRole(string $role)
  */
+/**
+ * @method bool can(string $ability, array|mixed $arguments = [])
+ */
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, InteractsWithMedia, HasRoles;
 
     protected $primaryKey = 'user_id';
     public $incrementing = false;
@@ -83,26 +87,6 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Course::class, 'instructor_id', 'user_id');
     }
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
-    }
-
-    /**
-     * Get the user's name.
-     */
-    public function hasRole($role): bool
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
-
-    public function hasPermission($permissionName): bool
-    {
-        return $this->roles()
-            ->whereHas('permissions', function ($query) use ($permissionName) {
-                $query->where('name', $permissionName);
-            })->exists();
-    }
     public function instructorProfile()
     {
         return $this->hasOne(InstructorProfile::class, 'user_id');
