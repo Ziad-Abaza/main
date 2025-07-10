@@ -65,6 +65,14 @@ if (authStore.token && !authStore.user) {
     // router.push({ name: 'login' });
   });
 }
+
+if (authStore.token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`
+  authStore.fetchUser().catch(() => {
+    authStore.clearStorage()
+    // router.push({ name: 'login' })
+  });
+}
 </script>
 
 <style>
