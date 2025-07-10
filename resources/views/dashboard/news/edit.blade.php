@@ -36,15 +36,15 @@
                             placeholder="e.g. Technology, Politics..." required />
 
                         <!-- Tags -->
-                        <x-inputs.tags name="tags" label="Tags" :value="old('tags', $news->tags ?? [])"
-                            placeholder="Enter tags separated by commas" />
+                        <x-inputs.tags name="tags" label="Tags" :value="old('tags', $news->tags ?? [])" />
 
                         <!-- Published At -->
-                        <x-inputs.date name="published_at" label="Published Date"
-                            :value="old('published_at', optional($news->published_at)->format('Y-m-d'))" />
-
+                        <x-inputs.date name="published_at" label="Publish Date & Time" :value="old(
+                                'published_at',
+                                optional($news->published_at)->format('Y-m-d\\TH:i')
+                            )" :min="now()->subYear()->format('Y-m-d\\TH:i')" :max="now()->addYear()->format('Y-m-d\\TH:i')" required />
                         <!-- Existing Images -->
-                        @if ($news->getFirstMediaUrl())
+                        @if ($news->getImages()->first()['url'])
                         <div class="mb-3">
                             <label class="form-label">Current Images</label>
                             <div>

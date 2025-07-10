@@ -181,7 +181,7 @@ Route::middleware(['auth', 'panel.access:console'])->prefix('console')->group(fu
         Route::get('/create', [NewsController::class, 'create'])->name('console.news.create');
         Route::post('/store', [NewsController::class, 'store'])->name('console.news.store');
         Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('console.news.edit');
-        Route::put('/{news}', [NewsController::class, 'update'])->name('console.news.update');
+        Route::post('/{news}', [NewsController::class, 'update'])->name('console.news.update');
         Route::delete('/{news}', [NewsController::class, 'destroy'])->name('console.news.destroy');
     });
 

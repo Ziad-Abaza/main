@@ -13,8 +13,7 @@ use App\Models\User;
 
 class News extends Model implements HasMedia
 {
-    use HasFactory, HasUuids, InteractsWithMedia;
-
+    use HasUuids, HasFactory, InteractsWithMedia;
     protected $primaryKey = 'news_id';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -25,11 +24,13 @@ class News extends Model implements HasMedia
         'excerpt',
         'content',
         'category',
+        'tags',
         'published_at'
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'tags' => 'array',
     ];
 
     public function author(): BelongsTo

@@ -34,7 +34,7 @@
                             placeholder="e.g. Technology, Politics..." required />
 
                         <!-- Tags -->
-                        <x-inputs.tags name="tags" label="Tags" :value="old('tags')" placeholder="Enter tag and press +" />
+                        <x-inputs.tags name="tags" label="Tags" :value="old('tags', $news->tags ?? [])" />
 
                         <!-- Published At -->
                         <x-inputs.date name="published_at" label="Published Date" :value="old('published_at')" />

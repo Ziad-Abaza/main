@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\General\BlogController as ApiBlogController;
 use App\Http\Controllers\Api\General\ContactController as ApiContactController;
 use App\Http\Controllers\Api\User\OverviewController;
 use App\Http\Controllers\Api\User\SettingsController;
+use App\Http\Controllers\Api\General\NewsController;
+
 /*
 |===========================================
 |> Authentication Routes
@@ -49,6 +51,13 @@ Route::prefix('auth')->group(function () {
 Route::prefix('home')->group(function () {
     Route::get('/', [HomeController::class, 'index']);
 });
+
+Route::prefix('news')->group(function () {
+    Route::get('/', [NewsController::class, 'index']);
+    Route::get('/{news}', [NewsController::class, 'show']);
+});
+
+
 
 /*
 |===========================================

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->uuid('author_id');
             $table->string('title');
             $table->text('excerpt')->nullable();
+            $table->json('tags')->nullable();
             $table->text('content');
             $table->string('category');
             $table->timestamp('published_at')->nullable();

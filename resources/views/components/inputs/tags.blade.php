@@ -1,79 +1,51 @@
 @props([
 'name',
-'label' => 'Tags',
-'value' => '',
-'placeholder' => 'Add a tag...',
+'label' => '',
+'value' => [],
+'placeholder' => '',
+'class' => ''
 ])
 
 @php
-$initialTags = old($name, $value);
-$initialTags = is_array($initialTags) ? $initialTags : array_filter(array_map('trim', explode(',', $initialTags)));
+$tags = is_string($value) ? explode(',', $value) : (array) $value;
 @endphp
 
-<div class="mb-4">
-    <label for="{{ $name }}" class="form-label fw-bold">{{ $label }}</label>
+<div {{ $attributes->merge(['class' => 'mb-3']) }}
+    x-data='{
+    tags: @json($tags),
+    addTag(newTag) {
+    newTag = newTag.trim();
+    if (newTag && !this.tags.includes(newTag)) {
+    this.tags.push(newTag);
+    }
+    },
+    removeTag(index) {
+    this.tags.splice(index, 1);
+    }
+    }'>
+    @if($label)
+    <label class="form-label fw-bold" for="{{ $name }}">{{ $label }}</label>
+    @endif
 
-    <!-- Input + Add Button -->
-    <div class="d-flex mb-2 gap-2">
-        <input type="text" id="{{ $name }}-input" class="form-control form-control-sm" placeholder="{{ $placeholder }}"
-            onkeypress="handleTagKeyPress(event, '{{ $name }}')">
-        <button type="button" class="btn btn-dark btn-sm" onclick="addTag('{{ $name }}')">
-            <i class="bi bi-plus-lg"></i>
-        </button>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <template x-for="(tag, index) in tags" :key="index">
+            <div class="badge bg-secondary d-flex align-items-center">
+                <span x-text="tag"></span>
+                <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close"
+                    @click="removeTag(index)"></button>
+                <input type="hidden" :name="'{{ $name }}[]'" :value="tag">
+            </div>
+        </template>
     </div>
 
-    <!-- Tags Display -->
-    <div id="{{ $name }}-tags" class="d-flex flex-wrap gap-2 mb-2">
-        @foreach ($initialTags as $tag)
-        <span class="badge bg-dark text-white px-3 py-1 rounded-pill d-inline-flex align-items-center"
-            onclick="removeTag(this, '{{ $name }}')">
-            {{ $tag }} <span class="ms-2">×</span>
-        </span>
-        @endforeach
-    </div>
+    <input type="text" class="form-control border border-2 border-secondary rounded-2 py-2 px-3 {{ $class }}" placeholder="{{ $placeholder }}"
+        @keydown.enter.prevent="addTag($event.target.value); $event.target.value = ''" />
+        <!-- User instruction -->
+        <div class="form-text text-muted mt-1">
+            Type a tag and press <kbd class="rounded-5 bg-light text-dark fw-bold">Enter</kbd> to add it to the list.
+        </div>
 
-    <!-- Hidden Input -->
-    <input type="hidden" name="{{ $name }}" id="{{ $name }}-hidden" value="{{ implode(',', $initialTags) }}">
+    @error($name)
+    <div class="invalid-feedback d-block">{{ $message }}</div>
+    @enderror
 </div>
-
-@once
-@push('scripts')
-<script>
-    function handleTagKeyPress(event, name) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        addTag(name);
-    }
-}
-
-function addTag(name) {
-    const input = document.getElementById(name + '-input');
-    const tagsContainer = document.getElementById(name + '-tags');
-    const hiddenInput = document.getElementById(name + '-hidden');
-
-    let tags = hiddenInput.value ? hiddenInput.value.split(',').filter(Boolean) : [];
-    const newTag = input.value.trim();
-
-    if (newTag && !tags.includes(newTag)) {
-        tags.push(newTag);
-        updateTags(tags, tagsContainer, hiddenInput, name);
-        input.value = '';
-    }
-}
-
-function removeTag(element, name) {
-    const hiddenInput = document.getElementById(name + '-hidden');
-    let tags = hiddenInput.value ? hiddenInput.value.split(',').filter(Boolean) : [];
-    const removedTag = element.textContent.replace('×', '').trim();
-
-    tags = tags.filter(tag => tag !== removedTag);
-    updateTags(tags, document.getElementById(name + '-tags'), hiddenInput, name);
-    element.remove();
-}
-
-function updateTags(tags, container, hiddenInput, name) {
-    hiddenInput.value = tags.join(',');
-}
-</script>
-@endpush
-@endonce
