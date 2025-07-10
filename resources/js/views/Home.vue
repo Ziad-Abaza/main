@@ -1749,6 +1749,9 @@
         </div>
       </div>
     </section>
+
+    <!-- News Section -->
+    <NewsSection />
   </div>
 </template>
 
@@ -1774,6 +1777,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useHomeStore } from "@/stores/homeStore";
 import { useTheme } from "../composables/useTheme";
+import NewsSection from "../components/NewsSection.vue";
 
 library.add(
   faLightbulb,

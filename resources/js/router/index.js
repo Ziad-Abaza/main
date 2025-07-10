@@ -20,6 +20,8 @@ import Privacy from '../views/Privacy.vue';
 import Terms from '../views/Terms.vue';
 import FAQ from '../views/FAQ.vue';
 import Blog from '../views/Blog.vue';
+import News from '../views/News.vue';
+import NewsDetail from '../views/NewsDetail.vue';
 import Contact from '../views/Contact.vue';
 import Hack from '../views/Hack.vue';
 import TeamView from '../views/TeamView.vue';
@@ -147,6 +149,17 @@ const routes = [{
         path: '/blog',
         name: 'blog',
         component: Blog,
+    },
+    {
+        path: '/news',
+        name: 'news',
+        component: News,
+    },
+    {
+        path: '/news/:id',
+        name: 'news-detail',
+        component: NewsDetail,
+        props: true,
     },
     {
         path: '/contact',
