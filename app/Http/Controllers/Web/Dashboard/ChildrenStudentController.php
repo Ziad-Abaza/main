@@ -19,14 +19,19 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Throwable;
+use App\Services\CacheService;
 
 class ChildrenStudentController extends Controller
 {
     protected $importService;
+    protected $cacheService;
 
-    public function __construct(ChildrenStudentImportService $importService)
-    {
+    public function __construct(
+        ChildrenStudentImportService $importService,
+        CacheService $cacheService
+    ) {
         $this->importService = $importService;
+        $this->cacheService = $cacheService;
 
         $this->middleware(['auth', 'can:manage_child'])->only([
             'index',
@@ -39,12 +44,17 @@ class ChildrenStudentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource with caching.
      */
     public function index()
     {
         try {
-            return view('dashboard.children-students.index');
+            // Generate unique cache key for children students
+            $cacheKey = 'children_students_index';
+
+            return $this->cacheService->remember($cacheKey, function () {
+                return view('dashboard.children-students.index');
+            });
         } catch (Throwable $th) {
             Log::error("Failed to load children students: " . $th->getMessage());
             return back()->with('error', 'Failed to load children students');
@@ -86,6 +96,9 @@ class ChildrenStudentController extends Controller
                 ImportChildrenStudentJob::dispatch($path);
                 Log::info("Successfully queued import process");
 
+                // Clear cache after importing
+                $this->cacheService->forget('children_students_index');
+
                 return redirect()->route('console.children-students.index')
                     ->with('success', 'Students import has been queued successfully');
             } catch (Throwable $th) {
@@ -113,7 +126,7 @@ class ChildrenStudentController extends Controller
 
                 $role = Role::where('name', 'student')->first();
                 if ($role) {
-                    $user->assignRole($role); 
+                    $user->assignRole($role);
                 }
 
                 $meta = [];
@@ -134,6 +147,9 @@ class ChildrenStudentController extends Controller
                     'meta' => $meta,
                 ]);
             });
+
+            // Clear cache after creating a new student
+            $this->cacheService->forget('children_students_index');
 
             return redirect()->route('console.children-students.index')
                 ->with('success', 'Student created successfully');
@@ -181,6 +197,9 @@ class ChildrenStudentController extends Controller
                     'code' => $validated['code']
                 ]);
             });
+
+            // Clear cache after updating a student
+            $this->cacheService->forget('children_students_index');
 
             return redirect()->route('console.children-students.index')
                 ->with('success', 'Child updated successfully');

@@ -12,6 +12,9 @@ class OverviewController extends Controller
 {
     public function coursesStats(Request $request)
     {
+        /**
+         * @var App\Models\User $user
+         */
         $user = Auth::user();
         $total = $user->enrolledCourses()->count();
         $completed = $user->enrolledCourses()->wherePivot('completion_percentage', 100)->count();
