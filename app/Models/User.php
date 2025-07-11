@@ -112,6 +112,12 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(UserVideoProgress::class, 'user_id');
     }
 
+    public function news()
+    {
+        return $this->hasMany(News::class, 'author_id', 'user_id');
+    }
+
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')->singleFile();

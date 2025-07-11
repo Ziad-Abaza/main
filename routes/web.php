@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Auth\AuthController;
+use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 
@@ -25,6 +26,15 @@ Route::get('/{any}', function () {
 */
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+/*
+|===========================================
+|> Payment Routes
+|===========================================
+*/
+
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/instructor.php';

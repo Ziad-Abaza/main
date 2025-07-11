@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\General\ContactController as ApiContactController;
 use App\Http\Controllers\Api\User\OverviewController;
 use App\Http\Controllers\Api\User\SettingsController;
 use App\Http\Controllers\Api\General\NewsController;
+use App\Http\Controllers\Payment\PaymentController;
 
 /*
 |===========================================
@@ -56,6 +57,16 @@ Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index']);
     Route::get('/{news}', [NewsController::class, 'show']);
 });
+
+
+/*
+|===========================================
+|> Payment Routes
+|===========================================
+*/
+
+Route::post('/payment/process', [PaymentController::class, 'paymentProcess']);
+Route::match(['GET', 'POST'], '/payment/callback', [PaymentController::class, 'callBack']);
 
 
 
