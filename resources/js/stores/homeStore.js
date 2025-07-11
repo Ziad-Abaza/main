@@ -7,6 +7,7 @@ export const useHomeStore = defineStore("home", {
         popularCategories: [],
         topInstructors: [],
         limitedTimeOffers: [],
+        latestNews: [],
         loading: false,
         error: null,
         lastFetched: null,
@@ -24,6 +25,9 @@ export const useHomeStore = defineStore("home", {
 
         // Get total number of offers
         totalOffers: (state) => state.limitedTimeOffers.length,
+
+        // Get total number of news articles
+        totalNews: (state) => state.latestNews.length,
 
         // Get courses by category
         getCoursesByCategory: (state) => (categoryId) => {
@@ -66,8 +70,7 @@ export const useHomeStore = defineStore("home", {
             if (this.loading) return;
 
             // Don't fetch if data is fresh and not forcing refresh
-            if (
-                !forceRefresh &&
+            if (!forceRefresh &&
                 !this.isDataStale &&
                 this.featuredCourses.length > 0
             ) {
@@ -117,12 +120,10 @@ export const useHomeStore = defineStore("home", {
                             category: offer.category,
                             instructor: offer.instructor_name,
                             originalPrice: parseFloat(offer.original_price),
-                            discountedPrice: offer.discounted_price
-                                ? parseFloat(offer.discounted_price)
-                                : null,
-                            discount: offer.discount
-                                ? parseFloat(offer.discount)
-                                : 0,
+                            discountedPrice: offer.discounted_price ?
+                                parseFloat(offer.discounted_price) : null,
+                            discount: offer.discount ?
+                                parseFloat(offer.discount) : 0,
                             timeLeft: offer.timeLeft,
                             enrollments: offer.enrollments,
                             image: offer.image || "default-image.jpg",
@@ -143,6 +144,26 @@ export const useHomeStore = defineStore("home", {
                         })
                     );
 
+                    // Map latest news data
+                    this.latestNews = data.latest_news ? data.latest_news.map(
+                        (article) => ({
+                            id: article.id,
+                            title: article.title,
+                            excerpt: article.excerpt,
+                            content: article.content,
+                            images: article.images || [],
+                            image: article.image,
+                            category: article.category,
+                            date: article.date,
+                            tags: article.tags || [],
+                            author: {
+                                name: article.author ?.name || "Unknown",
+                                role: article.author ?.role || "Author",
+                                avatar: article.author ?.avatar || null,
+                            },
+                        })
+                    ) : [];
+
                     // Update last fetched timestamp
                     this.lastFetched = new Date().toISOString();
                 } else {
@@ -152,7 +173,7 @@ export const useHomeStore = defineStore("home", {
             } catch (err) {
                 console.error("Error fetching home data:", err);
                 this.error =
-                    err.response?.data?.message ||
+                    err.response ?.data ?.message ||
                     err.message ||
                     "An error occurred while fetching data";
             } finally {

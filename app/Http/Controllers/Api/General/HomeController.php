@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\News;
 use Illuminate\Http\Response;
 use Throwable;
 use App\Http\Resources\InstructorResource;
@@ -106,6 +107,32 @@ class HomeController extends Controller
                     });
             });
 
+            // 5. Latest News with Cache
+            $latestNews = $this->cacheService->remember('latest_news', function () {
+                return News::with('author')
+                    ->orderByDesc('created_at') // Use created_at as fallback if published_at is null
+                    ->take(6)
+                    ->get()
+                    ->map(function ($news) {
+                        return [
+                            'id' => $news->news_id,
+                            'title' => $news->title,
+                            'excerpt' => $news->excerpt,
+                            'content' => $news->content,
+                            'images' => $news->getImages()->pluck('url'),
+                            'image' => $news->getImages()->pluck('url')->first(),
+                            'category' => $news->category,
+                            'date' => optional($news->published_at)->format('Y-m-d') ?? $news->created_at->format('Y-m-d'),
+                            'tags' => $news->tags ?? [],
+                            'author' => [
+                                'name' => $news->author->name ?? 'Unknown',
+                                'role' => $news->author->role ?? 'Author',
+                                'avatar' => $news->author->getAvatar() ?? null,
+                            ],
+                        ];
+                    });
+            });
+
             return response()->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
@@ -114,6 +141,7 @@ class HomeController extends Controller
                     'popular_categories' => $popularCategories,
                     'top_instructors' => $topInstructors,
                     'limited_time_offers' => $deals,
+                    'latest_news' => $latestNews,
                 ]
             ], Response::HTTP_OK);
         } catch (Throwable $th) {

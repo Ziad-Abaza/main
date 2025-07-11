@@ -67,8 +67,51 @@
       </div>
     </section>
 
+    <!-- Loading State -->
+    <section v-if="loading" class="py-16">
+      <div class="container mx-auto px-6 text-center">
+        <div
+          :class="
+            isDark
+              ? 'inline-flex items-center space-x-3 text-slate-400'
+              : 'inline-flex items-center space-x-3 text-slate-600'
+          "
+        >
+          <div
+            class="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"
+          ></div>
+          <span class="text-lg">Loading news...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error State -->
+    <section v-else-if="error" class="py-16">
+      <div class="container mx-auto px-6 text-center">
+        <div
+          :class="
+            isDark
+              ? 'text-red-400'
+              : 'text-red-600'
+          "
+        >
+          <p class="text-lg mb-4">{{ error }}</p>
+          <button
+            @click="newsStore.fetchNews()"
+            :class="
+              isDark
+                ? 'px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors'
+                : 'px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors'
+            "
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Featured News Article -->
-    <section class="py-16">
+    <section v-else-if="featuredNews" class="py-16">
       <div class="container mx-auto px-6">
         <div class="mb-12">
           <h2
@@ -451,17 +494,20 @@
         </div>
       </div>
     </section>
+
+
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useTheme } from '../composables/useTheme';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { useNewsStore } from '../stores/NewsStore';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -471,134 +517,26 @@ import 'swiper/css/navigation';
 library.add(faArrowRight);
 
 const { isDark } = useTheme();
+const newsStore = useNewsStore();
 
 // Swiper modules
 const SwiperAutoplay = Autoplay;
 const SwiperPagination = Pagination;
 const SwiperNavigation = Navigation;
 
-// Enhanced fake news data with multiple images for swiper
-const newsData = [
-  {
-    id: 1,
-    title: "New AI-Powered Learning Platform Launches at CTU",
-    excerpt: "Revolutionary artificial intelligence technology is now integrated into our educational platform, providing personalized learning experiences for every student.",
-    content: "The CTU Educational Platform has taken a giant leap forward with the introduction of our new AI-powered learning system. This revolutionary technology analyzes each student's learning patterns, strengths, and areas for improvement to create truly personalized educational experiences. The AI system adapts in real-time, providing targeted recommendations, adaptive assessments, and intelligent content curation that matches each learner's unique needs and pace.",
-    images: [
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
-    category: "Technology",
-    date: "2024-01-15",
-    tags: ["AI", "Education", "Technology", "Innovation"],
-    author: {
-      name: "Dr. Sarah Johnson",
-      role: "Head of Technology",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
-    }
-  },
-  {
-    id: 2,
-    title: "Record-Breaking Student Enrollment for Spring Semester",
-    excerpt: "CTU celebrates unprecedented growth with over 50,000 students enrolled across all programs, marking a 25% increase from last year.",
-    content: "The Spring 2024 semester has brought unprecedented success to CTU Educational Platform with a record-breaking enrollment of over 50,000 students. This represents a remarkable 25% increase from the previous year, demonstrating the growing trust and recognition of our platform's quality education. The surge in enrollment spans across all our programs, with particular growth in technology, business, and creative arts courses.",
-    images: [
-      "https://images.unsplash.com/photo-1523240794102-9ebd0b167d56?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1523240794102-9ebd0b167d56?w=800&h=600&fit=crop",
-    category: "Education",
-    date: "2024-01-12",
-    tags: ["Enrollment", "Growth", "Education"],
-    author: {
-      name: "Prof. Michael Chen",
-      role: "Dean of Admissions",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
-    }
-  },
-  {
-    id: 3,
-    title: "Partnership Announced with Leading Tech Companies",
-    excerpt: "Strategic collaboration with Google, Microsoft, and Amazon to provide industry-relevant curriculum and internship opportunities for students.",
-    content: "CTU Educational Platform is proud to announce groundbreaking partnerships with industry leaders Google, Microsoft, and Amazon. These strategic collaborations will bring cutting-edge curriculum directly from the tech industry to our students, ensuring they learn the most current and relevant skills. The partnerships also include exclusive internship opportunities, mentorship programs, and direct pathways to employment at these prestigious companies.",
-    images: [
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
-    category: "Partnerships",
-    date: "2024-01-10",
-    tags: ["Partnerships", "Tech", "Internships"],
-    author: {
-      name: "Lisa Rodriguez",
-      role: "Partnership Director",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
-    }
-  },
-  {
-    id: 4,
-    title: "New Mobile App Enhances Learning Experience",
-    excerpt: "Students can now access courses, submit assignments, and participate in discussions seamlessly from their mobile devices.",
-    content: "Learning just got more convenient with the launch of our new mobile application. The CTU mobile app provides students with seamless access to all platform features, including course content, assignment submissions, discussion forums, and real-time notifications. The app features an intuitive interface designed specifically for mobile learning, with offline capabilities for course materials and progress tracking across all devices.",
-    images: [
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop",
-    category: "Technology",
-    date: "2024-01-08",
-    tags: ["Mobile", "App", "Technology"],
-    author: {
-      name: "Alex Thompson",
-      role: "Mobile Development Lead",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
-    }
-  },
-  {
-    id: 5,
-    title: "Student Success Stories: From Beginner to Industry Expert",
-    excerpt: "Meet the inspiring journey of students who transformed their careers through CTU's comprehensive learning programs.",
-    content: "Success stories from our platform continue to inspire and motivate. This month, we highlight several remarkable transformations where students went from complete beginners to industry experts. These stories showcase the power of dedicated learning, quality instruction, and the comprehensive support system that CTU provides. From career changers to skill upgraders, our platform has been the catalyst for countless professional transformations.",
-    images: [
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-    category: "Success Stories",
-    date: "2024-01-05",
-    tags: ["Success", "Students", "Careers"],
-    author: {
-      name: "Emma Wilson",
-      role: "Student Success Manager",
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face"
-    }
-  },
-  {
-    id: 6,
-    title: "New Course Categories Added to Platform",
-    excerpt: "Expanding our curriculum with cutting-edge courses in blockchain, cybersecurity, and sustainable development.",
-    content: "CTU Educational Platform is expanding its course offerings with three exciting new categories: Blockchain Technology, Cybersecurity, and Sustainable Development. These additions reflect the growing demand for skills in emerging fields and our commitment to providing education that prepares students for the future job market. Each category features expert instructors, hands-on projects, and industry-recognized certifications.",
-    images: [
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop"
-    ],
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
-    category: "Curriculum",
-    date: "2024-01-03",
-    tags: ["Curriculum", "New Courses", "Blockchain"],
-    author: {
-      name: "Dr. James Miller",
-      role: "Curriculum Director",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
-    }
-  }
-];
+// Get news data from store
+const newsData = computed(() => newsStore.newsList);
+const loading = computed(() => newsStore.loading);
+const error = computed(() => newsStore.error);
 
-const featuredNews = ref(newsData[0]);
-const allNews = ref(newsData);
+// Computed properties for news data
+const featuredNews = computed(() => {
+  return newsData.value.length > 0 ? newsData.value[0] : null;
+});
+
+const allNews = computed(() => {
+  return newsData.value.slice(1); // All news except the featured one
+});
 
 // Format date function
 const formatDate = (dateString) => {
@@ -610,9 +548,9 @@ const formatDate = (dateString) => {
   });
 };
 
-onMounted(() => {
-  // Set featured news to the first article
-  featuredNews.value = newsData[0];
+onMounted(async () => {
+  // Fetch news data from API
+  await newsStore.fetchNews();
 });
 </script>
 
