@@ -117,7 +117,25 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(News::class, 'author_id', 'user_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'user_id');
+    }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'user_id');
+    }
+
+    public function coursePurchases()
+    {
+        return $this->hasMany(CoursePurchase::class, 'user_id', 'user_id');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ChildLevelSubscription::class, 'child_id', 'user_id');
+    }
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')->singleFile();

@@ -76,4 +76,19 @@ class ChildrenUniversity extends Model
     {
         return $this->belongsTo(Level::class, 'level_id');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ChildLevelSubscription::class, 'child_id', 'id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'child_id', 'id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'child_id', 'id');
+    }
 }

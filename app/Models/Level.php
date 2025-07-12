@@ -24,4 +24,9 @@ class Level extends Model
     {
         return $this->hasMany(ChildrenUniversity::class, 'level_id');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ChildLevelSubscription::class, 'level_id', 'level_id');
+    }
 }
