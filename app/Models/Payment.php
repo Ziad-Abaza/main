@@ -23,7 +23,14 @@ class Payment extends Model
         'currency',
         'payment_status',
         'payment_method',
-        'transaction_id'
+        'transaction_id',
+        'payment_gateway_response',
+        'paid_at'
+    ];
+
+    protected $casts = [
+        'payment_gateway_response' => 'array',
+        'paid_at' => 'datetime',
     ];
 
     public function order()

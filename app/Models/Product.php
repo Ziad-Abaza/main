@@ -29,7 +29,8 @@ class Product extends Model implements HasMedia
         'notes',
         'sku',
         'type',
-        'is_active'
+        'is_active',
+        'attributes'
     ];
 
     public function registerMediaCollections(): void
@@ -74,5 +75,44 @@ class Product extends Model implements HasMedia
     {
         $this->clearMediaCollection('product_files');
         $this->addMedia($file)->toMediaCollection('product_files');
+    }
+
+    /**
+     * Get the attributes as an array
+     */
+    public function getAttributesArray()
+    {
+        return $this->attributes ?? [];
+    }
+
+    /**
+     * Set a specific attribute
+     */
+    public function setAttribute($key, $value)
+    {
+        $attributes = $this->getAttributesArray();
+        $attributes[$key] = $value;
+        $this->attributes = $attributes;
+        $this->save();
+    }
+
+    /**
+     * Get a specific attribute
+     */
+    public function getAttribute($key, $default = null)
+    {
+        $attributes = $this->getAttributesArray();
+        return $attributes[$key] ?? $default;
+    }
+
+    /**
+     * Remove a specific attribute
+     */
+    public function removeAttribute($key)
+    {
+        $attributes = $this->getAttributesArray();
+        unset($attributes[$key]);
+        $this->attributes = $attributes;
+        $this->save();
     }
 }

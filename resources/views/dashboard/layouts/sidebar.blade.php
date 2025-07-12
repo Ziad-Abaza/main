@@ -74,6 +74,42 @@
                 </a>
             </li>
 
+            <!-- Products -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/products*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.products.index') }}">
+                    <i class="material-symbols-rounded opacity-5">inventory_2</i>
+                    <span class="nav-link-text ms-1">Products</span>
+                </a>
+            </li>
+
+            <!-- Orders -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/orders*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.orders.index') }}">
+                    <i class="material-symbols-rounded opacity-5">shopping_cart</i>
+                    <span class="nav-link-text ms-1">Orders</span>
+                </a>
+            </li>
+
+            <!-- Order Items -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/order-items*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.order_items.index') }}">
+                    <i class="material-symbols-rounded opacity-5">list_alt</i>
+                    <span class="nav-link-text ms-1">Order Items</span>
+                </a>
+            </li>
+
+            <!-- Payments -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/payments*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.payments.index') }}">
+                    <i class="material-symbols-rounded opacity-5">payment</i>
+                    <span class="nav-link-text ms-1">Payments</span>
+                </a>
+            </li>
+
             <!-- Courses -->
             <li class="nav-item">
                 <a class="nav-link text-dark {{ Request::is('console/courses*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
@@ -176,6 +212,15 @@
                     href="{{ route('console.level-courses.index') }}">
                     <i class="material-symbols-rounded opacity-5">import_contacts</i>
                     <span class="nav-link-text ms-1">Manage Level Courses</span>
+                </a>
+            </li>
+
+            <!-- Child Level Subscriptions -->
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ Request::is('console/child-levels*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+                    href="{{ route('console.child_levels.index') }}">
+                    <i class="material-symbols-rounded opacity-5">subscriptions</i>
+                    <span class="nav-link-text ms-1">Child Level Subscriptions</span>
                 </a>
             </li>
 

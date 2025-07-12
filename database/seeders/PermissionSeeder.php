@@ -40,6 +40,9 @@ class PermissionSeeder extends Seeder
             // Content management
             ['name' => 'manage_blog', 'description' => 'Manage blog and articles'],
             ['name' => 'manage_levels', 'description' => 'Manage educational levels (beginner, advanced, etc.)'],
+            ['name' => 'manage_products', 'description' => 'Manage products (create, update, delete)'],
+            ['name' => 'manage_orders', 'description' => 'Manage orders (view, update, delete)'],
+            ['name' => 'manage_payments', 'description' => 'Manage payments (view, update, delete)'],
 
             // view dashboard
             ['name' => 'view_dashboard', 'description' => 'View the dashboard'],

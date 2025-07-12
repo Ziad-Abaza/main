@@ -60,7 +60,7 @@ class AuthController extends Controller
 
         // ✳️ حدد الصلاحيات المطلوبة حسب المنطقة
         $requiredPermissions = $area === 'console'
-            ? ['manage_roles', 'manage_users', 'assign_admin', 'assign_superadmin', 'manage_child']
+            ? ['manage_roles', 'manage_users', 'assign_admin', 'assign_superadmin', 'manage_child', 'manage_products', 'manage_orders']
             : ['manage_child', 'manage_absences', 'manage_enrollments', 'view_submissions', 'manage_assignments', 'manage_quizzes', 'manage_courses', 'manage_users', 'manage_categories'];
 
         Log::debug("User Roles for {$user->email}: " . json_encode($user->roles->pluck('name')));

@@ -22,6 +22,7 @@ class Order extends Model
         'total_amount',
         'status',
         'payment_status',
+        'notes',
     ];
 
     public function child()

@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\General\ContactController as ApiContactController;
 use App\Http\Controllers\Api\User\OverviewController;
 use App\Http\Controllers\Api\User\SettingsController;
 use App\Http\Controllers\Api\General\NewsController;
-use App\Http\Controllers\Payment\PaymentController;
+use App\Http\Payment\PaymentController;
 
 /*
 |===========================================

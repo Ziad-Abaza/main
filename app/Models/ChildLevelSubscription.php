@@ -22,6 +22,11 @@ class ChildLevelSubscription extends Model
         'status'
     ];
 
+    protected $casts = [
+        'subscribe_date' => 'datetime',
+        'expiry_date' => 'datetime',
+    ];
+
     public function child()
     {
         return $this->belongsTo(ChildrenUniversity::class, 'child_id', 'id');

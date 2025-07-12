@@ -35,6 +35,9 @@ class RoleSeeder extends Seeder
             'manage_settings',
             'manage_blog',
             'manage_levels',
+            'manage_products',
+            'manage_orders',
+            'manage_payments',
             'view_console',
             'view_dashboard',
         ];

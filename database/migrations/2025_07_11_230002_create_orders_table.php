@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('order_id')->primary();
-            $table->uuid('child_id'); // FK to children_university
+            $table->uuid('child_id')->nullable(); // FK to children_university
             $table->uuid('user_id');
             $table->decimal('subtotal', 10, 2);
             $table->decimal('discount_amount', 10, 2)->default(0);
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('status')->default('pending'); // pending, processing, shipped, completed, cancelled
             $table->string('payment_status')->default('unpaid'); // unpaid, paid, partially_paid
             $table->timestamp('completed_at')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

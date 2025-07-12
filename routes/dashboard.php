@@ -17,6 +17,11 @@ use App\Livewire\Dashboard\ChildrenStudentsTable;
 use App\Http\Controllers\Web\Dashboard\FaqController;
 use App\Http\Controllers\Web\Dashboard\BlogController;
 use App\Http\Controllers\Web\Dashboard\ContactController;
+use App\Http\Controllers\Web\Dashboard\ProductController;
+use App\Http\Controllers\Web\Dashboard\OrderController;
+use App\Http\Controllers\Web\Dashboard\OrderItemController;
+use App\Http\Controllers\Web\Dashboard\ChildLevelController;
+use App\Http\Controllers\Web\Dashboard\PaymentController;
 
 
 
@@ -190,6 +195,77 @@ Route::middleware(['auth', 'panel.access:console'])->prefix('console')->group(fu
         Route::get('/', [ContactController::class, 'index'])->name('dashboard.contact.index');
         Route::delete('/delete/{contact}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
     });
+
+    // -----------------------------
+    // Product Management Routes
+    // -----------------------------
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('console.products.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('console.products.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('console.products.store');
+        Route::get('/{product}', [ProductController::class, 'show'])->name('console.products.show');
+        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('console.products.edit');
+        Route::post('/update/{product}', [ProductController::class, 'update'])->name('console.products.update');
+        Route::delete('/delete/{product}', [ProductController::class, 'destroy'])->name('console.products.delete');
+        Route::post('/{product}/remove-image', [ProductController::class, 'removeImage'])->name('console.products.remove-image');
+        Route::post('/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('console.products.toggle-status');
+        Route::get('/search', [ProductController::class, 'search'])->name('console.products.search');
+    });
+
+    // -----------------------------
+    // Order Item Management Routes
+    // -----------------------------
+    Route::prefix('order-items')->group(function () {
+        Route::get('/', [OrderItemController::class, 'index'])->name('console.order_items.index');
+        Route::get('/{orderItem}', [OrderItemController::class, 'show'])->name('console.order_items.show');
+        Route::get('/edit/{orderItem}', [OrderItemController::class, 'edit'])->name('console.order_items.edit');
+        Route::post('/update/{orderItem}', [OrderItemController::class, 'update'])->name('console.order_items.update');
+        Route::delete('/delete/{orderItem}', [OrderItemController::class, 'destroy'])->name('console.order_items.delete');
+        Route::get('/export', [OrderItemController::class, 'export'])->name('console.order_items.export');
+    });
+
+    // Order Management Routes
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('console.orders.index');
+        Route::get('/{order}', [OrderController::class, 'show'])->name('console.orders.show');
+        Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('console.orders.edit');
+        Route::post('/update/{order}', [OrderController::class, 'update'])->name('console.orders.update');
+        Route::delete('/delete/{order}', [OrderController::class, 'destroy'])->name('console.orders.delete');
+        Route::post('/{order}/update-status', [OrderController::class, 'updateStatus'])->name('console.orders.update-status');
+        Route::post('/{order}/update-payment-status', [OrderController::class, 'updatePaymentStatus'])->name('console.orders.update-payment-status');
+        Route::get('/export', [OrderController::class, 'export'])->name('console.orders.export');
+    });
+
+    // -----------------------------
+    // Child Level Management Routes
+    // -----------------------------
+    Route::prefix('child-levels')->group(function () {
+        Route::get('/', [ChildLevelController::class, 'index'])->name('console.child_levels.index');
+        Route::get('/create', [ChildLevelController::class, 'create'])->name('console.child_levels.create');
+        Route::post('/store', [ChildLevelController::class, 'store'])->name('console.child_levels.store');
+        Route::get('/{childLevel}', [ChildLevelController::class, 'show'])->name('console.child_levels.show');
+        Route::get('/edit/{childLevel}', [ChildLevelController::class, 'edit'])->name('console.child_levels.edit');
+        Route::post('/update/{childLevel}', [ChildLevelController::class, 'update'])->name('console.child_levels.update');
+        Route::delete('/delete/{childLevel}', [ChildLevelController::class, 'destroy'])->name('console.child_levels.delete');
+        Route::post('/{childLevel}/update-status', [ChildLevelController::class, 'updateStatus'])->name('console.child_levels.update-status');
+        Route::get('/export', [ChildLevelController::class, 'export'])->name('console.child_levels.export');
+    });
+
+    // -----------------------------
+    // Payment Management Routes
+    // -----------------------------
+    Route::prefix('payments')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('console.payments.index');
+        Route::get('/{payment}', [PaymentController::class, 'show'])->name('console.payments.show');
+        Route::get('/edit/{payment}', [PaymentController::class, 'edit'])->name('console.payments.edit');
+        Route::post('/update/{payment}', [PaymentController::class, 'update'])->name('console.payments.update');
+        Route::delete('/delete/{payment}', [PaymentController::class, 'destroy'])->name('console.payments.delete');
+        Route::post('/{payment}/update-status', [PaymentController::class, 'updateStatus'])->name('console.payments.update-status');
+        Route::get('/export', [PaymentController::class, 'export'])->name('console.payments.export');
+    });
+
+    // Payment Gateway Callback
+    Route::post('/payment-callback', [PaymentController::class, 'handleCallback'])->name('console.payment.callback');
 
     // Students Management
     Route::get('/students', [\App\Http\Controllers\Web\Dashboard\StudentController::class, 'list'])->name('console.students.index');

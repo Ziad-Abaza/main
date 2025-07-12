@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Payment;
+namespace App\Http\Payment;
 
 use App\Interfaces\PaymentGatewayInterface;
 use App\Http\Controllers\Controller;
